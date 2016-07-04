@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="PXUT-3000" />
+		<Option makefile="makefile" />
+		<Option makefile_is_custom="1" />
+		<Option execution_dir="..\..\new-pxut\" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin\Release\pxut-3000" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+				<MakeCommands>
+					<Build command="$make -f $makefile" />
+					<CompileFile command="$make -f $makefile $file" />
+					<Clean command="$make -f $makefile clean" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="$make -q -f $makefile" />
+					<SilentBuild command="$make -s -f $makefile" />
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="..\Fchar.h" />
+		<Unit filename="..\M10Era.h" />
+		<Unit filename="..\Media.h" />
+		<Unit filename="..\SDcard.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\User.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\UserApp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\armtest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\armtest.h" />
+		<Unit filename="..\char.h" />
+		<Unit filename="..\common.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\common.h" />
+		<Unit filename="..\cudefm2c_1.h" />
+		<Unit filename="..\cudefm2e_1.h" />
+		<Unit filename="..\data.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\diskio.h" />
+		<Unit filename="..\display.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\display.h" />
+		<Unit filename="..\fatfs_config.h" />
+		<Unit filename="..\ff.h" />
+		<Unit filename="..\ffconf.h" />
+		<Unit filename="..\filefunc.h" />
+		<Unit filename="..\function.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\gain.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\globe.h" />
+		<Unit filename="..\hzk.h" />
+		<Unit filename="..\ini.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\input.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\integer.h" />
+		<Unit filename="..\keyio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\ldscript" />
+		<Unit filename="..\ldscript.lds" />
+		<Unit filename="..\ldscript1" />
+		<Unit filename="..\ldscript2" />
+		<Unit filename="..\m10_patch.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\main.h" />
+		<Unit filename="..\makefile" />
+		<Unit filename="..\menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\para.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\print.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\print1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\readme.txt" />
+		<Unit filename="..\sdcard.h" />
+		<Unit filename="..\simkai24.h" />
+		<Unit filename="..\sysdef.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\sysdef.h" />
+		<Unit filename="..\test.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\test.h" />
+		<Unit filename="..\tools.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\tools.h" />
+		<Unit filename="..\udisk.h" />
+		<Unit filename="..\user.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

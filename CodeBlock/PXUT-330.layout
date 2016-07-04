@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="..\M10Era.h" open="1" top="0" tabpos="3">
+		<Cursor position="1045" topLine="36" />
+	</File>
+	<File name="..\char.h" open="1" top="0" tabpos="6">
+		<Cursor position="11973" topLine="416" />
+	</File>
+	<File name="..\common.c" open="1" top="0" tabpos="2">
+		<Cursor position="88328" topLine="3285" />
+	</File>
+	<File name="..\cudefm2c_1.h" open="0" top="0" tabpos="3">
+		<Cursor position="8995" topLine="210" />
+	</File>
+	<File name="..\cudefm2e_1.h" open="0" top="0" tabpos="4">
+		<Cursor position="1523" topLine="36" />
+	</File>
+	<File name="..\gain.c" open="1" top="0" tabpos="12">
+		<Cursor position="334" topLine="9" />
+	</File>
+	<File name="..\globe.h" open="1" top="0" tabpos="5">
+		<Cursor position="575" topLine="18" />
+	</File>
+	<File name="..\keyio.c" open="1" top="0" tabpos="1">
+		<Cursor position="20688" topLine="42" />
+	</File>
+	<File name="..\makefile" open="1" top="0" tabpos="4">
+		<Cursor position="3386" topLine="66" />
+	</File>
+	<File name="..\menu.c" open="1" top="1" tabpos="7">
+		<Cursor position="174151" topLine="843" />
+	</File>
+	<File name="..\para.c" open="1" top="0" tabpos="10">
+		<Cursor position="10066" topLine="0" />
+	</File>
+	<File name="..\sysdef.c" open="1" top="0" tabpos="11">
+		<Cursor position="58118" topLine="454" />
+	</File>
+	<File name="..\sysdef.h" open="1" top="0" tabpos="9">
+		<Cursor position="284" topLine="0" />
+	</File>
+	<File name="..\test.c" open="1" top="0" tabpos="8">
+		<Cursor position="9140" topLine="67" />
+	</File>
+</CodeBlocks_layout_file>

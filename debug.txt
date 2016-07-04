@@ -1,0 +1,4 @@
+arm-none-eabi-gcc  -Wall -g -O2   -c -o startup.o startup.S
+arm-none-eabi-gcc  -Wall -mlong-calls -ffunction-sections -D DEBUG -g -O2 -c main.c
+arm-none-eabi-gcc  -Wall -mlong-calls -ffunction-sections -D DEBUG -g -O2   -c -o tools.o tools.c
+arm-none-eabi-gcc  -Wall -mlong-calls -ffunction-sections -D DEBUG -g -O2 -c common.c

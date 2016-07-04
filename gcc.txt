@@ -1,0 +1,24 @@
+$(C_OBJECTS): %.o: %.c Makefile $(C_FILES) $(H_FILES)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+单个文件命令行编译编译;
+
+main.c common.c display.c sysdef.c gain.c udisk.c armtest.c
+
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o main.o main.c
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o common.o common.c
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o display.o display.c
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o sysdef.o sysdef.c
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o gain.o gain.c
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o udisk.o udisk.c
+arm-none-eabi-gcc -Wall -mlong-calls -ffunction-sections -g -O2 -c -o armtest.o armtest.c
+
+
+user.c: In function 'SysPwd':
+user.c:294: internal compiler error: Segmentation fault
+
+
+
+
+
+

@@ -1,0 +1,1747 @@
+
+lib_a-e_acos.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_acos
+         U __ieee754_sqrt
+
+lib_a-e_acosh.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_acosh
+         U __ieee754_log
+         U __ieee754_sqrt
+         U log1p
+
+lib_a-e_asin.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_asin
+         U __ieee754_sqrt
+         U fabs
+
+lib_a-e_atan2.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dsub
+00000000 T __ieee754_atan2
+         U atan
+         U fabs
+
+lib_a-e_atanh.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_atanh
+         U log1p
+
+lib_a-e_cosh.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+00000000 T __ieee754_cosh
+         U __ieee754_exp
+         U expm1
+         U fabs
+
+lib_a-e_exp.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T __ieee754_exp
+00000020 r halF
+00000000 r ln2HI
+00000010 r ln2LO
+
+lib_a-e_fmod.o:
+00000000 r Zero
+         U __aeabi_ddiv
+         U __aeabi_dmul
+00000000 T __ieee754_fmod
+
+lib_a-e_hypot.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_hypot
+         U __ieee754_sqrt
+
+lib_a-e_j0.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+000003b8 T __ieee754_j0
+         U __ieee754_log
+         U __ieee754_sqrt
+00000864 T __ieee754_y0
+         U cos
+         U fabs
+000000d8 r pR2
+00000130 r pR3
+00000080 r pR5
+00000028 r pR8
+000000b0 r pS2
+00000108 r pS3
+00000058 r pS5
+00000000 r pS8
+00000000 t pzero
+00000250 r qR2
+000002b0 r qR3
+000001f0 r qR5
+00000190 r qR8
+00000220 r qS2
+00000280 r qS3
+000001c0 r qS5
+00000160 r qS8
+000001c4 t qzero
+         U sin
+
+lib_a-e_j1.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+000003bc T __ieee754_j1
+         U __ieee754_log
+         U __ieee754_sqrt
+000007d0 T __ieee754_y1
+         U cos
+         U fabs
+00000000 t pone
+000000d8 r pr2
+00000130 r pr3
+00000080 r pr5
+00000028 r pr8
+000000b0 r ps2
+00000108 r ps3
+00000058 r ps5
+00000000 r ps8
+000001c4 t qone
+00000250 r qr2
+000002b0 r qr3
+000001f0 r qr5
+00000190 r qr8
+00000220 r qs2
+00000280 r qs3
+000001c0 r qs5
+00000160 r qs8
+         U sin
+
+lib_a-e_jn.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpge
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+         U __ieee754_j0
+         U __ieee754_j1
+00000358 T __ieee754_jn
+         U __ieee754_log
+         U __ieee754_sqrt
+         U __ieee754_y0
+         U __ieee754_y1
+00000000 T __ieee754_yn
+         U cos
+         U fabs
+         U sin
+
+lib_a-e_log.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T __ieee754_log
+
+lib_a-e_log10.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+         U __ieee754_log
+00000000 T __ieee754_log10
+
+lib_a-e_pow.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpge
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T __ieee754_pow
+         U __ieee754_sqrt
+00000000 r bp
+00000020 r dp_h
+00000010 r dp_l
+         U fabs
+         U nan
+         U scalbn
+
+lib_a-e_rem_pio2.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T __ieee754_rem_pio2
+         U __kernel_rem_pio2
+         U fabs
+00000000 r npio2_hw
+00000080 r two_over_pi
+
+lib_a-e_remainder.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpge
+         U __aeabi_dcmpgt
+         U __aeabi_dcmple
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __ieee754_fmod
+00000000 T __ieee754_remainder
+         U fabs
+
+lib_a-e_scalb.o:
+         U __aeabi_d2iz
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_scalb
+         U __isnand
+         U finite
+         U rint
+         U scalbn
+
+lib_a-e_sinh.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __ieee754_exp
+00000000 T __ieee754_sinh
+         U expm1
+         U fabs
+
+lib_a-e_sqrt.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __ieee754_sqrt
+
+lib_a-ef_acos.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_acosf
+         U __ieee754_sqrtf
+
+lib_a-ef_acosh.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_acoshf
+         U __ieee754_logf
+         U __ieee754_sqrtf
+         U log1pf
+
+lib_a-ef_asin.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_asinf
+         U __ieee754_sqrtf
+         U fabsf
+
+lib_a-ef_atan2.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fsub
+00000000 T __ieee754_atan2f
+         U atanf
+         U fabsf
+
+lib_a-ef_atanh.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_atanhf
+         U log1pf
+
+lib_a-ef_cosh.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+00000000 T __ieee754_coshf
+         U __ieee754_expf
+         U expm1f
+         U fabsf
+
+lib_a-ef_exp.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __ieee754_expf
+00000010 r halF
+00000000 r ln2HI
+00000008 r ln2LO
+
+lib_a-ef_fmod.o:
+00000000 r Zero
+         U __aeabi_fdiv
+         U __aeabi_fmul
+00000000 T __ieee754_fmodf
+
+lib_a-ef_hypot.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_hypotf
+         U __ieee754_sqrtf
+
+lib_a-ef_j0.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fcmplt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+000002a8 T __ieee754_j0f
+         U __ieee754_logf
+         U __ieee754_sqrtf
+00000578 T __ieee754_y0f
+         U cosf
+         U fabsf
+0000006c r pR2
+00000098 r pR3
+00000040 r pR5
+00000014 r pR8
+00000058 r pS2
+00000084 r pS3
+0000002c r pS5
+00000000 r pS8
+00000000 t pzerof
+00000128 r qR2
+00000158 r qR3
+000000f8 r qR5
+000000c8 r qR8
+00000110 r qS2
+00000140 r qS3
+000000e0 r qS5
+000000b0 r qS8
+00000144 t qzerof
+         U sinf
+
+lib_a-ef_j1.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000264 T __ieee754_j1f
+         U __ieee754_logf
+         U __ieee754_sqrtf
+000004d0 T __ieee754_y1f
+         U cosf
+         U fabsf
+00000000 t ponef
+0000006c r pr2
+00000098 r pr3
+00000040 r pr5
+00000014 r pr8
+00000058 r ps2
+00000084 r ps3
+0000002c r ps5
+00000000 r ps8
+00000144 t qonef
+000000c8 r qr2
+000000f8 r qr8
+000000b0 r qs2
+000000e0 r qs8
+         U sinf
+
+lib_a-ef_jn.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpge
+         U __aeabi_fcmpgt
+         U __aeabi_fcmplt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+         U __ieee754_j0f
+         U __ieee754_j1f
+00000158 T __ieee754_jnf
+         U __ieee754_logf
+         U __ieee754_y0f
+         U __ieee754_y1f
+00000000 T __ieee754_ynf
+         U fabsf
+
+lib_a-ef_log.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpeq
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __ieee754_logf
+
+lib_a-ef_log10.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __ieee754_log10f
+         U __ieee754_logf
+
+lib_a-ef_pow.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpge
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __ieee754_powf
+         U __ieee754_sqrtf
+00000000 r bp
+00000010 r dp_h
+00000008 r dp_l
+         U fabsf
+         U nanf
+         U scalbnf
+
+lib_a-ef_rem_pio2.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fcmpeq
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __ieee754_rem_pio2f
+         U __kernel_rem_pio2f
+         U fabsf
+00000000 r npio2_hw
+00000080 r two_over_pi
+
+lib_a-ef_remainder.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpge
+         U __aeabi_fcmpgt
+         U __aeabi_fcmple
+         U __aeabi_fcmplt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __ieee754_fmodf
+00000000 T __ieee754_remainderf
+         U fabsf
+
+lib_a-ef_scalb.o:
+         U __aeabi_f2iz
+         U __aeabi_fcmpeq
+         U __aeabi_fcmpgt
+         U __aeabi_fcmplt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_scalbf
+         U finitef
+         U isnanf
+         U rintf
+         U scalbnf
+
+lib_a-ef_sinh.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __ieee754_expf
+00000000 T __ieee754_sinhf
+         U expm1f
+         U fabsf
+
+lib_a-ef_sqrt.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __ieee754_sqrtf
+
+lib_a-er_gamma.o:
+         U __ieee754_exp
+00000000 T __ieee754_gamma_r
+         U __ieee754_lgamma_r
+
+lib_a-er_lgamma.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T __ieee754_lgamma_r
+         U __ieee754_log
+         U __kernel_cos
+         U __kernel_sin
+         U fabs
+         U floor
+
+lib_a-erf_gamma.o:
+         U __ieee754_expf
+00000000 T __ieee754_gammaf_r
+         U __ieee754_lgammaf_r
+
+lib_a-erf_lgamma.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fcmpeq
+         U __aeabi_fcmplt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __ieee754_lgammaf_r
+         U __ieee754_logf
+         U __kernel_cosf
+         U __kernel_sinf
+         U fabsf
+         U floorf
+
+lib_a-k_cos.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __kernel_cos
+
+lib_a-k_rem_pio2.o:
+00000010 r PIo2
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpge
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+         U __aeabi_idiv
+00000000 T __kernel_rem_pio2
+         U floor
+00000000 r init_jk
+         U scalbn
+
+lib_a-k_sin.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T __kernel_sin
+
+lib_a-k_standard.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __errno
+         U __fdlib_version
+00000000 T __kernel_standard
+         U copysign
+         U matherr
+         U rint
+
+lib_a-k_tan.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T __kernel_tan
+         U fabs
+
+lib_a-kf_cos.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __kernel_cosf
+
+lib_a-kf_rem_pio2.o:
+0000000c r PIo2
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fcmpeq
+         U __aeabi_fcmpge
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __kernel_rem_pio2f
+         U floorf
+00000000 r init_jk
+         U scalbnf
+
+lib_a-kf_sin.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T __kernel_sinf
+
+lib_a-kf_tan.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T __kernel_tanf
+         U fabsf
+
+lib_a-s_asinh.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __ieee754_log
+         U __ieee754_sqrt
+00000000 T asinh
+         U fabs
+         U log1p
+
+lib_a-s_atan.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T atan
+00000000 r atanhi
+00000020 r atanlo
+         U fabs
+
+lib_a-s_cbrt.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+00000000 T cbrt
+
+lib_a-s_ceil.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+00000000 T ceil
+
+lib_a-s_copysign.o:
+00000000 T copysign
+
+lib_a-s_cos.o:
+         U __aeabi_dsub
+         U __ieee754_rem_pio2
+         U __kernel_cos
+         U __kernel_sin
+00000000 T cos
+
+lib_a-s_erf.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+         U __aeabi_ui2d
+         U __ieee754_exp
+00000a08 T erf
+00000000 T erfc
+         U fabs
+
+lib_a-s_exp10.o:
+00000000 T exp10
+         U pow
+
+lib_a-s_expm1.o:
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T expm1
+
+lib_a-s_fabs.o:
+00000000 T fabs
+
+lib_a-s_fdim.o:
+         U __aeabi_dcmpgt
+         U __aeabi_dsub
+         U __fpclassifyd
+00000000 T fdim
+
+lib_a-s_finite.o:
+00000000 T finite
+
+lib_a-s_floor.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpgt
+00000000 T floor
+
+lib_a-s_fma.o:
+         U __aeabi_dadd
+         U __aeabi_dmul
+00000000 T fma
+
+lib_a-s_fmax.o:
+         U __aeabi_dcmpgt
+         U __fpclassifyd
+00000000 T fmax
+
+lib_a-s_fmin.o:
+         U __aeabi_dcmplt
+         U __fpclassifyd
+00000000 T fmin
+
+lib_a-s_fpclassify.o:
+00000000 T __fpclassifyd
+
+lib_a-s_frexp.o:
+         U __aeabi_dmul
+00000000 T frexp
+
+lib_a-s_ilogb.o:
+00000000 T ilogb
+
+lib_a-s_infconst.o:
+00000008 R __infinity
+00000000 R __infinityf
+00000010 R __infinityld
+
+lib_a-s_infinity.o:
+00000000 T infinity
+
+lib_a-s_isinf.o:
+00000000 T isinf
+
+lib_a-s_isinfd.o:
+00000000 T __isinfd
+
+lib_a-s_isnan.o:
+00000000 T isnan
+
+lib_a-s_isnand.o:
+00000000 T __isnand
+
+lib_a-s_ldexp.o:
+         U __aeabi_dcmpeq
+         U __errno
+         U finite
+00000000 T ldexp
+         U scalbn
+
+lib_a-s_lib_ver.o:
+00000000 D __fdlib_version
+
+lib_a-s_log1p.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+00000000 T log1p
+
+lib_a-s_logb.o:
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_i2d
+         U fabs
+00000000 T logb
+
+lib_a-s_lrint.o:
+00000000 r TWO52
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dsub
+00000000 T lrint
+
+lib_a-s_lround.o:
+         U __aeabi_d2iz
+00000000 T lround
+
+lib_a-s_matherr.o:
+00000000 T matherr
+
+lib_a-s_modf.o:
+         U __aeabi_dsub
+00000000 T modf
+
+lib_a-s_nan.o:
+00000000 T nan
+
+lib_a-s_nearbyint.o:
+00000000 T nearbyint
+         U rint
+
+lib_a-s_nextafter.o:
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dmul
+00000000 T nextafter
+
+lib_a-s_pow10.o:
+         U pow
+00000000 T pow10
+
+lib_a-s_remquo.o:
+         U __aeabi_ddiv
+         U fabs
+         U lrint
+         U remainder
+00000000 T remquo
+
+lib_a-s_rint.o:
+00000000 r TWO52
+         U __aeabi_dadd
+         U __aeabi_dsub
+00000000 T rint
+
+lib_a-s_round.o:
+         U __aeabi_dadd
+00000000 T round
+
+lib_a-s_scalbln.o:
+         U __aeabi_dadd
+         U __aeabi_dmul
+         U copysign
+00000000 T scalbln
+
+lib_a-s_scalbn.o:
+         U __aeabi_dadd
+         U __aeabi_dmul
+         U copysign
+00000000 T scalbn
+
+lib_a-s_signbit.o:
+00000008 T __signbitd
+00000000 T __signbitf
+
+lib_a-s_signif.o:
+         U __aeabi_i2d
+         U __ieee754_scalb
+         U ilogb
+00000000 T significand
+
+lib_a-s_sin.o:
+         U __aeabi_dsub
+         U __ieee754_rem_pio2
+         U __kernel_cos
+         U __kernel_sin
+00000000 T sin
+
+lib_a-s_tan.o:
+         U __aeabi_dsub
+         U __ieee754_rem_pio2
+         U __kernel_tan
+00000000 T tan
+
+lib_a-s_tanh.o:
+         U __aeabi_dadd
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U expm1
+         U fabs
+00000000 T tanh
+
+lib_a-s_trunc.o:
+         U __aeabi_dadd
+00000000 T trunc
+
+lib_a-sf_asinh.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __ieee754_logf
+         U __ieee754_sqrtf
+00000000 T asinhf
+         U fabsf
+         U log1pf
+
+lib_a-sf_atan.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+00000000 T atanf
+00000000 r atanhi
+00000010 r atanlo
+         U fabsf
+
+lib_a-sf_cbrt.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+00000000 T cbrtf
+
+lib_a-sf_ceil.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+00000000 T ceilf
+
+lib_a-sf_copysign.o:
+00000000 T copysignf
+
+lib_a-sf_cos.o:
+         U __aeabi_fsub
+         U __ieee754_rem_pio2f
+         U __kernel_cosf
+         U __kernel_sinf
+00000000 T cosf
+
+lib_a-sf_erf.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+         U __aeabi_ui2f
+         U __ieee754_expf
+00000000 T erfcf
+0000068c T erff
+         U fabsf
+
+lib_a-sf_exp10.o:
+00000000 T exp10f
+         U powf
+
+lib_a-sf_expm1.o:
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fcmplt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T expm1f
+
+lib_a-sf_fabs.o:
+00000000 T fabsf
+
+lib_a-sf_fdim.o:
+         U __aeabi_fcmpgt
+         U __aeabi_fsub
+         U __fpclassifyf
+00000000 T fdimf
+
+lib_a-sf_finite.o:
+00000000 T finitef
+
+lib_a-sf_floor.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpgt
+00000000 T floorf
+
+lib_a-sf_fma.o:
+         U __aeabi_fadd
+         U __aeabi_fmul
+00000000 T fmaf
+
+lib_a-sf_fmax.o:
+         U __aeabi_fcmpgt
+         U __fpclassifyf
+00000000 T fmaxf
+
+lib_a-sf_fmin.o:
+         U __aeabi_fcmplt
+         U __fpclassifyf
+00000000 T fminf
+
+lib_a-sf_fpclassify.o:
+00000000 T __fpclassifyf
+
+lib_a-sf_frexp.o:
+         U __aeabi_fmul
+00000000 T frexpf
+
+lib_a-sf_ilogb.o:
+00000000 T ilogbf
+
+lib_a-sf_infinity.o:
+00000000 T infinityf
+
+lib_a-sf_isinf.o:
+00000000 T isinff
+
+lib_a-sf_isinff.o:
+00000000 T __isinff
+
+lib_a-sf_isnan.o:
+00000000 T isnanf
+
+lib_a-sf_isnanf.o:
+00000000 T __isnanf
+
+lib_a-sf_ldexp.o:
+         U __aeabi_fcmpeq
+         U __errno
+         U finitef
+00000000 T ldexpf
+         U scalbnf
+
+lib_a-sf_log1p.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpeq
+         U __aeabi_fcmpgt
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U __aeabi_i2f
+00000000 T log1pf
+
+lib_a-sf_logb.o:
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_i2f
+         U fabsf
+00000000 T logbf
+
+lib_a-sf_lrint.o:
+00000000 r TWO23
+         U __aeabi_f2iz
+         U __aeabi_fadd
+         U __aeabi_fsub
+00000000 T lrintf
+
+lib_a-sf_lround.o:
+         U __aeabi_f2iz
+00000000 T lroundf
+
+lib_a-sf_modf.o:
+         U __aeabi_fsub
+00000000 T modff
+
+lib_a-sf_nan.o:
+00000000 T nanf
+
+lib_a-sf_nearbyint.o:
+00000000 T nearbyintf
+         U rintf
+
+lib_a-sf_nextafter.o:
+         U __aeabi_fadd
+         U __aeabi_fcmpeq
+         U __aeabi_fmul
+00000000 T nextafterf
+
+lib_a-sf_pow10.o:
+00000000 T pow10f
+         U powf
+
+lib_a-sf_remquo.o:
+         U __aeabi_fdiv
+         U fabsf
+         U lrintf
+         U remainderf
+00000000 T remquof
+
+lib_a-sf_rint.o:
+00000000 r TWO23
+         U __aeabi_fadd
+         U __aeabi_fsub
+00000000 T rintf
+
+lib_a-sf_round.o:
+         U __aeabi_fadd
+00000000 T roundf
+
+lib_a-sf_scalbln.o:
+         U __aeabi_fadd
+         U __aeabi_fmul
+         U copysignf
+00000000 T scalblnf
+
+lib_a-sf_scalbn.o:
+         U __aeabi_fadd
+         U __aeabi_fmul
+         U copysignf
+00000000 T scalbnf
+
+lib_a-sf_signif.o:
+         U __aeabi_i2f
+         U __ieee754_scalbf
+         U ilogbf
+00000000 T significandf
+
+lib_a-sf_sin.o:
+         U __aeabi_fsub
+         U __ieee754_rem_pio2f
+         U __kernel_cosf
+         U __kernel_sinf
+00000000 T sinf
+
+lib_a-sf_tan.o:
+         U __aeabi_fsub
+         U __ieee754_rem_pio2f
+         U __kernel_tanf
+00000000 T tanf
+
+lib_a-sf_tanh.o:
+         U __aeabi_fadd
+         U __aeabi_fdiv
+         U __aeabi_fmul
+         U __aeabi_fsub
+         U expm1f
+         U fabsf
+00000000 T tanhf
+
+lib_a-sf_trunc.o:
+00000000 T truncf
+
+lib_a-w_acos.o:
+         U __aeabi_dcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_acos
+         U __isnand
+00000000 T acos
+         U fabs
+         U matherr
+         U nan
+
+lib_a-w_acosh.o:
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __errno
+         U __fdlib_version
+         U __ieee754_acosh
+         U __isnand
+00000000 T acosh
+         U matherr
+
+lib_a-w_asin.o:
+         U __aeabi_dcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_asin
+         U __isnand
+00000000 T asin
+         U fabs
+         U matherr
+         U nan
+
+lib_a-w_atan2.o:
+         U __ieee754_atan2
+00000000 T atan2
+
+lib_a-w_atanh.o:
+         U __aeabi_dcmpge
+         U __aeabi_dcmpgt
+         U __aeabi_ddiv
+         U __errno
+         U __fdlib_version
+         U __ieee754_atanh
+         U __isnand
+00000000 T atanh
+         U fabs
+         U matherr
+
+lib_a-w_cabs.o:
+00000000 T cabs
+         U hypot
+
+lib_a-w_cosh.o:
+         U __aeabi_dcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_cosh
+         U __isnand
+00000000 T cosh
+         U fabs
+         U matherr
+
+lib_a-w_drem.o:
+00000000 T drem
+         U remainder
+
+lib_a-w_exp.o:
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __errno
+         U __fdlib_version
+         U __ieee754_exp
+00000000 T exp
+         U finite
+         U matherr
+
+lib_a-w_exp2.o:
+00000000 T exp2
+         U pow
+
+lib_a-w_fmod.o:
+         U __aeabi_dcmpeq
+         U __aeabi_ddiv
+         U __errno
+         U __fdlib_version
+         U __ieee754_fmod
+         U __isnand
+00000000 T fmod
+         U matherr
+
+lib_a-w_gamma.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_gamma_r
+         U _impure_ptr
+         U finite
+         U floor
+00000000 T gamma
+         U matherr
+
+lib_a-w_hypot.o:
+         U __errno
+         U __fdlib_version
+         U __ieee754_hypot
+         U finite
+00000000 T hypot
+         U matherr
+
+lib_a-w_j0.o:
+         U __aeabi_dcmpgt
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_j0
+         U __ieee754_y0
+         U __isnand
+         U fabs
+000001a0 T j0
+         U matherr
+00000000 T y0
+
+lib_a-w_j1.o:
+         U __aeabi_dcmpgt
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_j1
+         U __ieee754_y1
+         U __isnand
+         U fabs
+000001a0 T j1
+         U matherr
+00000000 T y1
+
+lib_a-w_jn.o:
+         U __aeabi_dcmpgt
+         U __aeabi_dcmple
+         U __aeabi_i2d
+         U __errno
+         U __fdlib_version
+         U __ieee754_jn
+         U __ieee754_yn
+         U __isnand
+         U fabs
+000001b8 T jn
+         U matherr
+00000000 T yn
+
+lib_a-w_lgamma.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_lgamma_r
+         U _impure_ptr
+         U finite
+         U floor
+00000000 T lgamma
+         U matherr
+
+lib_a-w_log.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_log
+         U __isnand
+00000000 T log
+         U matherr
+         U nan
+
+lib_a-w_log10.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_log10
+         U __isnand
+00000000 T log10
+         U matherr
+         U nan
+
+lib_a-w_pow.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __errno
+         U __fdlib_version
+         U __ieee754_pow
+         U __isnand
+         U finite
+         U matherr
+00000000 T pow
+         U rint
+
+lib_a-w_remainder.o:
+         U __aeabi_dcmpeq
+         U __aeabi_ddiv
+         U __errno
+         U __fdlib_version
+         U __ieee754_remainder
+         U __isnand
+         U matherr
+00000000 T remainder
+
+lib_a-w_scalb.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_scalb
+         U __isnand
+         U copysign
+         U finite
+         U matherr
+00000000 T scalb
+
+lib_a-w_sincos.o:
+         U cos
+         U sin
+00000000 T sincos
+
+lib_a-w_sinh.o:
+         U __aeabi_dcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_sinh
+         U finite
+         U matherr
+00000000 T sinh
+
+lib_a-w_sqrt.o:
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __errno
+         U __fdlib_version
+         U __ieee754_sqrt
+         U __isnand
+         U matherr
+00000000 T sqrt
+
+lib_a-w_tgamma.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmple
+         U __fdlib_version
+         U __ieee754_gamma_r
+         U __kernel_standard
+         U finite
+         U floor
+00000000 T tgamma
+
+lib_a-wf_acos.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_acosf
+00000000 T acosf
+         U fabsf
+         U isnanf
+         U matherr
+         U nan
+
+lib_a-wf_acosh.o:
+         U __aeabi_d2f
+         U __aeabi_ddiv
+         U __aeabi_f2d
+         U __aeabi_fcmplt
+         U __errno
+         U __fdlib_version
+         U __ieee754_acoshf
+00000000 T acoshf
+         U isnanf
+         U matherr
+
+lib_a-wf_asin.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_asinf
+00000000 T asinf
+         U fabsf
+         U isnanf
+         U matherr
+         U nan
+
+lib_a-wf_atan2.o:
+         U __ieee754_atan2f
+00000000 T atan2f
+
+lib_a-wf_atanh.o:
+         U __aeabi_d2f
+         U __aeabi_ddiv
+         U __aeabi_f2d
+         U __aeabi_fcmpge
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_atanhf
+00000000 T atanhf
+         U fabsf
+         U isnanf
+         U matherr
+
+lib_a-wf_cabs.o:
+00000000 T cabsf
+         U hypotf
+
+lib_a-wf_cosh.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_coshf
+00000000 T coshf
+         U fabsf
+         U isnanf
+         U matherr
+
+lib_a-wf_drem.o:
+00000000 T dremf
+         U remainderf
+
+lib_a-wf_exp.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __aeabi_fcmplt
+         U __errno
+         U __fdlib_version
+         U __ieee754_expf
+00000000 T expf
+         U finitef
+         U matherr
+
+lib_a-wf_exp2.o:
+00000000 T exp2f
+         U powf
+
+lib_a-wf_fmod.o:
+         U __aeabi_d2f
+         U __aeabi_ddiv
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __errno
+         U __fdlib_version
+         U __ieee754_fmodf
+00000000 T fmodf
+         U isnanf
+         U matherr
+
+lib_a-wf_gamma.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_gammaf_r
+         U _impure_ptr
+         U finitef
+         U floorf
+00000000 T gammaf
+         U matherr
+
+lib_a-wf_hypot.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __errno
+         U __fdlib_version
+         U __ieee754_hypotf
+         U finitef
+00000000 T hypotf
+         U matherr
+
+lib_a-wf_j0.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_j0f
+         U __ieee754_y0f
+         U fabsf
+         U isnanf
+00000190 T j0f
+         U matherr
+00000000 T y0f
+
+lib_a-wf_j1.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_j1f
+         U __ieee754_y1f
+         U fabsf
+         U isnanf
+00000190 T j1f
+         U matherr
+00000000 T y1f
+
+lib_a-wf_jn.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __aeabi_fcmple
+         U __aeabi_i2d
+         U __errno
+         U __fdlib_version
+         U __ieee754_jnf
+         U __ieee754_ynf
+         U fabsf
+         U isnanf
+000001a8 T jnf
+         U matherr
+00000000 T ynf
+
+lib_a-wf_lgamma.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_lgammaf_r
+         U _impure_ptr
+         U finitef
+         U floorf
+00000000 T lgammaf
+         U matherr
+
+lib_a-wf_log.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_logf
+         U isnanf
+00000000 T logf
+         U matherr
+         U nan
+
+lib_a-wf_log10.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_log10f
+         U isnanf
+00000000 T log10f
+         U matherr
+         U nan
+
+lib_a-wf_pow.o:
+         U __aeabi_d2f
+         U __aeabi_dcmpeq
+         U __aeabi_ddiv
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmplt
+         U __aeabi_fmul
+         U __errno
+         U __fdlib_version
+         U __ieee754_powf
+         U finitef
+         U isnanf
+         U matherr
+00000000 T powf
+         U rint
+
+lib_a-wf_remainder.o:
+         U __aeabi_d2f
+         U __aeabi_ddiv
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __errno
+         U __fdlib_version
+         U __ieee754_remainderf
+         U isnanf
+         U matherr
+00000000 T remainderf
+
+lib_a-wf_scalb.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_scalbf
+         U copysign
+         U finitef
+         U isnanf
+         U matherr
+00000000 T scalbf
+
+lib_a-wf_sincos.o:
+         U cosf
+00000000 T sincosf
+         U sinf
+
+lib_a-wf_sinh.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpgt
+         U __errno
+         U __fdlib_version
+         U __ieee754_sinhf
+         U finitef
+         U matherr
+00000000 T sinhf
+
+lib_a-wf_sqrt.o:
+         U __aeabi_d2f
+         U __aeabi_ddiv
+         U __aeabi_f2d
+         U __aeabi_fcmplt
+         U __errno
+         U __fdlib_version
+         U __ieee754_sqrtf
+         U isnanf
+         U matherr
+00000000 T sqrtf
+
+lib_a-wf_tgamma.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmple
+         U __fdlib_version
+         U __ieee754_gammaf_r
+         U __kernel_standard
+         U finitef
+         U floorf
+00000000 T tgammaf
+
+lib_a-wr_gamma.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_gamma_r
+         U finite
+         U floor
+00000000 T gamma_r
+         U matherr
+
+lib_a-wr_lgamma.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_lgamma_r
+         U finite
+         U floor
+00000000 T lgamma_r
+         U matherr
+
+lib_a-wrf_gamma.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_gammaf_r
+         U finitef
+         U floorf
+00000000 T gammaf_r
+         U matherr
+
+lib_a-wrf_lgamma.o:
+         U __aeabi_d2f
+         U __aeabi_f2d
+         U __aeabi_fcmpeq
+         U __aeabi_fcmple
+         U __errno
+         U __fdlib_version
+         U __ieee754_lgammaf_r
+         U finitef
+         U floorf
+00000000 T lgammaf_r
+         U matherr

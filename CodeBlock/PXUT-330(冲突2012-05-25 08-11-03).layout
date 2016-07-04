@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="..\Fchar.h" open="0" top="0" tabpos="19">
+		<Cursor position="88881" topLine="1080" />
+	</File>
+	<File name="..\M10Era.h" open="0" top="0" tabpos="12">
+		<Cursor position="5900" topLine="172" />
+	</File>
+	<File name="..\Media.h" open="0" top="0" tabpos="20">
+		<Cursor position="1851" topLine="18" />
+	</File>
+	<File name="..\Music_alice.c" open="0" top="0" tabpos="7">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="..\Music_byebye.c" open="0" top="0" tabpos="0">
+		<Cursor position="3225" topLine="0" />
+	</File>
+	<File name="..\Music_lee.c" open="0" top="0" tabpos="21">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="..\SDcard.c" open="1" top="0" tabpos="11">
+		<Cursor position="24832" topLine="13" />
+	</File>
+	<File name="..\Screen1.h" open="0" top="0" tabpos="5">
+		<Cursor position="1045" topLine="12" />
+	</File>
+	<File name="..\User.c" open="0" top="0" tabpos="7">
+		<Cursor position="11239" topLine="374" />
+	</File>
+	<File name="..\UserApp.c" open="0" top="0" tabpos="16">
+		<Cursor position="2207" topLine="60" />
+	</File>
+	<File name="..\armtest.c" open="1" top="0" tabpos="14">
+		<Cursor position="8115" topLine="308" />
+	</File>
+	<File name="..\char.h" open="1" top="0" tabpos="13">
+		<Cursor position="23751" topLine="1004" />
+	</File>
+	<File name="..\common.c" open="1" top="0" tabpos="6">
+		<Cursor position="24359" topLine="905" />
+	</File>
+	<File name="..\common.h" open="1" top="0" tabpos="10">
+		<Cursor position="3839" topLine="61" />
+	</File>
+	<File name="..\cudefm2c_1.h" open="0" top="0" tabpos="17">
+		<Cursor position="9568" topLine="224" />
+	</File>
+	<File name="..\cudefm2e_1.h" open="0" top="0" tabpos="16">
+		<Cursor position="8168" topLine="171" />
+	</File>
+	<File name="..\data.c" open="1" top="0" tabpos="12">
+		<Cursor position="8520" topLine="27" />
+	</File>
+	<File name="..\ding.c" open="0" top="0" tabpos="7">
+		<Cursor position="7242" topLine="39" />
+	</File>
+	<File name="..\display.c" open="1" top="0" tabpos="2">
+		<Cursor position="35724" topLine="934" />
+	</File>
+	<File name="..\display.h" open="0" top="0" tabpos="14">
+		<Cursor position="2668" topLine="57" />
+	</File>
+	<File name="..\fatfs_config.h" open="0" top="0" tabpos="0">
+		<Cursor position="6201" topLine="140" />
+	</File>
+	<File name="..\ff.h" open="0" top="0" tabpos="12">
+		<Cursor position="30020" topLine="565" />
+	</File>
+	<File name="..\function.c" open="1" top="1" tabpos="15">
+		<Cursor position="15223" topLine="435" />
+	</File>
+	<File name="..\gain.c" open="1" top="0" tabpos="9">
+		<Cursor position="31" topLine="0" />
+	</File>
+	<File name="..\globe.h" open="1" top="0" tabpos="3">
+		<Cursor position="5688" topLine="252" />
+	</File>
+	<File name="..\hzk.h" open="0" top="0" tabpos="18">
+		<Cursor position="927" topLine="0" />
+	</File>
+	<File name="..\ini.c" open="0" top="0" tabpos="16">
+		<Cursor position="636" topLine="0" />
+	</File>
+	<File name="..\input.c" open="1" top="0" tabpos="7">
+		<Cursor position="4525" topLine="69" />
+	</File>
+	<File name="..\keyio.c" open="1" top="0" tabpos="4">
+		<Cursor position="110448" topLine="3471" />
+	</File>
+	<File name="..\ldscript1" open="0" top="0" tabpos="21">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="..\ldscript2" open="0" top="0" tabpos="20">
+		<Cursor position="224" topLine="0" />
+	</File>
+	<File name="..\m10_patch.c" open="0" top="0" tabpos="14">
+		<Cursor position="3193" topLine="83" />
+	</File>
+	<File name="..\main.c" open="0" top="0" tabpos="14">
+		<Cursor position="3476" topLine="335" />
+	</File>
+	<File name="..\main.h" open="0" top="0" tabpos="12">
+		<Cursor position="271" topLine="0" />
+	</File>
+	<File name="..\makefile" open="0" top="0" tabpos="18">
+		<Cursor position="659" topLine="63" />
+	</File>
+	<File name="..\menu.c" open="1" top="0" tabpos="5">
+		<Cursor position="2964" topLine="99" />
+	</File>
+	<File name="..\para.c" open="0" top="0" tabpos="15">
+		<Cursor position="2352" topLine="51" />
+	</File>
+	<File name="..\print.c" open="0" top="0" tabpos="6">
+		<Cursor position="36741" topLine="1291" />
+	</File>
+	<File name="..\print1.c" open="0" top="0" tabpos="0">
+		<Cursor position="605" topLine="309" />
+	</File>
+	<File name="..\sdcard.h" open="0" top="0" tabpos="19">
+		<Cursor position="1871" topLine="39" />
+	</File>
+	<File name="..\simkai24.h" open="0" top="0" tabpos="5">
+		<Cursor position="3006192" topLine="36651" />
+	</File>
+	<File name="..\sysdef.c" open="0" top="0" tabpos="10">
+		<Cursor position="4054" topLine="73" />
+	</File>
+	<File name="..\sysdef.h" open="1" top="0" tabpos="8">
+		<Cursor position="71" topLine="0" />
+	</File>
+	<File name="..\test.c" open="1" top="0" tabpos="1">
+		<Cursor position="114377" topLine="3010" />
+	</File>
+	<File name="..\test.h" open="0" top="0" tabpos="16">
+		<Cursor position="8169" topLine="234" />
+	</File>
+	<File name="..\tools.c" open="0" top="0" tabpos="17">
+		<Cursor position="1771" topLine="71" />
+	</File>
+	<File name="..\tools.h" open="0" top="0" tabpos="15">
+		<Cursor position="274" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

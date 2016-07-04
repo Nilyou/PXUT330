@@ -1,0 +1,13 @@
+
+SECTIONS
+{	
+	.text : { *(.text) *(.rodata*) } > rom
+	.data : { *(.data).= 0x2000 } > rom
+	.bss  : { *(.bss) } > ram
+}
+
+MEMORY
+{
+	rom(r) : ORIGIN = 0x480000 , LENGTH = 0x50000
+	ram(rw): ORIGIN = 0x83d000, LENGTH = 0x8000
+}

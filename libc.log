@@ -1,0 +1,3275 @@
+
+lib_a-_Exit.o:
+00000000 T _Exit
+         U _exit
+
+lib_a-__adjust.o:
+00000000 T __adjust
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __exp10
+
+lib_a-__atexit.o:
+00000000 T __register_exitproc
+         U _global_impure_ptr
+         w malloc
+
+lib_a-__call_atexit.o:
+00000000 T __call_exitprocs
+         w __libc_fini
+         U __libc_fini_array
+         U _global_impure_ptr
+         U atexit
+         w free
+00000150 t register_fini
+
+lib_a-__dprintf.o:
+000000e8 t T.10
+         U __aeabi_uidiv
+         U __aeabi_uidivmod
+00000140 T __dprintf
+         U __unctrl
+         U _impure_ptr
+         U _write_r
+00000000 b big_endian_p
+00000000 r chars.1424
+00000068 t print_number
+         U strlen
+00000000 t write_char
+00000034 t write_string
+
+lib_a-__exp10.o:
+         U __aeabi_dmul
+00000000 T __exp10
+00000000 r powtab.2506
+
+lib_a-__ten_mu.o:
+         U __aeabi_dadd
+         U __aeabi_dmul
+         U __aeabi_i2d
+00000000 T __ten_mul
+
+lib_a-_tolower.o:
+         U __ctype_ptr__
+00000000 T _tolower
+
+lib_a-_toupper.o:
+         U __ctype_ptr__
+00000000 T _toupper
+
+lib_a-a64l.o:
+00000000 T a64l
+
+lib_a-abort.o:
+         U _exit
+00000000 T abort
+         U raise
+
+lib_a-abs.o:
+00000000 T abs
+
+lib_a-access.o:
+00000000 T access
+         U stat
+
+lib_a-aeabi_atexit.o:
+00000000 T __aeabi_atexit
+         U __cxa_atexit
+
+lib_a-aeabi_memclr.o:
+00000000 T __aeabi_memclr
+00000000 T __aeabi_memclr4
+00000000 T __aeabi_memclr8
+         U __aeabi_memset
+
+lib_a-aeabi_memcpy.o:
+00000000 T __aeabi_memcpy
+00000000 T __aeabi_memcpy4
+00000000 T __aeabi_memcpy8
+         U memcpy
+
+lib_a-aeabi_memmove.o:
+00000000 T __aeabi_memmove
+00000000 T __aeabi_memmove4
+00000000 T __aeabi_memmove8
+         U memmove
+
+lib_a-aeabi_memset.o:
+00000000 T __aeabi_memset
+00000000 T __aeabi_memset4
+00000000 T __aeabi_memset8
+         U memset
+
+lib_a-argz_add.o:
+00000000 T argz_add
+         U memcpy
+         U realloc
+         U strlen
+
+lib_a-argz_add_sep.o:
+00000000 T argz_add_sep
+         U argz_create_sep
+         U memcpy
+         U realloc
+
+lib_a-argz_append.o:
+00000000 T argz_append
+         U memcpy
+         U realloc
+
+lib_a-argz_count.o:
+00000000 T argz_count
+
+lib_a-argz_create.o:
+00000000 T argz_create
+         U malloc
+         U memcpy
+         U strlen
+
+lib_a-argz_create_sep.o:
+00000000 T argz_create_sep
+         U free
+         U malloc
+         U memcpy
+         U strdup
+         U strlen
+         U strsep
+
+lib_a-argz_delete.o:
+00000000 T argz_delete
+         U free
+         U memmove
+         U realloc
+         U strlen
+
+lib_a-argz_extract.o:
+         U argz_count
+00000000 T argz_extract
+
+lib_a-argz_insert.o:
+         U argz_add
+00000000 T argz_insert
+         U memcpy
+         U memmove
+         U realloc
+         U strlen
+
+lib_a-argz_next.o:
+00000000 T argz_next
+
+lib_a-argz_replace.o:
+         U _buf_findstr
+00000000 T argz_replace
+         U free
+         U malloc
+         U memcpy
+         U realloc
+         U strlen
+
+lib_a-argz_stringify.o:
+00000000 T argz_stringify
+
+lib_a-asctime.o:
+         U _impure_ptr
+00000000 T asctime
+         U asctime_r
+
+lib_a-asctime_r.o:
+00000000 T asctime_r
+00000000 r day_name.1782
+00000018 r mon_name.1783
+         U sprintf
+
+lib_a-asiprintf.o:
+0000007c T _asiprintf_r
+         U _impure_ptr
+         U _svfiprintf_r
+00000000 T asiprintf
+
+lib_a-asniprintf.o:
+000000cc T _asniprintf_r
+         U _impure_ptr
+         U _svfiprintf_r
+00000000 T asniprintf
+
+lib_a-asnprintf.o:
+000000cc T _asnprintf_r
+         U _impure_ptr
+         U _svfprintf_r
+00000000 T asnprintf
+
+lib_a-asprintf.o:
+0000007c T _asprintf_r
+         U _impure_ptr
+         U _svfprintf_r
+00000000 T asprintf
+
+lib_a-assert.o:
+0000005c T __assert
+00000000 T __assert_func
+         U _impure_ptr
+         U abort
+         U fiprintf
+
+lib_a-atexit.o:
+         U __register_exitproc
+00000000 T atexit
+
+lib_a-atof.o:
+00000000 T atof
+         U strtod
+
+lib_a-atoff.o:
+00000000 T atoff
+         U strtof
+
+lib_a-atoi.o:
+00000000 T _atoi_r
+         U _strtol_r
+00000018 T atoi
+         U strtol
+
+lib_a-atol.o:
+00000000 T _atol_r
+         U _strtol_r
+00000018 T atol
+         U strtol
+
+lib_a-atoll.o:
+00000000 T _atoll_r
+         U _strtoll_r
+00000018 T atoll
+         U strtoll
+
+lib_a-bcmp.o:
+00000000 T bcmp
+         U memcmp
+
+lib_a-bcopy.o:
+00000000 T bcopy
+         U memmove
+
+lib_a-bsearch.o:
+00000000 T bsearch
+
+lib_a-btowc.o:
+         U _impure_ptr
+         U _mbtowc_r
+00000000 T btowc
+         U memset
+
+lib_a-buf_findstr.o:
+00000000 T _buf_findstr
+
+lib_a-bzero.o:
+00000000 T bzero
+
+lib_a-calloc.o:
+         U _calloc_r
+         U _impure_ptr
+00000000 T calloc
+
+lib_a-callocr.o:
+00000000 T _calloc_r
+         U _malloc_r
+         U memset
+
+lib_a-cfreer.o:
+         U _free_r
+         U _impure_ptr
+00000000 T cfree
+
+lib_a-clearerr.o:
+         U __sinit
+         U _impure_ptr
+00000000 T clearerr
+
+lib_a-clibabi_assert.o:
+00000000 T __aeabi_assert
+         U __assert
+
+lib_a-clibabi_ctype.o:
+00000000 R __aeabi_ctype_table_
+00000000 R __aeabi_ctype_table_C
+
+lib_a-clibabi_errno.o:
+00000000 R __aeabi_EDOM
+00000008 R __aeabi_EILSEQ
+00000004 R __aeabi_ERANGE
+00000000 T __aeabi_errno_addr
+         U __errno
+00000000 T __rt_errno_addr
+
+lib_a-clibabi_limits.o:
+00000000 R __aeabi_MB_LEN_MAX
+
+lib_a-clibabi_locale.o:
+00000014 R __aeabi_LC_ALL
+00000000 R __aeabi_LC_COLLATE
+00000004 R __aeabi_LC_CTYPE
+00000008 R __aeabi_LC_MONETARY
+0000000c R __aeabi_LC_NUMERIC
+00000010 R __aeabi_LC_TIME
+00000000 T __aeabi_localeconv
+00000000 b a.871
+         U localeconv
+         U memcpy
+         U memset
+
+lib_a-clibabi_math.o:
+00000000 R __aeabi_HUGE_VAL
+00000010 R __aeabi_HUGE_VALF
+00000008 R __aeabi_HUGE_VALL
+00000014 R __aeabi_INFINITY
+00000018 R __aeabi_NAN
+
+lib_a-clibabi_setjmp.o:
+00000000 R __aeabi_JMP_BUF_SIZE
+
+lib_a-clibabi_signal.o:
+00000000 R __aeabi_SIGABRT
+00000004 R __aeabi_SIGFPE
+00000008 R __aeabi_SIGILL
+0000000c R __aeabi_SIGINT
+00000010 R __aeabi_SIGSEGV
+00000014 R __aeabi_SIGTERM
+
+lib_a-clibabi_signal_fns.o:
+00000000 A __aeabi_SIG_DFL
+fffffffe A __aeabi_SIG_ERR
+00000000 A __aeabi_SIG_IGN
+
+lib_a-clibabi_stdio.o:
+0000000c R __aeabi_BUFSIZ
+00000018 R __aeabi_FILENAME_MAX
+00000010 R __aeabi_FOPEN_MAX
+00000000 R __aeabi_IOFBF
+00000004 R __aeabi_IOLBF
+00000008 R __aeabi_IONBF
+0000001c R __aeabi_L_tmpnam
+00000014 R __aeabi_TMP_MAX
+00000004 C __aeabi_stderr
+00000004 C __aeabi_stdin
+00000004 C __aeabi_stdout
+         U _impure_ptr
+00000000 d fp
+00000000 t setup_aeabi_stdio
+
+lib_a-clibabi_stdlib.o:
+00000000 T __aeabi_MB_CUR_MAX
+         U __mb_cur_max
+
+lib_a-clibabi_time.o:
+00000000 R __aeabi_CLOCKS_PER_SEC
+
+lib_a-clock.o:
+         U _impure_ptr
+         U _times_r
+00000000 T clock
+
+lib_a-closer.o:
+         U _close
+00000000 T _close_r
+         U errno
+
+lib_a-ctime.o:
+         U asctime
+00000000 T ctime
+         U localtime
+
+lib_a-ctime_r.o:
+         U asctime_r
+00000000 T ctime_r
+         U localtime_r
+
+lib_a-ctype_.o:
+00000000 D __ctype_ptr
+00000004 D __ctype_ptr__
+00000000 R _ctype_
+
+lib_a-cxa_atexit.o:
+00000000 T __cxa_atexit
+         U __register_exitproc
+
+lib_a-cxa_finalize.o:
+         U __call_exitprocs
+00000000 T __cxa_finalize
+
+lib_a-difftime.o:
+         U __aeabi_i2d
+00000000 T difftime
+
+lib_a-diprintf.o:
+00000040 T _diprintf_r
+         U _impure_ptr
+         U _vdiprintf_r
+00000000 T diprintf
+
+lib_a-div.o:
+         U __aeabi_idiv
+         U __aeabi_idivmod
+00000000 T div
+
+lib_a-dprintf.o:
+00000044 T _dprintf_r
+         U _impure_ptr
+         U _vdprintf_r
+00000000 T dprintf
+
+lib_a-drand48.o:
+00000000 T _drand48_r
+         U _erand48_r
+         U _impure_ptr
+00000014 T drand48
+
+lib_a-dtoa.o:
+00000010 r .LC2
+         U _Balloc
+         U _Bfree
+         U __aeabi_d2iz
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpge
+         U __aeabi_dcmpgt
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_i2d
+         U __aeabi_ui2d
+         U __aeabi_uidiv
+         U __d2b
+         U __hi0bits
+         U __i2b
+         U __lshift
+         U __mcmp
+         U __mdiff
+         U __mprec_bigtens
+         U __mprec_tens
+         U __multadd
+         U __multiply
+         U __pow5mult
+000001e8 T _dtoa_r
+         U memcpy
+00000000 t quorem
+
+lib_a-dtoastub.o:
+00000000 T __dtoa
+         U _dtoa_r
+         U _impure_ptr
+
+lib_a-dummy.o:
+
+lib_a-ecvtbuf.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __aeabi_dcmple
+         U __aeabi_dcmplt
+0000070c T _dcvt
+         U _dtoa_r
+000001b8 T _gcvt
+         U _impure_ptr
+         U _mprec_log10
+         U _realloc_r
+00000480 T ecvtbuf
+0000059c T fcvtbuf
+00000000 t print_e
+         U strcpy
+
+lib_a-efgcvt.o:
+         U __aeabi_dcmplt
+         U __aeabi_f2d
+         U _gcvt
+         U _impure_ptr
+000000a0 T ecvt
+         U ecvtbuf
+000000c8 T ecvtf
+000000fc T fcvt
+         U fcvtbuf
+00000124 T fcvtf
+00000000 T gcvt
+00000080 T gcvtf
+
+lib_a-environ.o:
+00000000 D environ
+00000000 b initial_env
+
+lib_a-envlock.o:
+00000000 T __env_lock
+00000004 T __env_unlock
+
+lib_a-envz_add.o:
+         U argz_add
+00000000 T envz_add
+         U envz_remove
+         U free
+         U malloc
+         U memcpy
+         U strlen
+
+lib_a-envz_entry.o:
+         U _buf_findstr
+00000000 T envz_entry
+
+lib_a-envz_get.o:
+         U _buf_findstr
+00000000 T envz_get
+
+lib_a-envz_merge.o:
+         U argz_add
+         U argz_next
+         U envz_add
+         U envz_entry
+00000000 T envz_merge
+         U free
+         U strchr
+         U strdup
+
+lib_a-envz_remove.o:
+         U envz_entry
+00000000 T envz_remove
+         U memmove
+         U realloc
+         U strlen
+
+lib_a-envz_strip.o:
+         U argz_next
+00000000 T envz_strip
+         U memmove
+         U realloc
+         U strchr
+         U strlen
+
+lib_a-eprintf.o:
+00000000 T __eprintf
+         U _impure_ptr
+         U abort
+         U fiprintf
+
+lib_a-erand48.o:
+         U __aeabi_dadd
+         U __aeabi_ui2d
+         U __dorand48
+00000000 T _erand48_r
+         U _impure_ptr
+0000007c T erand48
+         U ldexp
+
+lib_a-errno.o:
+00000000 T __errno
+         U _impure_ptr
+
+lib_a-execr.o:
+         U _execve
+00000074 T _execve_r
+         U _fork
+0000003c T _fork_r
+         U _wait
+00000000 T _wait_r
+         U errno
+
+lib_a-exit.o:
+         U __call_exitprocs
+         U _exit
+         U _global_impure_ptr
+00000000 T exit
+
+lib_a-fclose.o:
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U __sinit
+00000000 T _fclose_r
+         U _fflush_r
+         U _free_r
+         U _impure_ptr
+000000f8 T fclose
+
+lib_a-fcloseall.o:
+         U _fclose_r
+00000000 T _fcloseall_r
+         U _fwalk_reent
+         U _global_impure_ptr
+00000018 T fcloseall
+
+lib_a-fcntlr.o:
+         U _fcntl
+00000000 T _fcntl_r
+         U errno
+
+lib_a-fdopen.o:
+         U __sclose
+         U __sflags
+         U __sfp
+         U __sread
+         U __sseek
+         U __swrite
+00000000 T _fdopen_r
+         U _impure_ptr
+00000084 T fdopen
+
+lib_a-feof.o:
+         U __sinit
+         U _impure_ptr
+00000000 T feof
+
+lib_a-ferror.o:
+         U __sinit
+         U _impure_ptr
+00000000 T ferror
+
+lib_a-fflush.o:
+         U __sinit
+00000000 T _fflush_r
+         U _free_r
+         U _fwalk_reent
+         U _global_impure_ptr
+         U _impure_ptr
+000001d4 T fflush
+
+lib_a-ffs.o:
+00000000 T ffs
+
+lib_a-fgetc.o:
+         U __sinit
+         U __srget_r
+0000006c T _fgetc_r
+         U _impure_ptr
+00000000 T fgetc
+
+lib_a-fgetpos.o:
+00000000 T _fgetpos_r
+         U _ftell_r
+         U _impure_ptr
+00000024 T fgetpos
+
+lib_a-fgets.o:
+         U __sinit
+         U __srefill_r
+00000000 T _fgets_r
+         U _impure_ptr
+00000108 T fgets
+         U memchr
+         U memcpy
+
+lib_a-fgetwc.o:
+         U __errno
+         U __mb_cur_max
+         U __sinit
+         U __srefill_r
+00000000 T _fgetwc_r
+         U _impure_ptr
+         U _mbrtowc_r
+00000138 T fgetwc
+
+lib_a-fgetws.o:
+         U __errno
+         U __sinit
+         U __srefill_r
+00000000 T _fgetws_r
+         U _impure_ptr
+         U _mbsrtowcs_r
+00000178 T fgetws
+         U mbsinit
+         U memchr
+
+lib_a-fileno.o:
+         U __sinit
+         U _impure_ptr
+00000000 T fileno
+
+lib_a-findfp.o:
+00000010 t __fp_lock
+00000044 T __fp_lock_all
+00000018 t __fp_unlock
+00000020 T __fp_unlock_all
+         U __sclose
+00000190 T __sfmoreglue
+000001d8 T __sfp
+00000000 T __sfp_lock_acquire
+00000004 T __sfp_lock_release
+0000010c T __sinit
+00000008 T __sinit_lock_acquire
+0000000c T __sinit_lock_release
+         U __sread
+         U __sseek
+         U __swrite
+00000080 T _cleanup
+00000068 T _cleanup_r
+         U _fwalk
+         U _global_impure_ptr
+         U _impure_ptr
+         U _malloc_r
+         U fclose
+         U memset
+00000090 t std
+
+lib_a-fini.o:
+         w __fini_array_end
+         w __fini_array_start
+00000000 T __libc_fini_array
+         U _fini
+
+lib_a-fiprintf.o:
+00000040 T _fiprintf_r
+         U _impure_ptr
+         U _vfiprintf_r
+00000000 T fiprintf
+
+lib_a-fiscanf.o:
+         U __svfiscanf_r
+00000000 T _fiscanf_r
+         U _impure_ptr
+00000030 T fiscanf
+
+lib_a-fix_grouping.o:
+         U __ctype_ptr__
+00000000 T __fix_locale_grouping_str
+00000000 r nogrouping
+
+lib_a-flags.o:
+00000000 T __sflags
+
+lib_a-fmemopen.o:
+         U __sflags
+         U __sfp
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+000000cc T _fmemopen_r
+         U _free_r
+         U _impure_ptr
+         U _malloc_r
+         U abort
+000002cc t fmemcloser
+000002a0 T fmemopen
+00000410 t fmemreader
+00000000 t fmemseeker
+000002e4 t fmemwriter
+         U memchr
+         U memcpy
+         U memset
+
+lib_a-fopen.o:
+         U __sclose
+         U __sflags
+         U __sfp
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U __sread
+         U __sseek
+         U __swrite
+00000000 T _fopen_r
+         U _fseek_r
+         U _impure_ptr
+         U _open_r
+000000e4 T fopen
+
+lib_a-fopencookie.o:
+         U __errno
+         U __sflags
+         U __sfp
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+00000000 T _fopencookie_r
+         U _free_r
+         U _impure_ptr
+         U _malloc_r
+000002f4 t fccloser
+00000288 t fcreader
+0000017c t fcseeker
+000001f4 t fcwriter
+00000120 T fopencookie
+
+lib_a-fprintf.o:
+00000040 T _fprintf_r
+         U _impure_ptr
+         U _vfprintf_r
+00000000 T fprintf
+
+lib_a-fputc.o:
+         U __sinit
+00000050 T _fputc_r
+         U _impure_ptr
+         U _putc_r
+00000000 T fputc
+
+lib_a-fputs.o:
+         U __sfvwrite_r
+         U __sinit
+00000000 T _fputs_r
+         U _impure_ptr
+0000008c T fputs
+         U strlen
+
+lib_a-fputwc.o:
+         U __mb_cur_max
+         U __sinit
+         U __swbuf_r
+00000000 T _fputwc_r
+         U _impure_ptr
+         U _wcrtomb_r
+00000174 T fputwc
+
+lib_a-fputws.o:
+         U __sfvwrite_r
+         U __sinit
+         U __swsetup_r
+00000000 T _fputws_r
+         U _impure_ptr
+         U _wcsrtombs_r
+000000f0 T fputws
+
+lib_a-fread.o:
+         U __aeabi_uidiv
+         U __sinit
+         U __srefill_r
+00000000 T _fread_r
+         U _free_r
+         U _impure_ptr
+00000228 T fread
+         U memcpy
+
+lib_a-freer.o:
+         U __malloc_av_
+         U __malloc_current_mallinfo
+         U __malloc_lock
+         U __malloc_sbrk_base
+         U __malloc_top_pad
+         U __malloc_trim_threshold
+         U __malloc_unlock
+000000fc T _free_r
+00000000 T _malloc_trim_r
+         U _sbrk_r
+
+lib_a-freopen.o:
+         U __sclose
+         U __sflags
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U __sinit
+         U __sread
+         U __sseek
+         U __swrite
+         U _fclose_r
+         U _fflush_r
+         U _free_r
+00000000 T _freopen_r
+         U _impure_ptr
+         U _open_r
+00000218 T freopen
+         U memset
+
+lib_a-fscanf.o:
+         U __svfscanf_r
+00000000 T _fscanf_r
+         U _impure_ptr
+00000030 T fscanf
+
+lib_a-fseek.o:
+         U __sinit
+         U __smakebuf_r
+         U __srefill_r
+         U __sseek
+         U _fflush_r
+         U _free_r
+00000000 T _fseek_r
+         U _fstat_r
+         U _impure_ptr
+00000480 T fseek
+         U memset
+
+lib_a-fseeko.o:
+         U _fseek_r
+00000030 T _fseeko_r
+         U _impure_ptr
+00000000 T fseeko
+
+lib_a-fsetpos.o:
+         U _fseek_r
+00000000 T _fsetpos_r
+         U _impure_ptr
+00000020 T fsetpos
+
+lib_a-fstatr.o:
+         U _fstat
+00000000 T _fstat_r
+         U errno
+
+lib_a-ftell.o:
+         U __sinit
+         U _fflush_r
+00000000 T _ftell_r
+         U _impure_ptr
+000000d8 T ftell
+
+lib_a-ftello.o:
+         U _ftell_r
+00000020 T _ftello_r
+         U _impure_ptr
+00000000 T ftello
+
+lib_a-funopen.o:
+         U __errno
+         U __sfp
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U _free_r
+00000000 T _funopen_r
+         U _impure_ptr
+         U _malloc_r
+000002b4 t funcloser
+00000124 T funopen
+00000248 t funreader
+00000170 t funseeker
+000001dc t funwriter
+
+lib_a-fvwrite.o:
+00000000 T __sfvwrite_r
+         U __swsetup_r
+         U _fflush_r
+         U _free_r
+         U _malloc_r
+         U _realloc_r
+         U memchr
+         U memcpy
+         U memmove
+
+lib_a-fwalk.o:
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+00000088 T _fwalk
+00000000 T _fwalk_reent
+
+lib_a-fwide.o:
+         U __sinit
+00000000 T _fwide_r
+         U _impure_ptr
+0000007c T fwide
+
+lib_a-fwrite.o:
+         U __aeabi_uidiv
+         U __sfvwrite_r
+         U __sinit
+00000000 T _fwrite_r
+         U _impure_ptr
+000000a8 T fwrite
+
+lib_a-gdtoa-gethex.o:
+         U _Balloc
+         U _Bfree
+         U __any_on
+0000016c T __gethex
+00000100 C __hexdig
+00000000 T __hexdig_init
+         U __hi0bits
+         U __lshift
+         U memcpy
+00000084 t rshift
+
+lib_a-gdtoa-hexnan.o:
+         U __hexdig
+         U __hexdig_init
+00000000 T __hexnan
+
+lib_a-getc.o:
+         U __sinit
+         U __srget_r
+0000006c T _getc_r
+         U _impure_ptr
+00000000 T getc
+
+lib_a-getc_u.o:
+         U __srget_r
+00000044 T _getc_unlocked_r
+         U _impure_ptr
+00000000 T getc_unlocked
+
+lib_a-getchar.o:
+         U _getc_r
+00000020 T _getchar_r
+         U _impure_ptr
+00000000 T getchar
+
+lib_a-getchar_u.o:
+         U _getc_unlocked_r
+00000020 T _getchar_unlocked_r
+         U _impure_ptr
+00000000 T getchar_unlocked
+
+lib_a-getdelim.o:
+         U __errno
+00000000 T __getdelim
+         U __sinit
+         U _impure_ptr
+         U getc_unlocked
+         U realloc
+
+lib_a-getenv.o:
+0000002c T _findenv
+         U _findenv_r
+         U _impure_ptr
+00000000 T getenv
+
+lib_a-getenv_r.o:
+         U __env_lock
+         U __env_unlock
+00000000 T _findenv_r
+000000dc T _getenv_r
+         U environ
+         U strncmp
+
+lib_a-getline.o:
+         U __getdelim
+00000000 T __getline
+
+lib_a-getopt.o:
+000007d0 T __getopt_long_only_r
+00000800 T __getopt_long_r
+00000830 T __getopt_r
+         U _impure_ptr
+         U fprintf
+         U getenv
+0000097c T getopt
+000000c4 t getopt_internal
+000008ec T getopt_long
+0000085c T getopt_long_only
+         U memcmp
+00000000 B optarg
+00000000 D opterr
+00000004 B optind
+00000004 D optopt
+00000008 b optwhere
+00000000 t permute
+         U strchr
+         U strcmp
+         U strlen
+
+lib_a-getreent.o:
+00000000 T __getreent
+         U _impure_ptr
+
+lib_a-gets.o:
+         U __srget_r
+00000000 T _gets_r
+         U _impure_ptr
+00000094 T gets
+
+lib_a-getsubopt.o:
+00000000 T getsubopt
+         U strcmp
+00000004 C suboptarg
+
+lib_a-gettimeofdayr.o:
+         U _gettimeofday
+00000000 T _gettimeofday_r
+         U errno
+
+lib_a-gettzinfo.o:
+00000000 T __gettzinfo
+00000000 d tzinfo
+
+lib_a-getw.o:
+         U fread
+00000000 T getw
+
+lib_a-getwc.o:
+         U _fgetwc_r
+00000010 T _getwc_r
+         U fgetwc
+00000000 T getwc
+
+lib_a-getwchar.o:
+         U _fgetwc_r
+00000020 T _getwchar_r
+         U _impure_ptr
+         U fgetwc
+00000000 T getwchar
+
+lib_a-gmtime.o:
+         U _impure_ptr
+00000000 T gmtime
+         U gmtime_r
+
+lib_a-gmtime_r.o:
+         U _mktm_r
+00000000 T gmtime_r
+
+lib_a-hash.o:
+         U __addel
+         U __aeabi_idiv
+         U __big_keydata
+         U __big_return
+         U __buf_free
+         U __buf_init
+00000000 T __call_hash
+         U __default_hash
+         U __delpair
+         U __errno
+0000003c T __expand_table
+         U __find_bigpair
+         U __find_last_page
+         U __get_buf
+000008ec T __hash_open
+         U __ibitmap
+         U __log2
+         U __put_page
+         U __split_page
+         U abort
+0000084c t alloc_segs
+         U calloc
+         U close
+0000018c t flush_meta
+         U free
+         U fstat
+000014bc t hash_access
+000011c4 t hash_close
+00001858 t hash_delete
+00000150 t hash_fd
+00001810 t hash_get
+00001798 t hash_put
+00001264 t hash_seq
+000011f4 t hash_sync
+00000748 t hdestroy
+         U lseek
+         U malloc
+         U memcmp
+         U memmove
+         U memset
+         U open
+         U read
+         U stat
+         U write
+
+lib_a-hash_bigkey.o:
+         U __add_ovflpage
+00000b50 T __big_delete
+0000072c T __big_insert
+00000520 T __big_keydata
+000001f0 T __big_return
+00000560 T __big_split
+         U __call_hash
+         U __errno
+00000a34 T __find_bigpair
+00000000 T __find_last_page
+         U __free_ovflpage
+         U __get_buf
+00000094 t collect_data
+000003fc t collect_key
+         U free
+         U malloc
+         U memcmp
+         U memmove
+
+lib_a-hash_buf.o:
+00000078 T __buf_free
+00000000 T __buf_init
+00000148 T __get_buf
+         U __get_page
+         U __put_page
+00000030 T __reclaim_buf
+         U free
+         U malloc
+
+lib_a-hash_func.o:
+00000000 D __default_hash
+00000000 t hash4
+
+lib_a-hash_log2.o:
+00000000 T __log2
+
+lib_a-hash_page.o:
+00000650 T __add_ovflpage
+00000b38 T __addel
+         U __aeabi_idiv
+         U __big_delete
+         U __big_insert
+         U __big_split
+         U __call_hash
+000013bc T __delpair
+         U __errno
+         U __expand_table
+00000590 T __free_ovflpage
+         U __get_buf
+000002c4 T __get_page
+00000000 T __ibitmap
+         U __log2
+0000009c T __put_page
+         U __reclaim_buf
+00000db4 T __split_page
+0000050c t fetch_bitmap
+         U free
+         U lseek
+         U malloc
+         U memmove
+         U memset
+         U mkstemp
+00000000 d namestr.3827
+00000a9c t putpair
+         U read
+         U sigprocmask
+         U unlink
+         U write
+
+lib_a-hcreate.o:
+00000050 T hcreate
+         U hcreate_r
+00000038 T hdestroy
+         U hdestroy_r
+00000000 T hsearch
+         U hsearch_r
+00000000 b htab
+
+lib_a-hcreate_r.o:
+         U __default_hash
+         U __errno
+         U free
+00000108 T hcreate_r
+000000e0 T hdestroy_r
+00000000 T hsearch_r
+         U malloc
+         U strcmp
+         U strlen
+
+lib_a-impure.o:
+00000000 R _global_impure_ptr
+00000000 D _impure_ptr
+00000008 d impure_data
+
+lib_a-index.o:
+00000000 T index
+         U strchr
+
+lib_a-init.o:
+         w __init_array_end
+         w __init_array_start
+00000000 T __libc_init_array
+         w __preinit_array_end
+         w __preinit_array_start
+         U _init
+
+lib_a-iprintf.o:
+         U _impure_ptr
+00000000 T _iprintf_r
+         U _vfiprintf_r
+00000034 T iprintf
+
+lib_a-isalnum.o:
+         U __ctype_ptr__
+00000000 T isalnum
+
+lib_a-isalpha.o:
+         U __ctype_ptr__
+00000000 T isalpha
+
+lib_a-isascii.o:
+00000000 T isascii
+
+lib_a-isattyr.o:
+         U _isatty
+00000000 T _isatty_r
+         U errno
+
+lib_a-isblank.o:
+00000000 T isblank
+
+lib_a-iscanf.o:
+         U __svfiscanf_r
+         U _impure_ptr
+00000000 T _iscanf_r
+00000034 T iscanf
+
+lib_a-iscntrl.o:
+         U __ctype_ptr__
+00000000 T iscntrl
+
+lib_a-isdigit.o:
+         U __ctype_ptr__
+00000000 T isdigit
+
+lib_a-islower.o:
+         U __ctype_ptr__
+00000000 T islower
+
+lib_a-isprint.o:
+         U __ctype_ptr__
+00000000 T isgraph
+0000001c T isprint
+
+lib_a-ispunct.o:
+         U __ctype_ptr__
+00000000 T ispunct
+
+lib_a-isspace.o:
+         U __ctype_ptr__
+00000000 T isspace
+
+lib_a-isupper.o:
+         U __ctype_ptr__
+00000000 T isupper
+
+lib_a-iswalnum.o:
+00000000 T iswalnum
+         U iswalpha
+         U iswdigit
+
+lib_a-iswalpha.o:
+         U __ctype_ptr__
+00000000 T iswalpha
+
+lib_a-iswblank.o:
+         U isblank
+00000000 T iswblank
+
+lib_a-iswcntrl.o:
+         U __ctype_ptr__
+00000000 T iswcntrl
+
+lib_a-iswctype.o:
+         U iswalnum
+         U iswalpha
+         U iswblank
+         U iswcntrl
+00000000 T iswctype
+         U iswdigit
+         U iswgraph
+         U iswlower
+         U iswprint
+         U iswpunct
+         U iswspace
+         U iswupper
+         U iswxdigit
+
+lib_a-iswdigit.o:
+00000000 T iswdigit
+
+lib_a-iswgraph.o:
+00000000 T iswgraph
+         U iswprint
+         U iswspace
+
+lib_a-iswlower.o:
+00000000 T iswlower
+         U towupper
+
+lib_a-iswprint.o:
+         U __ctype_ptr__
+00000000 T iswprint
+
+lib_a-iswpunct.o:
+         U __ctype_ptr__
+00000000 T iswpunct
+
+lib_a-iswspace.o:
+         U __ctype_ptr__
+00000000 T iswspace
+
+lib_a-iswupper.o:
+00000000 T iswupper
+         U towlower
+
+lib_a-iswxdigit.o:
+00000000 T iswxdigit
+
+lib_a-isxdigit.o:
+         U __ctype_ptr__
+00000000 T isxdigit
+
+lib_a-jp2uc.o:
+
+lib_a-jrand48.o:
+         U __dorand48
+         U _impure_ptr
+00000000 T _jrand48_r
+00000020 T jrand48
+
+lib_a-l64a.o:
+00000000 r R64_ARRAY
+         U _impure_ptr
+00000080 T _l64a_r
+00000000 T l64a
+
+lib_a-labs.o:
+00000000 T labs
+
+lib_a-lcltime.o:
+         U _impure_ptr
+00000000 T localtime
+         U localtime_r
+
+lib_a-lcltime_r.o:
+         U _mktm_r
+00000000 T localtime_r
+
+lib_a-lcong48.o:
+         U _impure_ptr
+00000000 T _lcong48_r
+0000003c T lcong48
+
+lib_a-ldiv.o:
+         U __aeabi_idiv
+         U __aeabi_idivmod
+00000000 T ldiv
+
+lib_a-ldpart.o:
+         U _PathLocale
+00000000 T __part_load_locale
+         U close
+         U free
+         U fstat
+00000000 d locale_buf_C.1889
+         U malloc
+00000000 b num_lines.1890
+         U open
+         U read
+         U realloc
+         U strcat
+         U strchr
+         U strcmp
+         U strcpy
+         U strlen
+
+lib_a-ldtoa.o:
+         U _Balloc
+         U _Bfree
+         U __aeabi_uidiv
+0000169c T _ldcheck
+000025d0 T _ldtoa_r
+00001ac0 T _strtold
+00000000 r bmask
+         U calloc
+00001488 t e53toe
+00000610 t ecmp
+00001728 t ediv
+00000250 t edivm
+00000e34 t eiremain
+00000000 t eisinf
+00000a44 t emdnorm
+00000048 t emovi
+00001058 t emovo
+00000140 d emtens
+00001124 t emul
+000004dc t emulm
+00000f54 t enan
+000008fc t enormlz
+0000012c d eone
+00000130 t eshdn1
+00000754 t eshift
+00000170 t eshup1
+00000028 d etens
+00000000 b ezero
+         U free
+000001b4 t m16m
+00000018 d nan113
+00000014 d nan24
+0000000c d nan53
+00000000 d nan64
+         U sprintf
+         U strcpy
+         U strlen
+
+lib_a-linkr.o:
+         U _link
+00000000 T _link_r
+         U errno
+
+lib_a-llabs.o:
+00000000 T llabs
+
+lib_a-lldiv.o:
+         U __aeabi_ldivmod
+00000000 T lldiv
+
+lib_a-lmessages.o:
+00000000 r _C_messages_locale
+00000000 T __get_current_messages_locale
+00000024 T __messages_load_locale
+         U __part_load_locale
+00000004 b _messages_locale
+00000018 b _messages_locale_buf
+00000000 b _messages_using_locale
+00000014 b empty
+
+lib_a-lmonetary.o:
+00000000 r _C_monetary_locale
+         U __fix_locale_grouping_str
+00000000 T __get_current_monetary_locale
+         U __mlocale_changed
+00000048 T __monetary_load_locale
+         U __part_load_locale
+00000004 b _monetary_locale
+00000040 b _monetary_locale_buf
+00000000 b _monetary_using_locale
+00000024 t cnv
+00000044 b empty
+00000000 d numempty
+         U strtol
+
+lib_a-lnumeric.o:
+00000000 r _C_numeric_locale
+         U __fix_locale_grouping_str
+00000000 T __get_current_numeric_locale
+         U __nlocale_changed
+00000024 T __numeric_load_locale
+         U __part_load_locale
+00000004 b _numeric_locale
+00000010 b _numeric_locale_buf
+00000000 b _numeric_using_locale
+00000000 d numempty
+
+lib_a-locale.o:
+00000008 B _PathLocale
+00000004 D __lc_ctype
+00000000 T __locale_charset
+00000000 D __mb_cur_max
+00000004 B __mlocale_changed
+00000000 B __nlocale_changed
+         U _impure_ptr
+00000010 T _localeconv_r
+00000028 T _setlocale_r
+00000000 r charset
+00000004 r lconv
+0000001c T localeconv
+00000088 T setlocale
+         U strcmp
+
+lib_a-lrand48.o:
+         U __dorand48
+         U _impure_ptr
+00000000 T _lrand48_r
+00000028 T lrand48
+
+lib_a-lseekr.o:
+         U _lseek
+00000000 T _lseek_r
+         U errno
+
+lib_a-makebuf.o:
+00000000 T __smakebuf_r
+         U __sseek
+         U _cleanup_r
+         U _fstat_r
+         U _isatty_r
+         U _malloc_r
+
+lib_a-malign.o:
+         U _impure_ptr
+         U _memalign_r
+00000000 T memalign
+
+lib_a-malignr.o:
+         U __aeabi_uidivmod
+         U __malloc_lock
+         U __malloc_unlock
+         U _free_r
+         U _malloc_r
+00000000 T _memalign_r
+
+lib_a-mallinfor.o:
+         U __malloc_av_
+         U __malloc_current_mallinfo
+         U __malloc_lock
+         U __malloc_unlock
+00000000 T __malloc_update_mallinfo
+0000008c T _mallinfo_r
+
+lib_a-malloc.o:
+         U _free_r
+         U _impure_ptr
+         U _malloc_r
+00000000 T free
+00000020 T malloc
+
+lib_a-mallocr.o:
+00000000 D __malloc_av_
+00000004 B __malloc_current_mallinfo
+         U __malloc_lock
+0000002c B __malloc_max_sbrked_mem
+00000030 B __malloc_max_total_mem
+00000408 D __malloc_sbrk_base
+00000000 B __malloc_top_pad
+0000040c D __malloc_trim_threshold
+         U __malloc_unlock
+         U _free_r
+00000000 T _malloc_r
+         U _sbrk_r
+
+lib_a-malloptr.o:
+         U __malloc_lock
+         U __malloc_top_pad
+         U __malloc_trim_threshold
+         U __malloc_unlock
+00000000 T _mallopt_r
+
+lib_a-mallstatsr.o:
+         U __malloc_current_mallinfo
+         U __malloc_lock
+         U __malloc_max_total_mem
+         U __malloc_unlock
+         U __malloc_update_mallinfo
+00000000 T _malloc_stats_r
+         U fiprintf
+
+lib_a-mblen.o:
+00000000 T mblen
+
+lib_a-mblen_r.o:
+00000000 T _mblen_r
+
+lib_a-mbrlen.o:
+00000000 T mbrlen
+         U mbrtowc
+
+lib_a-mbrtowc.o:
+         U _impure_ptr
+00000000 T _mbrtowc_r
+         U _mbtowc_r
+0000004c T mbrtowc
+
+lib_a-mbsinit.o:
+00000000 T mbsinit
+
+lib_a-mbsnrtowcs.o:
+         U _impure_ptr
+         U _mbrtowc_r
+00000000 T _mbsnrtowcs_r
+000000f0 T mbsnrtowcs
+
+lib_a-mbsrtowcs.o:
+         U _impure_ptr
+         U _mbsnrtowcs_r
+00000040 T _mbsrtowcs_r
+00000000 T mbsrtowcs
+
+lib_a-mbstowcs.o:
+00000000 T mbstowcs
+
+lib_a-mbstowcs_r.o:
+         U __mb_cur_max
+00000000 T _mbstowcs_r
+         U _mbtowc_r
+
+lib_a-mbtowc.o:
+00000000 T mbtowc
+
+lib_a-mbtowc_r.o:
+00000000 T _mbtowc_r
+
+lib_a-memccpy.o:
+00000000 T memccpy
+
+lib_a-memchr.o:
+00000000 T memchr
+
+lib_a-memcmp.o:
+00000000 T memcmp
+
+lib_a-memcpy.o:
+00000000 T memcpy
+
+lib_a-memmem.o:
+00000000 t critical_factorization
+         U memchr
+         U memcmp
+00000470 T memmem
+00000118 t two_way_long_needle
+
+lib_a-memmove.o:
+00000000 T memmove
+
+lib_a-mempcpy.o:
+00000000 T mempcpy
+
+lib_a-memset.o:
+00000000 T memset
+
+lib_a-mktemp.o:
+         U __ctype_ptr__
+         U _getpid_r
+00000000 t _gettemp
+         U _impure_ptr
+0000025c T _mkstemp_r
+00000238 T _mktemp_r
+         U _open_r
+         U _stat_r
+00000200 T mkstemp
+000001cc T mktemp
+
+lib_a-mktime.o:
+00000000 r DAYS_IN_MONTH
+00000030 r _DAYS_BEFORE_MONTH
+         U __gettzinfo
+         U __tzcalc_limits
+         U _daylight
+         U div
+0000030c T mktime
+00000000 t validate_structure
+
+lib_a-mktm_r.o:
+         U __aeabi_idivmod
+         U __gettzinfo
+         U __tz_lock
+         U __tz_unlock
+00000000 T __tzcalc_limits
+         U _daylight
+0000023c T _mktm_r
+00000000 r mon_lengths
+00000060 r year_lengths
+
+lib_a-mlock.o:
+00000000 T __malloc_lock
+00000004 T __malloc_unlock
+
+lib_a-mprec.o:
+0000048c T _Balloc
+00000000 T _Bfree
+         U __aeabi_ddiv
+         U __aeabi_dmul
+00000404 T __any_on
+000001d0 T __b2d
+00000388 T __copybits
+00000514 T __d2b
+0000001c T __hi0bits
+00000aac T __i2b
+00000074 T __lo0bits
+000007a4 T __lshift
+00000108 T __mcmp
+00000624 T __mdiff
+000000d8 R __mprec_bigtens
+00000000 R __mprec_tens
+00000100 R __mprec_tinytens
+00000ad0 T __multadd
+000008b8 T __multiply
+00000bb4 T __pow5mult
+00000294 T __ratio
+00000cb0 T __s2b
+00000170 T __ulp
+         U _calloc_r
+00000338 T _mprec_log10
+         U memcpy
+000000c8 r p05.2435
+
+lib_a-mrand48.o:
+         U __dorand48
+         U _impure_ptr
+00000000 T _mrand48_r
+00000024 T mrand48
+
+lib_a-msize.o:
+         U _impure_ptr
+         U _malloc_usable_size_r
+00000000 T malloc_usable_size
+
+lib_a-msizer.o:
+00000000 T _malloc_usable_size_r
+
+lib_a-mstats.o:
+         U _impure_ptr
+         U _mallinfo_r
+         U _malloc_stats_r
+         U _mallopt_r
+00000000 T _mstats_r
+         U fiprintf
+00000084 T mallinfo
+00000040 T malloc_stats
+0000005c T mallopt
+0000002c T mstats
+
+lib_a-mtrim.o:
+         U _impure_ptr
+         U _malloc_trim_r
+00000000 T malloc_trim
+
+lib_a-nl_langinfo.o:
+         U __get_current_messages_locale
+         U __get_current_monetary_locale
+         U __get_current_numeric_locale
+         U __get_current_time_locale
+00000000 b cset.1595
+00000004 b csym.1594
+         U free
+         U localeconv
+00000000 T nl_langinfo
+         U realloc
+         U setlocale
+         U strcat
+         U strchr
+         U strcmp
+         U strcpy
+         U strlen
+         U strncmp
+         U strstr
+
+lib_a-nrand48.o:
+         U __dorand48
+         U _impure_ptr
+00000000 T _nrand48_r
+00000024 T nrand48
+
+lib_a-on_exit.o:
+         U __register_exitproc
+00000000 T on_exit
+
+lib_a-open_memstream.o:
+         U __sfp
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U _free_r
+         U _impure_ptr
+         U _malloc_r
+0000029c T _open_memstream_r
+00000278 T _open_wmemstream_r
+         U _realloc_r
+00000114 t internal_open_memstream_r
+000002c0 t memcloser
+         U memcpy
+00000000 t memseeker
+         U memset
+00000314 t memwriter
+000002a4 T open_memstream
+00000280 T open_wmemstream
+
+lib_a-openr.o:
+         U _open
+00000000 T _open_r
+         U errno
+
+lib_a-perror.o:
+         U _impure_ptr
+00000000 T _perror_r
+         U fputc
+         U fputs
+00000064 T perror
+         U strerror
+
+lib_a-printf.o:
+         U _impure_ptr
+00000040 T _printf_r
+         U _vfprintf_r
+00000000 T printf
+
+lib_a-putc.o:
+         U __sinit
+         U __swbuf_r
+         U _impure_ptr
+000000bc T _putc_r
+00000000 T putc
+
+lib_a-putc_u.o:
+         U __swbuf_r
+         U _impure_ptr
+0000007c T _putc_unlocked_r
+00000000 T putc_unlocked
+
+lib_a-putchar.o:
+         U _impure_ptr
+         U _putc_r
+00000028 T _putchar_r
+00000000 T putchar
+
+lib_a-putchar_u.o:
+         U _impure_ptr
+00000000 T _putchar_unlocked_r
+         U putc_unlocked
+0000001c T putchar_unlocked
+
+lib_a-putenv.o:
+         U _impure_ptr
+         U _putenv_r
+00000000 T putenv
+
+lib_a-putenv_r.o:
+         U _free_r
+00000000 T _putenv_r
+         U _setenv_r
+         U _strdup_r
+         U index
+
+lib_a-puts.o:
+         U __sfvwrite_r
+         U _impure_ptr
+00000000 T _puts_r
+000000a4 T puts
+         U strlen
+
+lib_a-putw.o:
+         U fwrite
+00000000 T putw
+
+lib_a-putwc.o:
+         U _fputwc_r
+00000010 T _putwc_r
+         U fputwc
+00000000 T putwc
+
+lib_a-putwchar.o:
+         U _fputwc_r
+         U _impure_ptr
+00000020 T _putwchar_r
+         U fputwc
+00000000 T putwchar
+
+lib_a-pvallocr.o:
+         U _memalign_r
+00000000 T _pvalloc_r
+
+lib_a-qsort.o:
+         U __aeabi_uidiv
+00000000 T qsort
+
+lib_a-raise.o:
+00000004 C _dummy_raise
+
+lib_a-rand.o:
+         U _impure_ptr
+0000001c T rand
+00000000 T srand
+
+lib_a-rand48.o:
+00000000 T __dorand48
+
+lib_a-rand_r.o:
+00000000 T rand_r
+
+lib_a-readr.o:
+         U _read
+00000000 T _read_r
+         U errno
+
+lib_a-realloc.o:
+         U _impure_ptr
+         U _realloc_r
+00000000 T realloc
+
+lib_a-reallocf.o:
+         U _free_r
+         U _impure_ptr
+         U _realloc_r
+00000000 T _reallocf_r
+00000040 T reallocf
+
+lib_a-reallocr.o:
+         U __malloc_av_
+         U __malloc_lock
+         U __malloc_unlock
+         U _free_r
+         U _malloc_r
+00000000 T _realloc_r
+         U memmove
+
+lib_a-reent.o:
+         U _free_r
+         U _impure_ptr
+0000009c T _reclaim_reent
+00000000 T _wrapup_reent
+00000070 T cleanup_glue
+00000004 C errno
+
+lib_a-refill.o:
+         U __sinit
+         U __smakebuf_r
+00000000 T __srefill_r
+         U _fflush_r
+         U _free_r
+         U _fwalk
+         U _global_impure_ptr
+         U fflush
+000001ac t lflush
+
+lib_a-remove.o:
+         U _impure_ptr
+00000000 T _remove_r
+         U _unlink_r
+00000018 T remove
+
+lib_a-rename.o:
+         U _impure_ptr
+         U _rename_r
+00000000 T rename
+
+lib_a-renamer.o:
+         U _rename
+00000000 T _rename_r
+         U errno
+
+lib_a-rewind.o:
+         U _fseek_r
+         U _impure_ptr
+00000000 T _rewind_r
+00000028 T rewind
+
+lib_a-rget.o:
+         U __sinit
+         U __srefill_r
+00000058 T __srget
+00000000 T __srget_r
+         U _impure_ptr
+
+lib_a-rindex.o:
+00000000 T rindex
+         U strrchr
+
+lib_a-s_copysign.o:
+00000000 T copysign
+
+lib_a-s_finite.o:
+00000000 T finite
+
+lib_a-s_frexp.o:
+         U __aeabi_dmul
+00000000 T frexp
+
+lib_a-s_infconst.o:
+00000008 R __infinity
+00000000 R __infinityf
+00000010 R __infinityld
+
+lib_a-s_isinf.o:
+00000000 T isinf
+
+lib_a-s_isinfd.o:
+00000000 T __isinfd
+
+lib_a-s_isnan.o:
+00000000 T isnan
+
+lib_a-s_isnand.o:
+00000000 T __isnand
+
+lib_a-s_ldexp.o:
+         U __aeabi_dcmpeq
+         U __errno
+         U finite
+00000000 T ldexp
+         U scalbn
+
+lib_a-s_modf.o:
+         U __aeabi_dsub
+00000000 T modf
+
+lib_a-s_nan.o:
+00000000 T nan
+
+lib_a-s_scalbn.o:
+         U __aeabi_dadd
+         U __aeabi_dmul
+         U copysign
+00000000 T scalbn
+
+lib_a-sbrkr.o:
+         U _sbrk
+00000000 T _sbrk_r
+         U errno
+
+lib_a-scanf.o:
+         U __svfscanf_r
+         U _impure_ptr
+00000000 T _scanf_r
+00000034 T scanf
+
+lib_a-sccl.o:
+00000000 T __sccl
+
+lib_a-seed48.o:
+         U _impure_ptr
+00000000 T _seed48_r
+00000070 T seed48
+00000000 b sseed.1732
+
+lib_a-setbuf.o:
+00000000 T setbuf
+         U setvbuf
+
+lib_a-setbuffer.o:
+00000000 T setbuffer
+         U setvbuf
+
+lib_a-setenv.o:
+         U _impure_ptr
+         U _setenv_r
+         U _unsetenv_r
+00000020 T setenv
+00000000 T unsetenv
+
+lib_a-setenv_r.o:
+         U __env_lock
+         U __env_unlock
+         U __errno
+         U _findenv_r
+         U _malloc_r
+         U _realloc_r
+000000ac T _setenv_r
+00000000 T _unsetenv_r
+00000000 b alloced.1712
+         U bcopy
+         U environ
+         U strchr
+         U strcmp
+         U strlen
+         U strncmp
+         U tzset
+
+lib_a-setjmp.o:
+00000014 T longjmp
+00000000 T setjmp
+
+lib_a-setlinebuf.o:
+00000000 T setlinebuf
+         U setvbuf
+
+lib_a-setvbuf.o:
+         U __sinit
+         U _cleanup_r
+         U _fflush_r
+         U _free_r
+         U _impure_ptr
+         U malloc
+00000000 T setvbuf
+
+lib_a-sf_copysign.o:
+00000000 T copysignf
+
+lib_a-sf_finite.o:
+00000000 T finitef
+
+lib_a-sf_frexp.o:
+         U __aeabi_fmul
+00000000 T frexpf
+
+lib_a-sf_isinf.o:
+00000000 T isinff
+
+lib_a-sf_isinff.o:
+00000000 T __isinff
+
+lib_a-sf_isnan.o:
+00000000 T isnanf
+
+lib_a-sf_isnanf.o:
+00000000 T __isnanf
+
+lib_a-sf_ldexp.o:
+         U __aeabi_fcmpeq
+         U __errno
+         U finitef
+00000000 T ldexpf
+         U scalbnf
+
+lib_a-sf_modf.o:
+         U __aeabi_fsub
+00000000 T modff
+
+lib_a-sf_nan.o:
+00000000 T nanf
+
+lib_a-sf_scalbn.o:
+         U __aeabi_fadd
+         U __aeabi_fmul
+         U copysignf
+00000000 T scalbnf
+
+lib_a-signal.o:
+0000019c T __sigtramp
+00000108 T __sigtramp_r
+         U _getpid_r
+         U _impure_ptr
+000000f8 T _init_signal
+000000a8 T _init_signal_r
+         U _kill_r
+         U _malloc_r
+00000000 T _raise_r
+000001b0 T _signal_r
+00000094 T raise
+00000218 T signal
+
+lib_a-signalr.o:
+         U _getpid
+00000000 T _getpid_r
+         U _kill
+00000010 T _kill_r
+         U errno
+
+lib_a-signgam.o:
+00000000 T __signgam
+         U _impure_ptr
+
+lib_a-siprintf.o:
+         U _impure_ptr
+00000074 T _siprintf_r
+         U _svfiprintf_r
+00000000 T siprintf
+
+lib_a-siscanf.o:
+         U __ssvfiscanf_r
+         U _impure_ptr
+00000008 T _siscanf_r
+00000000 t eofread
+00000088 T siscanf
+         U strlen
+
+lib_a-sniprintf.o:
+         U _impure_ptr
+000000a0 T _sniprintf_r
+         U _svfiprintf_r
+00000000 T sniprintf
+
+lib_a-snprintf.o:
+         U _impure_ptr
+000000a0 T _snprintf_r
+         U _svfprintf_r
+00000000 T snprintf
+
+lib_a-sprintf.o:
+         U _impure_ptr
+00000074 T _sprintf_r
+         U _svfprintf_r
+00000000 T sprintf
+
+lib_a-srand48.o:
+         U _impure_ptr
+00000000 T _srand48_r
+0000004c T srand48
+
+lib_a-sscanf.o:
+         U __ssvfscanf_r
+         U _impure_ptr
+00000008 T _sscanf_r
+00000000 t eofread
+00000088 T sscanf
+         U strlen
+
+lib_a-statr.o:
+         U _stat
+00000000 T _stat_r
+         U errno
+
+lib_a-stdio.o:
+00000000 T __sclose
+000000a0 T __sread
+00000014 T __sseek
+00000048 T __swrite
+         U _close_r
+         U _lseek_r
+         U _read_r
+         U _write_r
+
+lib_a-stpcpy.o:
+00000000 T stpcpy
+
+lib_a-stpncpy.o:
+00000000 T stpncpy
+
+lib_a-strcasecmp.o:
+         U __ctype_ptr__
+00000000 T strcasecmp
+
+lib_a-strcasestr.o:
+         U __ctype_ptr__
+00000000 t critical_factorization
+         U memchr
+00000628 T strcasestr
+         U strncasecmp
+00000180 t two_way_long_needle
+
+lib_a-strcat.o:
+00000000 T strcat
+         U strcpy
+
+lib_a-strchr.o:
+00000000 T strchr
+
+lib_a-strcmp.o:
+00000000 T strcmp
+00000094 t strcmp_unaligned
+
+lib_a-strcoll.o:
+         U strcmp
+00000000 T strcoll
+
+lib_a-strcpy.o:
+00000000 T strcpy
+
+lib_a-strcspn.o:
+00000000 T strcspn
+
+lib_a-strdup.o:
+         U _impure_ptr
+         U _strdup_r
+00000000 T strdup
+
+lib_a-strdup_r.o:
+         U _malloc_r
+00000000 T _strdup_r
+         U memcpy
+         U strlen
+
+lib_a-strerror.o:
+         U _user_strerror
+00000000 T strerror
+
+lib_a-strerror_r.o:
+         U strerror
+00000000 T strerror_r
+         U strncpy
+
+lib_a-strftime.o:
+         U __aeabi_idivmod
+         U __gettzinfo
+         U __tz_lock
+         U __tz_unlock
+         U _tzname
+         U abs
+0000004c r dname
+00000030 r dname_len
+00000000 t iso_year_adjust
+         U labs
+00000068 r mname
+00000000 r mname_len
+         U snprintf
+         U sprintf
+0000017c T strftime
+         U strlen
+
+lib_a-strlcat.o:
+00000000 T strlcat
+         U strlen
+
+lib_a-strlcpy.o:
+00000000 T strlcpy
+
+lib_a-strlen.o:
+00000000 T strlen
+
+lib_a-strlwr.o:
+         U __ctype_ptr__
+00000000 T strlwr
+
+lib_a-strncasecmp.o:
+         U __ctype_ptr__
+00000000 T strncasecmp
+
+lib_a-strncat.o:
+00000000 T strncat
+
+lib_a-strncmp.o:
+00000000 T strncmp
+
+lib_a-strncpy.o:
+00000000 T strncpy
+
+lib_a-strndup.o:
+         U _impure_ptr
+         U _strndup_r
+00000000 T strndup
+
+lib_a-strndup_r.o:
+         U _malloc_r
+00000000 T _strndup_r
+         U memcpy
+
+lib_a-strnlen.o:
+00000000 T strnlen
+
+lib_a-strpbrk.o:
+00000000 T strpbrk
+
+lib_a-strptime.o:
+         U __aeabi_idivmod
+         U __ctype_ptr__
+00000074 d abb_month
+00000020 d abb_weekdays
+000000a8 d ampm
+00000000 t first_day
+00000040 d full_month
+00000000 d full_weekdays
+00000018 t match_string
+         U strlen
+         U strncasecmp
+00000094 T strptime
+         U strtol
+00000000 R tm_year_base
+
+lib_a-strrchr.o:
+         U strchr
+00000000 T strrchr
+
+lib_a-strsep.o:
+         U __strtok_r
+00000000 T strsep
+
+lib_a-strspn.o:
+00000000 T strspn
+
+lib_a-strstr.o:
+00000000 t critical_factorization
+         U memchr
+         U memcmp
+         U strchr
+000004cc T strstr
+00000118 t two_way_long_needle
+
+lib_a-strtod.o:
+00000000 r .LC0
+00000004 r .LC1
+0000000c r .LC2
+         U _Balloc
+         U _Bfree
+         U __aeabi_d2f
+         U __aeabi_d2iz
+         U __aeabi_d2uiz
+         U __aeabi_dadd
+         U __aeabi_dcmpeq
+         U __aeabi_dcmpgt
+         U __aeabi_dcmple
+         U __aeabi_dcmplt
+         U __aeabi_ddiv
+         U __aeabi_dmul
+         U __aeabi_dsub
+         U __aeabi_fcmpeq
+         U __aeabi_fcmpgt
+         U __aeabi_fcmplt
+         U __aeabi_i2d
+         U __aeabi_ui2d
+         U __copybits
+         U __d2b
+         U __gethex
+         U __hexnan
+         U __i2b
+         U __lshift
+         U __mcmp
+         U __mdiff
+         U __mprec_bigtens
+         U __mprec_tens
+         U __multiply
+         U __pow5mult
+         U __ratio
+         U __s2b
+         U __ulp
+         U _impure_ptr
+00000000 T _strtod_r
+00000000 d fpi.2229
+00000014 d fpinan.2265
+         U memcpy
+0000165c T strtod
+00001580 T strtof
+00000000 r tinytens
+
+lib_a-strtok.o:
+         U __strtok_r
+         U _impure_ptr
+00000000 T strtok
+
+lib_a-strtok_r.o:
+00000000 T __strtok_r
+000000b4 T strtok_r
+
+lib_a-strtol.o:
+         U __aeabi_uidiv
+         U __aeabi_uidivmod
+         U __ctype_ptr__
+         U _impure_ptr
+00000000 T _strtol_r
+000001a8 T strtol
+
+lib_a-strtoll.o:
+         U _impure_ptr
+         U _strtoll_r
+00000000 T strtoll
+
+lib_a-strtoll_r.o:
+         U __aeabi_uldivmod
+         U __ctype_ptr__
+00000000 T _strtoll_r
+
+lib_a-strtoul.o:
+         U __aeabi_uidiv
+         U __aeabi_uidivmod
+         U __ctype_ptr__
+         U _impure_ptr
+00000000 T _strtoul_r
+000001a0 T strtoul
+
+lib_a-strtoull.o:
+         U _impure_ptr
+         U _strtoull_r
+00000000 T strtoull
+
+lib_a-strtoull_r.o:
+         U __aeabi_uldivmod
+         U __ctype_ptr__
+00000000 T _strtoull_r
+
+lib_a-strupr.o:
+         U __ctype_ptr__
+00000000 T strupr
+
+lib_a-strxfrm.o:
+00000000 T strxfrm
+
+lib_a-svfiprintf.o:
+         U __aeabi_uldivmod
+00000000 t __sprint_r
+         U _free_r
+         U _malloc_r
+         U _realloc_r
+00000188 T _svfiprintf_r
+00000000 r blanks.3525
+         U memchr
+         U memcpy
+         U memmove
+         U strlen
+00000010 r zeroes.3526
+
+lib_a-svfiscanf.o:
+         U __ctype_ptr__
+         U __mb_cur_max
+         U __sccl
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+00000000 t __ssrefill_r
+0000016c T __ssvfiscanf_r
+         U __submore
+         U _free_r
+         U _mbrtowc_r
+         U _strtol_r
+         U _strtoll_r
+         U _strtoul_r
+         U _strtoull_r
+0000006c t _sungetc_r
+00000000 r basefix.3139
+         U iswspace
+         U memcpy
+         U memset
+
+lib_a-svfprintf.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmplt
+         U __aeabi_uldivmod
+         U __isinfd
+         U __isnand
+00000000 t __sprint_r
+         U _dtoa_r
+         U _free_r
+         U _localeconv_r
+         U _malloc_r
+         U _realloc_r
+00000188 T _svfprintf_r
+00000000 r blanks.3587
+         U memchr
+         U memcpy
+         U memmove
+         U strlen
+00000010 r zeroes.3588
+
+lib_a-svfscanf.o:
+         U __aeabi_d2f
+         U __ctype_ptr__
+         U __isnand
+         U __mb_cur_max
+         U __sccl
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+00000000 t __ssrefill_r
+0000016c T __ssvfscanf_r
+         U __submore
+         U _free_r
+         U _mbrtowc_r
+         U _strtod_r
+         U _strtol_r
+         U _strtoll_r
+         U _strtoul_r
+         U _strtoull_r
+0000006c t _sungetc_r
+00000000 r basefix.3528
+         U iswspace
+         U memcpy
+         U memset
+         U nanf
+         U sprintf
+
+lib_a-swab.o:
+00000000 T swab
+
+lib_a-sysclose.o:
+         U _close_r
+         U _impure_ptr
+00000000 T close
+
+lib_a-sysexecve.o:
+         U _execve_r
+         U _impure_ptr
+00000000 T execve
+
+lib_a-sysfcntl.o:
+         U __errno
+00000000 T fcntl
+
+lib_a-sysfork.o:
+         U _fork_r
+         U _impure_ptr
+00000000 T fork
+
+lib_a-sysfstat.o:
+         U _fstat_r
+         U _impure_ptr
+00000000 T fstat
+
+lib_a-sysgetpid.o:
+         U _getpid_r
+         U _impure_ptr
+00000000 T getpid
+
+lib_a-sysgettod.o:
+         U _gettimeofday_r
+         U _impure_ptr
+00000000 T gettimeofday
+
+lib_a-sysisatty.o:
+         U _isatty
+00000000 T isatty
+
+lib_a-syskill.o:
+         U _impure_ptr
+         U _kill_r
+00000000 T kill
+
+lib_a-syslink.o:
+         U _impure_ptr
+         U _link_r
+00000000 T link
+
+lib_a-syslseek.o:
+         U _impure_ptr
+         U _lseek_r
+00000000 T lseek
+
+lib_a-sysopen.o:
+         U _impure_ptr
+         U _open_r
+00000000 T open
+
+lib_a-sysread.o:
+         U _impure_ptr
+         U _read_r
+00000000 T read
+
+lib_a-syssbrk.o:
+         U _impure_ptr
+         U _sbrk_r
+00000000 T sbrk
+
+lib_a-sysstat.o:
+         U _impure_ptr
+         U _stat_r
+00000000 T stat
+
+lib_a-system.o:
+         U _system
+00000000 T _system_r
+00000014 T system
+
+lib_a-systimes.o:
+         U _impure_ptr
+         U _times_r
+00000000 T times
+
+lib_a-sysunlink.o:
+         U _impure_ptr
+         U _unlink_r
+00000000 T unlink
+
+lib_a-syswait.o:
+         U _impure_ptr
+         U _wait_r
+00000000 T wait
+
+lib_a-syswrite.o:
+         U _impure_ptr
+         U _write_r
+00000000 T write
+
+lib_a-tdelete.o:
+         U free
+00000000 T tdelete
+
+lib_a-tdestroy.o:
+         U free
+00000044 T tdestroy
+00000000 t trecurse
+
+lib_a-tfind.o:
+00000000 T tfind
+
+lib_a-time.o:
+         U _gettimeofday_r
+         U _impure_ptr
+00000000 T time
+
+lib_a-timelocal.o:
+00000000 r _C_time_locale
+00000000 T __get_current_time_locale
+         U __part_load_locale
+00000024 T __time_load_locale
+00000004 b _time_locale
+00000000 b _time_using_locale
+000000ec b time_locale_buf
+
+lib_a-timesr.o:
+         U _times
+00000000 T _times_r
+
+lib_a-tmpfile.o:
+         U _close_r
+         U _fdopen_r
+         U _impure_ptr
+         U _open_r
+         U _remove_r
+00000000 T _tmpfile_r
+         U _tmpnam_r
+000000a8 T tmpfile
+
+lib_a-tmpnam.o:
+         U _close_r
+         U _getpid_r
+         U _impure_ptr
+         U _malloc_r
+         U _open_r
+         U _sprintf_r
+00000098 T _tempnam_r
+0000016c T _tmpnam_r
+         U getenv
+         U strlen
+00000150 T tempnam
+000001d0 T tmpnam
+00000000 t worker
+
+lib_a-toascii.o:
+00000000 T toascii
+
+lib_a-tolower.o:
+         U __ctype_ptr__
+00000000 T tolower
+
+lib_a-toupper.o:
+         U __ctype_ptr__
+00000000 T toupper
+
+lib_a-towctrans.o:
+         U _impure_ptr
+00000000 T _towctrans_r
+0000003c T towctrans
+         U towlower
+         U towupper
+
+lib_a-towlower.o:
+         U __ctype_ptr__
+00000000 T towlower
+
+lib_a-towupper.o:
+         U __ctype_ptr__
+00000000 T towupper
+
+lib_a-tsearch.o:
+         U malloc
+00000000 T tsearch
+
+lib_a-twalk.o:
+00000000 t trecurse
+000000a4 T twalk
+
+lib_a-tzlock.o:
+00000000 T __tz_lock
+00000004 T __tz_unlock
+
+lib_a-tzset.o:
+         U _impure_ptr
+         U _tzset_r
+00000000 T tzset
+
+lib_a-tzset_r.o:
+         U __gettzinfo
+         U __tz_lock
+         U __tz_unlock
+         U __tzcalc_limits
+00000010 b __tzname_dst
+00000004 b __tzname_std
+         U _daylight
+         U _getenv_r
+         U _malloc_r
+         U _timezone
+         U _tzname
+00000000 T _tzset_r
+         U free
+00000000 b prev_tzenv
+         U sscanf
+         U strcmp
+         U strcpy
+         U strlen
+         U strtoul
+
+lib_a-tzvars.o:
+00000000 B _daylight
+00000004 B _timezone
+00000000 D _tzname
+
+lib_a-u_strerr.o:
+00000000 T _user_strerror
+
+lib_a-unctrl.o:
+00000000 R __unctrl
+00000400 R __unctrllen
+
+lib_a-ungetc.o:
+         U __sinit
+00000000 T __submore
+         U _fflush_r
+         U _impure_ptr
+         U _malloc_r
+         U _realloc_r
+000000ac T _ungetc_r
+         U memcpy
+00000264 T ungetc
+
+lib_a-ungetwc.o:
+         U __sinit
+         U _impure_ptr
+         U _ungetc_r
+00000000 T _ungetwc_r
+         U _wcrtomb_r
+000000a8 T ungetwc
+
+lib_a-unlinkr.o:
+         U _unlink
+00000000 T _unlink_r
+         U errno
+
+lib_a-valloc.o:
+         U _impure_ptr
+         U _pvalloc_r
+         U _valloc_r
+00000000 T pvalloc
+00000020 T valloc
+
+lib_a-vallocr.o:
+         U _memalign_r
+00000000 T _valloc_r
+
+lib_a-vasiprintf.o:
+         U _impure_ptr
+         U _svfiprintf_r
+00000000 T _vasiprintf_r
+00000058 T vasiprintf
+
+lib_a-vasniprintf.o:
+         U _impure_ptr
+         U _svfiprintf_r
+00000000 T _vasniprintf_r
+000000ac T vasniprintf
+
+lib_a-vasnprintf.o:
+         U _impure_ptr
+         U _svfprintf_r
+00000000 T _vasnprintf_r
+000000ac T vasnprintf
+
+lib_a-vasprintf.o:
+         U _impure_ptr
+         U _svfprintf_r
+00000000 T _vasprintf_r
+00000058 T vasprintf
+
+lib_a-vdiprintf.o:
+         U _free_r
+         U _impure_ptr
+         U _vasniprintf_r
+00000000 T _vdiprintf_r
+         U _write_r
+00000078 T vdiprintf
+
+lib_a-vdprintf.o:
+         U _free_r
+         U _impure_ptr
+         U _vasnprintf_r
+00000000 T _vdprintf_r
+         U _write_r
+00000078 T vdprintf
+
+lib_a-vfiprintf.o:
+         U __aeabi_uldivmod
+         U __sfvwrite_r
+         U __sinit
+00000000 t __sprint_r
+         U __swsetup_r
+         U _fflush_r
+         U _impure_ptr
+00000034 T _vfiprintf_r
+00000000 r blanks.3507
+         U memchr
+         U strlen
+00001240 T vfiprintf
+00000010 r zeroes.3508
+
+lib_a-vfiscanf.o:
+         U __ctype_ptr__
+         U __mb_cur_max
+         U __sccl
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U __sinit
+         U __srefill_r
+00000fe8 T __svfiscanf
+00000000 T __svfiscanf_r
+         U _fread_r
+         U _impure_ptr
+         U _mbrtowc_r
+         U _strtol_r
+         U _strtoll_r
+         U _strtoul_r
+         U _strtoull_r
+         U _ungetc_r
+00001014 T _vfiscanf_r
+00000000 r basefix.3088
+         U iswspace
+         U memset
+0000105c T vfiscanf
+
+lib_a-vfprintf.o:
+         U __aeabi_dcmpeq
+         U __aeabi_dcmplt
+         U __aeabi_uldivmod
+         U __isinfd
+         U __isnand
+         U __sfvwrite_r
+         U __sinit
+00000000 t __sprint_r
+         U __swsetup_r
+         U _dtoa_r
+         U _fflush_r
+         U _impure_ptr
+         U _localeconv_r
+00000034 T _vfprintf_r
+00000000 r blanks.3569
+         U memchr
+         U strlen
+00002140 T vfprintf
+00000010 r zeroes.3570
+
+lib_a-vfscanf.o:
+         U __aeabi_d2f
+         U __ctype_ptr__
+         U __isnand
+         U __mb_cur_max
+         U __sccl
+         U __sfp_lock_acquire
+         U __sfp_lock_release
+         U __sinit
+         U __srefill_r
+000015e0 T __svfscanf
+00000000 T __svfscanf_r
+         U _fread_r
+         U _impure_ptr
+         U _mbrtowc_r
+         U _strtod_r
+         U _strtol_r
+         U _strtoll_r
+         U _strtoul_r
+         U _strtoull_r
+         U _ungetc_r
+0000160c T _vfscanf_r
+00000000 r basefix.3477
+         U iswspace
+         U memset
+         U nanf
+         U sprintf
+00001654 T vfscanf
+
+lib_a-viprintf.o:
+         U _impure_ptr
+         U _vfiprintf_r
+00000000 T _viprintf_r
+0000001c T viprintf
+
+lib_a-viscanf.o:
+         U __svfiscanf_r
+         U _impure_ptr
+00000000 T _viscanf_r
+0000001c T viscanf
+
+lib_a-vprintf.o:
+         U _impure_ptr
+         U _vfprintf_r
+00000000 T _vprintf_r
+0000001c T vprintf
+
+lib_a-vscanf.o:
+         U __svfscanf_r
+         U _impure_ptr
+00000000 T _vscanf_r
+0000001c T vscanf
+
+lib_a-vsiprintf.o:
+         U _impure_ptr
+         U _svfiprintf_r
+00000000 T _vsiprintf_r
+00000050 T vsiprintf
+
+lib_a-vsiscanf.o:
+         U __ssvfiscanf_r
+         U _impure_ptr
+00000008 T _vsiscanf_r
+00000000 t eofread1
+         U strlen
+00000080 T vsiscanf
+
+lib_a-vsniprintf.o:
+         U _impure_ptr
+         U _svfiprintf_r
+00000000 T _vsniprintf_r
+00000088 T vsniprintf
+
+lib_a-vsnprintf.o:
+         U _impure_ptr
+         U _svfprintf_r
+00000000 T _vsnprintf_r
+00000088 T vsnprintf
+
+lib_a-vsprintf.o:
+         U _impure_ptr
+         U _svfprintf_r
+00000000 T _vsprintf_r
+00000050 T vsprintf
+
+lib_a-vsscanf.o:
+         U __ssvfscanf_r
+         U _impure_ptr
+00000008 T _vsscanf_r
+00000000 t eofread1
+         U strlen
+00000080 T vsscanf
+
+lib_a-wbuf.o:
+         U __sinit
+00000140 T __swbuf
+00000000 T __swbuf_r
+         U __swsetup_r
+         U _fflush_r
+         U _impure_ptr
+
+lib_a-wcpcpy.o:
+00000000 T wcpcpy
+
+lib_a-wcpncpy.o:
+00000000 T wcpncpy
+
+lib_a-wcrtomb.o:
+         U _impure_ptr
+00000000 T _wcrtomb_r
+         U _wctomb_r
+00000040 T wcrtomb
+
+lib_a-wcscat.o:
+00000000 T wcscat
+
+lib_a-wcschr.o:
+00000000 T wcschr
+
+lib_a-wcscmp.o:
+00000000 T wcscmp
+
+lib_a-wcscoll.o:
+         U wcscmp
+00000000 T wcscoll
+
+lib_a-wcscpy.o:
+00000000 T wcscpy
+
+lib_a-wcscspn.o:
+00000000 T wcscspn
+
+lib_a-wcslcat.o:
+00000000 T wcslcat
+         U wcslen
+
+lib_a-wcslcpy.o:
+00000000 T wcslcpy
+
+lib_a-wcslen.o:
+00000000 T wcslen
+
+lib_a-wcsncat.o:
+00000000 T wcsncat
+
+lib_a-wcsncmp.o:
+00000000 T wcsncmp
+
+lib_a-wcsncpy.o:
+00000000 T wcsncpy
+
+lib_a-wcsnlen.o:
+00000000 T wcsnlen
+
+lib_a-wcsnrtombs.o:
+         U _impure_ptr
+         U _wcrtomb_r
+00000000 T _wcsnrtombs_r
+00000164 T wcsnrtombs
+
+lib_a-wcspbrk.o:
+00000000 T wcspbrk
+
+lib_a-wcsrchr.o:
+00000000 T wcsrchr
+
+lib_a-wcsrtombs.o:
+         U _impure_ptr
+         U _wcsnrtombs_r
+00000040 T _wcsrtombs_r
+00000000 T wcsrtombs
+
+lib_a-wcsspn.o:
+00000000 T wcsspn
+
+lib_a-wcsstr.o:
+         U wcslen
+00000000 T wcsstr
+
+lib_a-wcstod.o:
+         U __aeabi_d2f
+         U __isnand
+         U _free_r
+         U _impure_ptr
+         U _malloc_r
+         U _strtod_r
+         U _wcsrtombs_r
+00000000 T _wcstod_r
+0000016c T _wcstof_r
+00000000 b initial.2069
+         U iswspace
+         U nanf
+00000150 T wcstod
+000000fc T wcstof
+
+lib_a-wcstok.o:
+00000000 T wcstok
+
+lib_a-wcstol.o:
+         U __aeabi_uidiv
+         U __aeabi_uidivmod
+         U _impure_ptr
+00000000 T _wcstol_r
+         U iswalpha
+         U iswdigit
+         U iswspace
+         U iswupper
+000001d8 T wcstol
+
+lib_a-wcstoll.o:
+         U _impure_ptr
+         U _wcstoll_r
+00000000 T wcstoll
+
+lib_a-wcstoll_r.o:
+         U __aeabi_uldivmod
+00000000 T _wcstoll_r
+         U iswalpha
+         U iswdigit
+         U iswspace
+         U iswupper
+
+lib_a-wcstombs.o:
+00000000 T wcstombs
+
+lib_a-wcstombs_r.o:
+00000000 T _wcstombs_r
+         U _wctomb_r
+
+lib_a-wcstoul.o:
+         U __aeabi_uidiv
+         U __aeabi_uidivmod
+         U _impure_ptr
+00000000 T _wcstoul_r
+         U iswalpha
+         U iswdigit
+         U iswspace
+         U iswupper
+000001d8 T wcstoul
+
+lib_a-wcstoull.o:
+         U _impure_ptr
+         U _wcstoull_r
+00000000 T wcstoull
+
+lib_a-wcstoull_r.o:
+         U __aeabi_uldivmod
+00000000 T _wcstoull_r
+         U iswalpha
+         U iswdigit
+         U iswspace
+         U iswupper
+
+lib_a-wcswidth.o:
+00000000 T wcswidth
+         U wcwidth
+
+lib_a-wcsxfrm.o:
+         U wcslcpy
+00000000 T wcsxfrm
+
+lib_a-wctob.o:
+         U _impure_ptr
+         U _wctomb_r
+         U memset
+00000000 T wctob
+
+lib_a-wctomb.o:
+00000000 T wctomb
+
+lib_a-wctomb_r.o:
+         U __lc_ctype
+00000000 T _wctomb_r
+         U strcmp
+         U strlen
+
+lib_a-wctrans.o:
+         U _impure_ptr
+00000000 T _wctrans_r
+         U strcmp
+00000054 T wctrans
+
+lib_a-wctype.o:
+         U _impure_ptr
+00000000 T _wctype_r
+         U strcmp
+00000208 T wctype
+
+lib_a-wcwidth.o:
+         U iswcntrl
+         U iswprint
+00000000 T wcwidth
+
+lib_a-wmemchr.o:
+00000000 T wmemchr
+
+lib_a-wmemcmp.o:
+00000000 T wmemcmp
+
+lib_a-wmemcpy.o:
+         U memcpy
+00000000 T wmemcpy
+
+lib_a-wmemmove.o:
+         U memmove
+00000000 T wmemmove
+
+lib_a-wmemset.o:
+00000000 T wmemset
+
+lib_a-writer.o:
+         U _write
+00000000 T _write_r
+         U errno
+
+lib_a-wsetup.o:
+         U __sinit
+         U __smakebuf_r
+00000000 T __swsetup_r
+         U _free_r
+         U _impure_ptr
