@@ -33,6 +33,7 @@ int TestMenuSystem(void);
 int TestMenuFft(void);
 
 void BScan(void);
+void BScanEx(void);
 
 int ManualMonthTest(void);//人工月性能校验
 

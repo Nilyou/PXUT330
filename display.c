@@ -4826,22 +4826,28 @@ int MCoorDraw(u_int CoorHPosi , u_int CoorVPosi , u_int CoorHeight , u_int CoorW
             MDrawLine(CoorHPosi, CoorVPosi + CoorHeight+1,CoorHPosi + CoorWidth, CoorVPosi + CoorHeight+1,C_CR_WAVEBACK) ;
             /* 下边的线 */
         }
+	
+#if 0
         for (i = 1; i < 8; i++ ) /* 画水平的虚线，两线垂直相差40个点 */
+#else
+		for (i = 1; i < 5; i++ ) /* 画水平的虚线，两线垂直相差40个点 */
+#endif
         {
             for (j = 0; j <= CoorWidth/8; j++ )/* 一条水平虚线共需画CoorWidth/4个点，每4个点画一个点 */
             {
                 /* draw a point at (x,y) in one of three modes: DP_NOT(inverse), DP_NOT(set) or DP_RESET(clear) */
                 //MDrawPixel(CoorHPosi + 4 * j, CoorVPosi + 40 * i, DP_NOT) ;
-                MDrawLine( CoorHPosi + 8 * j, CoorVPosi + (CoorHeight/5) * i,CoorHPosi + 8 * j, CoorVPosi + (CoorHeight/5) * i ,C_CR_WAVEBACK);
+				MDrawLine( CoorHPosi + 8 * j, CoorVPosi + (CoorHeight/5) * i,CoorHPosi + 8 * j, CoorVPosi + (CoorHeight/5) * i ,C_CR_WAVEBACK);
             }
         }
+
         for (j = 0; j <= CoorWidth/4; j++ )/* 一条水平虚线共需画CoorWidth/4个点，每4个点画一个点 */
         {
             /* draw a point at (x,y) in one of three modes: DP_NOT(inverse), DP_NOT(set) or DP_RESET(clear) */
             //MDrawPixel(CoorHPosi + 4 * j, CoorVPosi + 40 * i+1, DP_NOT) ;
             MDrawLine(CoorHPosi + 4 * j, CoorVPosi + (CoorHeight/5) * i+1,CoorHPosi + 4 * j, CoorVPosi + (CoorHeight/5) * i+1,C_CR_WAVEBACK);
         }
-
+		
         for (i = 0; i < CoorHeight/(CoorHeight/5); i++ )  /* 画垂直的虚线 */
         {
             for (j = 0; j < CoorWidth/C_COORHORIUNIT + 1; j++ )	/* 两线相差C_COORHORIUNIT个点 */
