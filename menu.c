@@ -8343,18 +8343,157 @@ void BScanEx(void)//B扫描
 	//SetBackgroundColor(c_crPara[crPara[ C_CR_WAVEBACK] ]);
     //MEraseWindow(0, C_COORVPOSI,C_COORHPOSI + C_COORWIDTH + 18, CoorVPosi + C_COORHEIGHT - C_COORHEIGHT/2+2) ; /* 清除窗体 */
     //SetBackgroundColor(c_crPara[crPara[ C_CR_BACK] ]);
-
-	i = 0;
-	xpos = j;
-	ypos = C_COORVPOSI + C_COORHEIGHT - 150  + i;
 	
 	MSetDisplayColor( 0x3F<<5 );	
-	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT - 150, ECHO_PACKAGE_SIZE + 1 , C_COORVPOSI + C_COORHEIGHT - 150,C_CR_WAVEBACK);
-	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT - 150, 0 , C_COORVPOSI + C_COORHEIGHT,C_CR_WAVEBACK);
-	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT, ECHO_PACKAGE_SIZE + 1, C_COORVPOSI + C_COORHEIGHT, C_CR_WAVEBACK );
-	MDrawLine( ECHO_PACKAGE_SIZE + 1, C_COORVPOSI + C_COORHEIGHT - 150, ECHO_PACKAGE_SIZE + 1, C_COORVPOSI + C_COORHEIGHT, C_CR_WAVEBACK );
+	int iX0 = 0;
+	int iY0 = C_COORVPOSI + C_COORHEIGHT - C_COORHEIGHT/2 + 10;
+	int iX1 = ECHO_PACKAGE_SIZE + 2;
+	int iY1 = C_COORVPOSI + C_COORHEIGHT;
 	
+	//B扫边框
+	MDrawLine( iX0, iY0, iX1, iY0, C_CR_WAVEBACK);
+	MDrawLine( iX0, iY0, iX0, iY1, C_CR_WAVEBACK);
+	MDrawLine( iX0, iY1, iX1, iY1, C_CR_WAVEBACK );
+	MDrawLine( iX1, iY0, iX1, iY1, C_CR_WAVEBACK );
+	
+#if 1
+	TextOut(0,0,1,32,16,"请选择编码器:",4);
+	int key, iEncoder = -1;
+	u_int iRotaryValue = 0;
+	float iStep = 0;
+	
+	int iLine = 0, iLineDraw = -1;
+	char szkey[8];
+	while( true )
+	{
+		key = MGetKeyCode(0);
+		
+		if( key == 1 || key == 0 )
+		{
+			iEncoder = key;
+			sprintf( szkey, "请选择编码器:%d", iEncoder );
+			DisplayPrompt(15);
+			TextOut(0,0,1,32,16,szkey,4);
+		}
+		
+		if( iEncoder != -1 && key == C_KEYCOD_CONFIRM )
+        {
+			while( true )
+			{
+				key = MGetKeyCode(0);
+				if( key != C_KEYCOD_CONFIRM )
+					break;
+			}
+            break;
+        }
+		
+		if( key == C_KEYCOD_RETURN )
+		{
+			iEncoder = -1;
+			break;
+		}
+	}
+	
+	if( iEncoder != -1 )
+	{
+		SetScanRotaryEncoder(iEncoder, 1, 0, 1);
+		
+		DisplayPrompt(15);
+		TextOut(0,0,1,40,16,"请将探头移动一个工件扫描长度, 完成后点击确认",4);
+		iRotaryValue = 0;
+		int iRotaryValueOld = GetScanRotaryValue(iEncoder);
+		while( true )
+		{
+#if 0
+			iRotaryValue = GetScanRotaryValue(iEncoder);
+#else
+			iRotaryValue++;
+#endif
+			key = MGetKeyCode(0);
+
+			if( iRotaryValue != 0 && key == C_KEYCOD_CONFIRM )
+			{
+				iStep = abs((float)(iRotaryValue - iRotaryValueOld) / (float)(iY1 - iY0 - 4));
+				break;
+			}
+			
+			if( key == C_KEYCOD_RETURN )
+			{
+				iStep = 10;
+				break;
+			}
+		}
+
+		DisplayPrompt(15);
+		TextOut(0,0,1,32,16,(char *)_Bscan[MGetLanguage()][2],4);
+
+		iRotaryValue = 0;
+		while(true)
+		{
+#if 0
+			iRotaryValue = GetScanRotaryValue(iEncoder);
+#else
+			iRotaryValue++;
+#endif
+			if( iStep == 0 )
+				break;
+			
+			if( iStep > 1 )
+				iLine = (int)(iRotaryValue / iStep);
+			else
+				iLine = (int)(iRotaryValue);
+			
+			if( iLineDraw < iLine )
+			{
+				sampbuffer = GetSampleBuffer();
+				
+				for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
+				{
+					clrR = 0x1F - sampbuffer[j]*0x1F/0xFF;
+					clrG = 0x3F - sampbuffer[j]*0x3F/0xFF;
+					clrB = 0x1F - sampbuffer[j]*0x1F/0xFF;
+					clr = ((0x1F & clrR)<<11) | ((0x3F & clrG)<<5) | (0x1F & clrB);
+					MSetDisplayColor( clr );
+					xpos = j+1;
+					ypos = iY0 + 2 + iLine;
+					MDrawPixel( xpos, ypos, DP_SET);
+					
+					iLineDraw = iLine;
+				}
+			}
+			else
+			{
+				sampbuffer = GetSampleBuffer();
+				
+				for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
+				{
+					clrR = 0x1F - sampbuffer[j]*0x1F/0xFF;
+					clrG = 0x3F - sampbuffer[j]*0x3F/0xFF;
+					clrB = 0x1F - sampbuffer[j]*0x1F/0xFF;
+					clr = ((0x1F & clrR)<<11) | ((0x3F & clrG)<<5) | (0x1F & clrB);
+					MSetDisplayColor( clr );
+					xpos = j+1;
+					ypos = iY0 + 2 + iLine;
+					MDrawPixel( xpos, ypos, DP_SET);
+					MDrawPixel( xpos, ypos, DP_SET);
+				}
+			}
+			
+			if( iRotaryValue > (int)((iY1 - iY0 - 4) * iStep) )
+			{
+				break;
+			}	
+			
+			int keycode = MGetKeyCode(0);
+			if( keycode == C_KEYCOD_RETURN )
+			{
+				break;
+			}
+		}	
+	}
+#else
 	TextOut(0,0,1,32,16,"请点击确认后，在工件上移动探头",4);
+
 	int key;
 	while( true )
 	{
@@ -8367,10 +8506,10 @@ void BScanEx(void)//B扫描
 	
 	DisplayPrompt(15);
 	TextOut(0,0,1,32,16,(char *)_Bscan[MGetLanguage()][2],4);
-	
+
 	if( key == C_KEYCOD_CONFIRM )
 	{
-			while(true)
+		while(true)
 		{
 			if( GetElapsedTime() <= preElapsedtime + 100 )
 			{
@@ -8406,6 +8545,8 @@ void BScanEx(void)//B扫描
 			}
 		}	
 	}
+	
+#endif	
 	MSetDisplayColor( iOldcurr_cr );
 	
 	MKeyRlx();
