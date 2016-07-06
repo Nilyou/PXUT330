@@ -8294,8 +8294,10 @@ void BScanEx(void)//B扫描
             {
                 ClearCursor(2);
                 xpos = GateMax.Pos;
-                ypos = C_COORVPOSI + C_COORHEIGHT - 2 - GateMax.Amp*2 ;
-                if((GateMax.Amp*2) < C_COORHEIGHT)	DrawCursor(xpos,ypos,2);
+                //ypos = C_COORVPOSI + C_COORHEIGHT - 2 - GateMax.Amp*2 ;
+                ypos = C_COORVPOSI + C_COORHEIGHT/2 - 1 - GateMax.Amp ;
+				if((GateMax.Amp*2) < C_COORHEIGHT)	
+					DrawCursor(xpos,ypos,2);
             }
 
         }
@@ -8342,59 +8344,72 @@ void BScanEx(void)//B扫描
     //MEraseWindow(0, C_COORVPOSI,C_COORHPOSI + C_COORWIDTH + 18, CoorVPosi + C_COORHEIGHT - C_COORHEIGHT/2+2) ; /* 清除窗体 */
     //SetBackgroundColor(c_crPara[crPara[ C_CR_BACK] ]);
 
-	TextOut(0,0,1,18,32,(char *)_Bscan[MGetLanguage()][2],4);
-	
 	i = 0;
 	xpos = j;
 	ypos = C_COORVPOSI + C_COORHEIGHT - 150  + i;
 	
 	MSetDisplayColor( 0x3F<<5 );	
-	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT - 150, ECHO_PACKAGE_SIZE , C_COORVPOSI + C_COORHEIGHT - 150,C_CR_WAVEBACK);
+	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT - 150, ECHO_PACKAGE_SIZE + 1 , C_COORVPOSI + C_COORHEIGHT - 150,C_CR_WAVEBACK);
 	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT - 150, 0 , C_COORVPOSI + C_COORHEIGHT,C_CR_WAVEBACK);
-	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT, ECHO_PACKAGE_SIZE, C_COORVPOSI + C_COORHEIGHT, C_CR_WAVEBACK );
-	MDrawLine( ECHO_PACKAGE_SIZE , C_COORVPOSI + C_COORHEIGHT - 150, ECHO_PACKAGE_SIZE, C_COORVPOSI + C_COORHEIGHT, C_CR_WAVEBACK );
+	MDrawLine( 0, C_COORVPOSI + C_COORHEIGHT, ECHO_PACKAGE_SIZE + 1, C_COORVPOSI + C_COORHEIGHT, C_CR_WAVEBACK );
+	MDrawLine( ECHO_PACKAGE_SIZE + 1, C_COORVPOSI + C_COORHEIGHT - 150, ECHO_PACKAGE_SIZE + 1, C_COORVPOSI + C_COORHEIGHT, C_CR_WAVEBACK );
 	
-	while(true)
+	TextOut(0,0,1,32,16,"请点击确认后，在工件上移动探头",4);
+	int key;
+	while( true )
 	{
-		if( GetElapsedTime() <= preElapsedtime + 100 )
-        {
-            continue;
-        }
-        else 
-		{
-			preElapsedtime = GetElapsedTime();
-		}
-
-		sampbuffer = GetSampleBuffer();
-			
-		for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
-		{
-			clrR = 0x1F - sampbuffer[j]*0x1F/0xFF;
-			clrG = 0x3F - sampbuffer[j]*0x3F/0xFF;
-			clrB = 0x1F - sampbuffer[j]*0x1F/0xFF;
-			clr = ((0x1F & clrR)<<11) | ((0x3F & clrG)<<5) | (0x1F & clrB);
-			MSetDisplayColor( clr );
-			xpos = j;
-			ypos = C_COORVPOSI + C_COORHEIGHT - 149  + i;
-			MDrawPixel( xpos, ypos, 0);
-		}
-		
-		i++;
-		
-		if( i > 149 )
-			break;
-        int keycode = MGetKeyCode(0);
-        if( keycode == C_KEYCOD_RETURN )
+		key = MGetKeyCode(0);
+        if( key == C_KEYCOD_CONFIRM || key == C_KEYCOD_RETURN )
         {
             break;
         }
-	}	
-   
+	}
+	
+	DisplayPrompt(15);
+	TextOut(0,0,1,32,16,(char *)_Bscan[MGetLanguage()][2],4);
+	
+	if( key == C_KEYCOD_CONFIRM )
+	{
+			while(true)
+		{
+			if( GetElapsedTime() <= preElapsedtime + 100 )
+			{
+				continue;
+			}
+			else 
+			{
+				preElapsedtime = GetElapsedTime();
+			}
+
+			sampbuffer = GetSampleBuffer();
+				
+			for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
+			{
+				clrR = 0x1F - sampbuffer[j]*0x1F/0xFF;
+				clrG = 0x3F - sampbuffer[j]*0x3F/0xFF;
+				clrB = 0x1F - sampbuffer[j]*0x1F/0xFF;
+				clr = ((0x1F & clrR)<<11) | ((0x3F & clrG)<<5) | (0x1F & clrB);
+				MSetDisplayColor( clr );
+				xpos = j+1;
+				ypos = C_COORVPOSI + C_COORHEIGHT - 149  + i;
+				MDrawPixel( xpos, ypos, 0);
+			}
+			
+			i++;
+			
+			if( i > 148 )
+				break;
+			int keycode = MGetKeyCode(0);
+			if( keycode == C_KEYCOD_RETURN )
+			{
+				break;
+			}
+		}	
+	}
 	MSetDisplayColor( iOldcurr_cr );
 	
 	MKeyRlx();
     DisplayPrompt(15);
-	
     TextOut(0,0,1,32,16,(char *)_Bscan[MGetLanguage()][0],4);
     MAnyKeyReturn();
 
