@@ -7430,7 +7430,7 @@ void BScan(void)//B扫描
             MSetAcquisition(1);
             AllParaRestore();
             MSetSystem();
-            ScreenRenovate();
+			ScreenRenovate();
             DrawDac(0);
             return ;
         }
@@ -8129,9 +8129,40 @@ void BScan(void)//B扫描
 //	DrawDac(0);
 
 }
-	
+
+void DrawBscanGate()
+{
+	int p, w, h, i, s = 4;
+	u_short	 v = C_COORVPOSI + C_COORHEIGHT;  /* 垂直位置 */
+	int paratype = -1;
+	int clear = 0;
+	for( i = 0; i < 2; i++)
+    {
+        if( i == 0)
+			MSetColor(C_CR_GATEA);
+        else 
+			MSetColor(C_CR_GATEB);
+
+        p = MGetGatePara(i, 0); // 水平位置
+        w = MGetGatePara(i, 1);
+        h = MGetGatePara(i, 2) * 2;
+
+        if( MGetEchoMode() == C_RF_WAVE )
+        {
+            MSetEchoMode(0, C_SETMODE_SAVE);
+            MSetGatePara(p, w, (C_COORHEIGHT*3/4+h/2)/2, i, C_SETMODE_SAVE);
+            MDrawGate(i, 1, paratype,clear);
+            MSetGatePara(p, w, (C_COORHEIGHT*3/4-h/2)/2, i, C_SETMODE_SAVE);
+            MDrawGate(i, -1, paratype, clear);
+            MSetEchoMode(C_RF_WAVE, C_SETMODE_SAVE);
+            MSetGatePara(p, w, h/2,i, C_SETMODE_SETSAVE);
+        }
+    }
+}	
+
 //#define NOENCODER 1
-void BScanEx(void)//B扫描
+//B扫描
+void BScanEx(void)
 {
 	int gain ,range;//, angle, speed;
     u_int amp,nextamp;
@@ -8324,9 +8355,6 @@ void BScanEx(void)//B扫描
     MKeyRlx();
 
     //MAdjustGain(0,0,MGetAmpStdMax(),MGetAmpStdMax() );
-    MFclearScreen();
-    MSetColor(C_CR_PARA);
-    MCoorDraw(C_COORHPOSI ,C_COORVPOSI , C_COORHEIGHT - C_COORHEIGHT/2 , C_COORWIDTH );	/*画指定位置和大小的波形坐标*/
 //=============================================	
 	int   key;
 	int   iEncoder         = -1;
@@ -8336,15 +8364,36 @@ void BScanEx(void)//B扫描
 	int   iLineLast        = -1;
 	u_short iRotaryValue   =  0;
 
-	bool  bLineDraw[C_COORHEIGHT/2]; 
+	bool  bLineDraw[C_COORHEIGHT]; 
 	
 	char  szkey[32];
+	
+	int   iBscanHeight = C_COORHEIGHT / 2;
+	
+    //MFclearScreen();
+	EraseWindow(0, 0, C_HORIDOT_VIDEO-10, C_VERTDOT_VIDEO);
+    MSetColor( C_CR_PARA );
+    MCoorDraw( C_COORHPOSI ,C_COORVPOSI , C_COORHEIGHT - iBscanHeight , C_COORWIDTH );	/*画指定位置和大小的波形坐标*/		   
+	MDrawLine( ECHO_PACKAGE_SIZE, 
+	           C_COORVPOSI,
+			   ECHO_PACKAGE_SIZE, 
+			   C_COORVPOSI + C_COORHEIGHT - iBscanHeight,
+			   C_CR_WAVEBACK );    //竖线
 
 	MSetEchoMode(3,C_SETMODE_SETSAVE);
+	
+	MSetGatePara(C_COORHORIUNIT * 7.5,C_COORHORIUNIT * 1,80,0,C_SETMODE_SETSAVE);
+#if 0
+	MDrawGate(-1,0,-1,0);
+#else 
+	DrawBscanGate();
+#endif
+
 	//设置A扫显示区域
-	SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI + VertOffsetScreen, C_COORHEIGHT / 2 );
+	SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI, 1 );
 	//显示A扫
 	EnableEchoDisplay( 1 ) ;
+
 	//记录当前绘制颜色
 	int iOldcurr_cr = curr_cr;
 	
@@ -8352,7 +8401,7 @@ void BScanEx(void)//B扫描
 	MSetDisplayColor( 0x3F << 5 );	
 	//B扫区域
 	int iX0 = 0;
-	int iY0 = C_COORVPOSI + C_COORHEIGHT - C_COORHEIGHT/2 + 10;
+	int iY0 = C_COORVPOSI + C_COORHEIGHT - iBscanHeight + 10;
 	int iX1 = ECHO_PACKAGE_SIZE + 2;
 	int iY1 = C_COORVPOSI + C_COORHEIGHT;
 	//绘制B扫边框
@@ -8413,7 +8462,16 @@ void BScanEx(void)//B扫描
 		while( true )
 		{
 			iRotaryValue = GetScanRotaryValue(iEncoder);
-
+			
+			//不反向移动
+			if( iRotaryValue > 60000 )
+			{
+				SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
+				SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
+				
+				iRotaryValue = 0;
+			}
+			
 			sprintf( szkey, "编码器移动点数:%d         ",iRotaryValue );
 			TextOut( 0, 19, 1, 44, 32, szkey, 2 );
 			key = MGetKeyCode(0);
@@ -8485,7 +8543,7 @@ void BScanEx(void)//B扫描
 		SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
 		
 		int i = 0;
-		for( ; i < C_COORHEIGHT/2; i++ )
+		for( ; i < C_COORHEIGHT; i++ )
 			bLineDraw[i] = false;
 		
 		DisplayPrompt( 15 );
@@ -8493,6 +8551,26 @@ void BScanEx(void)//B扫描
 		TextOut( 0, 0, 1, 32, 16, (char *)_Bscan[MGetLanguage()][2], 4 );
 		while( true )
 		{
+			if(MAdjustGain(0,1,80,160))
+			{
+				MSetGateParaInit();	//门内最高波设初值
+			}
+			gateamp = MGetAmpMax(0);
+			if(!MGetFunctionMode(C_ECHOMAX_MEMORY))
+			{
+				if(MGetGateParaMax(0) == C_TRUE)
+				{
+					ClearCursor(2);
+					xpos = GateMax.Pos;
+					//ypos = C_COORVPOSI + C_COORHEIGHT - 2 - GateMax.Amp*2 ;
+					ypos = C_COORVPOSI + C_COORHEIGHT/2 - 1 - GateMax.Amp ;
+					if((GateMax.Amp*2) < C_COORHEIGHT)	
+						DrawCursor(xpos,ypos,2);
+				}
+			}
+
+			MParaRenovate(0);
+			
 			iRotaryValue = GetScanRotaryValue( iEncoder );
 
 			if( iStep == 0 )
@@ -8517,10 +8595,10 @@ void BScanEx(void)//B扫描
 					MDrawLine( iX1+1, iY0 + 2 + iLine, iX1+4, iY0 + 5 + iLine, C_CR_WAVEBACK );
 					iLineLast = iLine;
 				}
-				
+
 				//获取A扫数据
 				sampbuffer = GetSampleBuffer();
-				
+			
 				for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
 				{
 					//R,G,B比值相同时为灰，波形数值越大，颜色越白
@@ -8541,7 +8619,6 @@ void BScanEx(void)//B扫描
 			{
 				break;
 			}
-			SetDisplayColor( iOldcurr_cr );
 		}	
 	}
 

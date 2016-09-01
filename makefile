@@ -95,7 +95,5 @@ all:
 	$(LD) $(LDFLAGS)  -T ldscript.lds -o UserApp.elf ${ASM_OBJECTS} $(C_OBJECTS) -l :libm10era.a -l :libc.a -l :libm.a -l :libgcc.a -l :libfatfs.a -L LIB_PATH_1 -L LIB_PATH_2
 	$(OBJCOPY) -O binary UserApp.elf UserApp.bin
 clean:
-	if exist *.o del *.o
-	if exist *.elf del *.elf
-	if exist *.bin del *.bin
+	rm $(C_OBJECTS) startup.o UserApp.bin UserApp.elf
 
