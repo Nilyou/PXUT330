@@ -13,10 +13,40 @@ extern FUNCTION             Function;   //功能
 extern CACHE	cache;
 extern int curr_cr;
 
+int iBscan = 0;
+
+void DrawBscanGate()
+{
+	int p, w, h, i, s = 4;
+	u_short	 v = C_COORVPOSI + C_COORHEIGHT;  /* 垂直位置 */
+	int paratype = -1;
+	int clear = 0;
+	for( i = 0; i < 2; i++)
+    {
+        if( i == 0)
+			MSetColor(C_CR_GATEA);
+        else 
+			MSetColor(C_CR_GATEB);
+
+        p = MGetGatePara(i, 0); // 水平位置
+        w = MGetGatePara(i, 1);
+        h = MGetGatePara(i, 2) * 2;
+
+        if( MGetEchoMode() == C_RF_WAVE )
+        {
+            MSetEchoMode(0, C_SETMODE_SAVE);
+            MSetGatePara(p, w, (C_COORHEIGHT*3/4+h/2)/2, i, C_SETMODE_SAVE);
+            MDrawGate(i, 1, paratype,clear);
+            MSetGatePara(p, w, (C_COORHEIGHT*3/4-h/2)/2, i, C_SETMODE_SAVE);
+            MDrawGate(i, -1, paratype, clear);
+            MSetEchoMode(C_RF_WAVE, C_SETMODE_SAVE);
+            MSetGatePara(p, w, h/2,i, C_SETMODE_SETSAVE);
+        }
+    }
+}	
+
 int KeyManage(int keycode,int mode)		//按键管理,mode=1renovate
 {
-
-
     u_int SameKeyTime = 0;
     int mode1;			//mode1 =1长按键0短按
     int xpos,ypos;
@@ -309,7 +339,7 @@ int KeyManage(int keycode,int mode)		//按键管理,mode=1renovate
             MSetSystemRange();	//设置当前声程
             MSetSystemDelay();
             MChannelRenovate();
-            MDrawGate(-1,0,-1,0);
+			MDrawGate(-1,0,-1,0);
             DrawDac(0);
             MKeyRlx();
             g_UDiskInfo.DataHeaderMark = 1;
@@ -1035,7 +1065,8 @@ int KeyManage(int keycode,int mode)		//按键管理,mode=1renovate
                 MSetSystemRange();	//设置当前声程
                 MSetSystemDelay();
                 MChannelRenovate();
-                MDrawGate(-1,0,-1,0);
+                //MDrawGate(-1,0,-1,0);
+				MDrawGate(-1,0,-1,0);
                 DrawDac(0);
                 MKeyRlx();
                 g_UDiskInfo.DataHeaderMark = 1;
@@ -8130,36 +8161,6 @@ void BScan(void)//B扫描
 
 }
 
-void DrawBscanGate()
-{
-	int p, w, h, i, s = 4;
-	u_short	 v = C_COORVPOSI + C_COORHEIGHT;  /* 垂直位置 */
-	int paratype = -1;
-	int clear = 0;
-	for( i = 0; i < 2; i++)
-    {
-        if( i == 0)
-			MSetColor(C_CR_GATEA);
-        else 
-			MSetColor(C_CR_GATEB);
-
-        p = MGetGatePara(i, 0); // 水平位置
-        w = MGetGatePara(i, 1);
-        h = MGetGatePara(i, 2) * 2;
-
-        if( MGetEchoMode() == C_RF_WAVE )
-        {
-            MSetEchoMode(0, C_SETMODE_SAVE);
-            MSetGatePara(p, w, (C_COORHEIGHT*3/4+h/2)/2, i, C_SETMODE_SAVE);
-            MDrawGate(i, 1, paratype,clear);
-            MSetGatePara(p, w, (C_COORHEIGHT*3/4-h/2)/2, i, C_SETMODE_SAVE);
-            MDrawGate(i, -1, paratype, clear);
-            MSetEchoMode(C_RF_WAVE, C_SETMODE_SAVE);
-            MSetGatePara(p, w, h/2,i, C_SETMODE_SETSAVE);
-        }
-    }
-}	
-
 //#define NOENCODER 1
 //B扫描
 void BScanEx(void)
@@ -8363,6 +8364,7 @@ void BScanEx(void)
 	int   iLineDraw        = -1;
 	int   iLineLast        = -1;
 	u_short iRotaryValue   =  0;
+	iBscan = 1;
 
 	bool  bLineDraw[C_COORHEIGHT]; 
 	
@@ -8371,6 +8373,8 @@ void BScanEx(void)
 	int   iBscanHeight = C_COORHEIGHT / 2;
 	
     //MFclearScreen();
+
+#if 0//0901
 	EraseWindow(0, 0, C_HORIDOT_VIDEO-10, C_VERTDOT_VIDEO);
     MSetColor( C_CR_PARA );
     MCoorDraw( C_COORHPOSI ,C_COORVPOSI , C_COORHEIGHT - iBscanHeight , C_COORWIDTH );	/*画指定位置和大小的波形坐标*/		   
@@ -8379,6 +8383,17 @@ void BScanEx(void)
 			   ECHO_PACKAGE_SIZE, 
 			   C_COORVPOSI + C_COORHEIGHT - iBscanHeight,
 			   C_CR_WAVEBACK );    //竖线
+#else
+	MSetColor( C_CR_PARA );
+	MCoorDraw( C_COORHPOSI ,C_COORVPOSI , C_COORHEIGHT - iBscanHeight , C_COORWIDTH );	/*画指定位置和大小的波形坐标*/		   
+	MDrawLine( ECHO_PACKAGE_SIZE, 
+	           C_COORVPOSI,
+			   ECHO_PACKAGE_SIZE, 
+			   C_COORVPOSI + C_COORHEIGHT - iBscanHeight,
+			   C_CR_WAVEBACK );    //竖线
+			   
+	ScreenRenovate();
+#endif
 
 	MSetEchoMode(3,C_SETMODE_SETSAVE);
 	
@@ -8386,10 +8401,12 @@ void BScanEx(void)
 #if 0
 	MDrawGate(-1,0,-1,0);
 #else 
+	MDrawGate(-1,0,-1,1);
 	DrawBscanGate();
 #endif
 
 	//设置A扫显示区域
+	//SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI + VertOffsetScreen, 1 );
 	SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI, 1 );
 	//显示A扫
 	EnableEchoDisplay( 1 ) ;
@@ -8402,13 +8419,13 @@ void BScanEx(void)
 	//B扫区域
 	int iX0 = 0;
 	int iY0 = C_COORVPOSI + C_COORHEIGHT - iBscanHeight + 10;
-	int iX1 = ECHO_PACKAGE_SIZE + 2;
+	int iX1 = ECHO_PACKAGE_SIZE;
 	int iY1 = C_COORVPOSI + C_COORHEIGHT;
 	//绘制B扫边框
 	MDrawLine( iX0, iY0, iX1, iY0, C_CR_WAVEBACK );
-	MDrawLine( iX0, iY0, iX0, iY1, C_CR_WAVEBACK );
-	MDrawLine( iX0, iY1, iX1, iY1, C_CR_WAVEBACK );
-	MDrawLine( iX1, iY0, iX1, iY1, C_CR_WAVEBACK );
+	//MDrawLine( iX0, iY0, iX0, iY1, C_CR_WAVEBACK );
+	//MDrawLine( iX0, iY1, iX1, iY1, C_CR_WAVEBACK );
+	//MDrawLine( iX1, iY0, iX1, iY1, C_CR_WAVEBACK );
 	
 #if 0//330上现在只有一个编码器
 	TextOut( 0, 0, 1, 32, 16, "请选择编码器:", 4 );
@@ -8454,8 +8471,11 @@ void BScanEx(void)
 		SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
 		SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
 		
-		DisplayPrompt( 15 );
-		TextOut( 0, 1, 1, 44, 16, "请将探头移动100mm, 完成后点击确认", 4 );
+		//DisplayPrompt( 15 );
+		EraseDrawRectangle(iX0+10, iY0+10, iX1-10, iY1-10 ) ;
+//	CEMenuOut(xpos + 4,ypos+2,_BSCAN_B3,9,1,16);
+		TextOut( iX0+10, iY0+10, 1, iX1-10, iY0+30, "请将探头移动100mm, 完成后点击确认", 4 );
+		//TextOut( 0, 1, 1, 44, 16, "请将探头移动100mm, 完成后点击确认", 4 );
 
 		//获取编码器值
 		iRotaryValue = GetScanRotaryValue(iEncoder);
@@ -8473,7 +8493,8 @@ void BScanEx(void)
 			}
 			
 			sprintf( szkey, "编码器移动点数:%d         ",iRotaryValue );
-			TextOut( 0, 19, 1, 44, 32, szkey, 2 );
+			TextOut( iX0+10, iY0+40, 1, iX1-10, iY0+60, szkey, 2 );
+			//TextOut( 0, 19, 1, 44, 32, szkey, 2 );
 			key = MGetKeyCode(0);
 
 			if( iRotaryValue != 0 && key == C_KEYCOD_CONFIRM )
@@ -8505,10 +8526,8 @@ void BScanEx(void)
 		}
 
 		//清除显示
-		TextOut( 0,  0, 1, 44, 16, "                                            ", 4 );
-		TextOut( 0, 19, 1, 44, 32, "                                           ", 2 );
-		
-		TextOut( 0, 0, 1, 32, 16, "请点击确认开始扫查", 4 );
+		EraseDrawRectangle(iX0+10, iY0+10, iX1-10, iY1-10 ) ;
+		TextOut( iX0+10, iY0+40, 1, iX1-10, iY0+60, "请点击确认开始扫查", 4 );
 		while( true )
 		{
 			key = MGetKeyCode( 0 );
@@ -8538,6 +8557,10 @@ void BScanEx(void)
 			}
 		}
 		
+		ScreenRenovate();
+		MDrawGate(-1,0,-1,1);
+		DrawBscanGate();
+		EraseDrawRectangle(iX0, iY0, iX1, iY1) ;	
 		//重置编码器
 		SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
 		SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
@@ -8547,7 +8570,6 @@ void BScanEx(void)
 			bLineDraw[i] = false;
 		
 		DisplayPrompt( 15 );
-		//_Bscan[MGetLanguage()][2]:请在工件上移动探头
 		TextOut( 0, 0, 1, 32, 16, (char *)_Bscan[MGetLanguage()][2], 4 );
 		while( true )
 		{
@@ -8586,20 +8608,21 @@ void BScanEx(void)
 					MSetDisplayColor( 0x3F << 5 );	
 					if( iLineLast != -1 )
 					{
-						MDrawLine( iX1+1, iY0 + 2 + iLineLast, iX1+4, iY0 - 3 + iLineLast, C_CR_WAVEBACK );
-						MDrawLine( iX1+1, iY0 + 2 + iLineLast, iX1+8, iY0 + 2 + iLineLast, C_CR_WAVEBACK );
-						MDrawLine( iX1+1, iY0 + 2 + iLineLast, iX1+4, iY0 + 5 + iLineLast, C_CR_WAVEBACK );
+						MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-14, iY0 - 3 + iLineLast, C_CR_WAVEBACK );
+						MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-9, iY0 + 2 + iLineLast, C_CR_WAVEBACK );
+						MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-14, iY0 + 7 + iLineLast, C_CR_WAVEBACK );
 					}
-					MDrawLine( iX1+1, iY0 + 2 + iLine, iX1+4, iY0 - 3 + iLine, C_CR_WAVEBACK );
-					MDrawLine( iX1+1, iY0 + 2 + iLine, iX1+8, iY0 + 2 + iLine, C_CR_WAVEBACK );
-					MDrawLine( iX1+1, iY0 + 2 + iLine, iX1+4, iY0 + 5 + iLine, C_CR_WAVEBACK );
+					MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-14, iY0 - 3 + iLine, C_CR_WAVEBACK );
+					MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-9, iY0 + 2 + iLine, C_CR_WAVEBACK );
+					MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-14, iY0 + 7 + iLine, C_CR_WAVEBACK );
+					
 					iLineLast = iLine;
 				}
 
 				//获取A扫数据
 				sampbuffer = GetSampleBuffer();
 			
-				for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
+				for( j = 0; j < ECHO_PACKAGE_SIZE-20; j++ )
 				{
 					//R,G,B比值相同时为灰，波形数值越大，颜色越白
 					clrR = sampbuffer[j] * 0x1F / 0xFF;
@@ -8619,6 +8642,7 @@ void BScanEx(void)
 			{
 				break;
 			}
+			KeyManage(keycode,1);
 		}	
 	}
 
@@ -8637,5 +8661,6 @@ _BSCAN_END:
 	//还原A扫显示区域
 	SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI + VertOffsetScreen, 0 );
 	EnableEchoDisplay( 1 ) ;
+	iBscan = 0;
 }
 
