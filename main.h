@@ -35,6 +35,8 @@ int TestMenuFft(void);
 void BScan(void);
 void BScanEx(void);
 
+void TOFDFunc(void);
+
 int ManualMonthTest(void);//人工月性能校验
 
 int TestMenuSensitivity(void);//灵敏度校验

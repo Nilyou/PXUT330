@@ -1527,7 +1527,7 @@ const u_char _FuncMenu_A1[C_LANGUAGE][11][22] =
         "⒍曲面修正",
         "⒎门内展宽",
         "⒏实心波形",
-        "⒐Ｂ扫描  ",
+        "⒐TOFD",
     },//中文
     {
         "Press Enter           ",
@@ -1540,7 +1540,7 @@ const u_char _FuncMenu_A1[C_LANGUAGE][11][22] =
         "6.C S Amend           ",
         "7.Zoom in Wave        ",
         "8.Solid Wave          ",
-        "9.B Scan              ",
+        "9.TOFD                ",
     },//英文
 };
 const char _FuncMenu_A2[C_LANGUAGE][20][21] =

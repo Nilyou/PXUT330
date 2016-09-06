@@ -26,7 +26,6 @@ extern const unsigned char _Freeze[]; 	  //冻结
 */
 
 extern int iBscan;
-extern void DrawBscanGate();
 
 extern const char 	_us[C_LANGUAGE][1][4];
 const char 	_ProbeFace[] =
@@ -4906,7 +4905,6 @@ void MDrawGate( int/*-1两门都画0A门1B门*/ gatetype, int/*-1向下1向上*/ mode,
 {
 	if( iBscan == 1 )
 	{
-		//DrawBscanGate();
 		return;
 	}
 
