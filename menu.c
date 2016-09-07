@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include "Media.h"
 #include "ff.h"
+	
 //#include "ding.c"
 //#include "Music_alice.c"
 //#include "Music_lee.c"
@@ -8134,13 +8135,21 @@ void BScan(void)//B扫描
 //每mm编码器的值
 int g_iEncoderStep = 10;
 //角度
-int g_iAngle = 0;
+int g_iAngle = 60;
+//工件厚度
+int g_iThickness = 200;
+//PCS, 2位小数
+int g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0*60) * 200 / 10 ) * 100);
+
+//1mm一次，工件长度小于500mm
+u_char g_pEcho[500][ECHO_PACKAGE_SIZE];
+int    g_iLine = 0;
 
 void DrawFuncMenu( int iIndex )
 {
 	char  szkey[64];
 	int   iNumber = 0;
-	
+			
 	EraseDrawRectangle( C_COORHPOSI+2, C_COORVPOSI, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 ) ;
 	
 	MSetDisplayColor( 0x3F << 5 );
@@ -8173,22 +8182,26 @@ void DrawFuncMenu( int iIndex )
 		TextOut( C_COORHPOSI+C_COORHPOSI+164, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+245, C_VERTDOT_VIDEO- C_COORVPOSI, "设置", 4 );
 		MSetDisplayColor( 0x3F << 5 );
 
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+200, C_COORVPOSI+30, "0.探头频率(     MHz)", 4 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+200, C_COORVPOSI+30, "0.探头频率:     MHz", 4 );
 		Write_Number(C_COORHPOSI+152, C_COORVPOSI+10, MGetFrequence(),5,2,0);
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+40, 1, C_COORHPOSI+100, C_COORVPOSI+60, "1.晶片尺寸(     mm)", 4 );
-		Write_Crystal( C_COORHPOSI+152, C_COORVPOSI+10, MGetCrystal_l(), MGetCrystal_w());
-		sprintf( szkey, "2.角度(%d °)         ", g_iAngle );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+40, 1, C_COORHPOSI+100, C_COORVPOSI+60, "1.晶片尺寸:      ", 4 );
+		Write_Crystal( C_COORHPOSI+152, C_COORVPOSI+40, MGetCrystal_l(), MGetCrystal_w());
+		sprintf( szkey, "2.角度   :%d °           ", g_iAngle );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+70, 1, C_COORHPOSI+200, C_COORVPOSI+90, szkey, 4 );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+100, 1, C_COORHPOSI+100, C_COORVPOSI+120, "3.工件厚度", 4 );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+130, 1, C_COORHPOSI+100, C_COORVPOSI+150, "4.声速", 4 );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点", 4 );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+190, 1, C_COORHPOSI+100, C_COORVPOSI+210, "6.PCS", 4 );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+220, 1, C_COORHPOSI+100, C_COORVPOSI+240, "7.扫查方式", 4 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+100, 1, C_COORHPOSI+100, C_COORVPOSI+120, "3.工件厚度:     mm ", 4 );
+		Write_Number(C_COORHPOSI+152, C_COORVPOSI+100, g_iThickness,5,1,0);
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+130, 1, C_COORHPOSI+100, C_COORVPOSI+150, "4.声速   :", 4 );
+		WriteSpeed( C_COORHPOSI+152, C_COORVPOSI+130 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点   :", 4 );
+		WriteOffset( C_COORHPOSI+152, C_COORVPOSI+160 );
+		sprintf( szkey, "6.PCS   :%d.%d", g_iPCS/100, g_iPCS%100 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+190, 1, C_COORHPOSI+100, C_COORVPOSI+210, szkey, 4 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+220, 1, C_COORHPOSI+100, C_COORVPOSI+240, "7.扫查方式:平行扫查", 4 );
 		iNumber = MGetPulseMode();
-		sprintf( szkey, "8.发射电压(%s)         ", iNumber == 0?"低压":iNumber == 1?"中压":iNumber == 2?"标准":"高压" );
+		sprintf( szkey, "8.发射电压:%s         ", iNumber == 0?"低压":iNumber == 1?"中压":iNumber == 2?"标准":"高压" );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+250, 1, C_COORHPOSI+100, C_COORVPOSI+270, szkey, 4 );
 		iNumber = MGetRepeatRate();
-		sprintf( szkey, "9.重复频率(%d)         ", iNumber );
+		sprintf( szkey, "9.重复频率:%d         ", iNumber );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+280, 1, C_COORHPOSI+100, C_COORVPOSI+300, szkey, 4 );
 	}
 	else
@@ -8371,27 +8384,83 @@ void SetFunc( int iIndex )
 		}
 	}
 	//3. 工件厚度
-	else if( iIndex == 1 )
+	else if( iIndex == 3 )
 	{
-		
+		number = 20, deci_len = 1;
+		TextOut( 0, 0, 1, 100, 20, "厚度:", 4 );
+		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
+		{
+			if( number >= 0 )
+			{
+				g_iThickness = number;
+			}
+		}
 	}
 	//4. 声速
-	else if( iIndex == 1 )
+	else if( iIndex == 4 )
 	{
+		if( MGetUnitType() > 0 )
+			deci_len = 2;//单位inch
+        else 
+			deci_len = 0;
+        
+		number = 100;
 		
+        int MaxSpeed = C_MAX_SPEED, MinSpeed = C_MIN_SPEED;
+        
+		if( MGetUnitType() )
+		{
+			MaxSpeed = C_MAX_SPEED * 100 / 25.4 + 0.5;
+			MinSpeed = C_MIN_SPEED * 100 / 25.4 + 0.5;
+			
+			sprintf( szkey, "声速(%.2f～%.2f)", MinSpeed/100.0, MaxSpeed/100.0 );
+			TextOut( 0, 0, 1, 100, 20, szkey, 4 );
+		}
+		else
+		{
+			sprintf( szkey, "声速(%2d～%2d)", MinSpeed, MaxSpeed );
+			TextOut( 0, 0, 1, 100, 20, szkey, 4 );
+		}
+		
+		
+		if( Input_Number(0,21,&number, 5, &deci_len,0) == 1)
+		{
+			if( number >= MinSpeed && number <= MaxSpeed )
+			{
+				MSetSpeed( number, C_SETMODE_SAVE );
+			}
+		}
 	}
 	//5. 零点
-	else if( iIndex == 1 )
+	else if( iIndex == 5 )
 	{
-		
+		number = 0, deci_len = 1;
+		TextOut( 0, 0, 1, 100, 20, "零点(0～30):", 4 );
+		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
+		{
+			if( number >= 0 )
+			{
+				MSetOffset( number * 16, C_SETMODE_SETSAVE );
+			}
+		}
 	}
 	//6. PCS
-	else if( iIndex == 1 )
+	else if( iIndex == 6 )
 	{
-		
+		number = 0, deci_len = 2;
+		TextOut( 0, 0, 1, 100, 20, "PCS(未填写时自动计算):", 4 );
+		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
+		{
+			g_iPCS = number;
+		}	
+		else
+		{
+			TextOut( 0, 0, 1, 100, 20, "222222222", 4 );
+			g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 ) * 100);
+		}	
 	}
 	//7. 扫查方式
-	else if( iIndex == 1 )
+	else if( iIndex == 7 )
 	{
 		
 	}
@@ -8443,12 +8512,64 @@ void SetFunc( int iIndex )
 	}
 }
 
+void DAFunc()
+{
+	char  szkey[64];
+	int   iNumber = 0, keycode;
+			
+	EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像		
+	EraseDrawRectangle( C_COORHPOSI+2, C_COORVPOSI, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 ) ;
+	
+	MSetDisplayColor( 0x3F << 5 );
+	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+2, C_VERTDOT_VIDEO-5 );
+	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+494, C_VERTDOT_VIDEO - C_COORVPOSI - 18 );
+	DrawLine( C_COORHPOSI+494, C_VERTDOT_VIDEO - C_COORVPOSI - 18, C_COORHPOSI+494, C_VERTDOT_VIDEO-5 );
+	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO-5, C_COORHPOSI+494, C_VERTDOT_VIDEO-5 );
+	
+	DrawLine( C_COORHPOSI+123, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+123, C_VERTDOT_VIDEO-5 );
+	DrawLine( C_COORHPOSI+246, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+246, C_VERTDOT_VIDEO-5 );
+	DrawLine( C_COORHPOSI+369, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+369, C_VERTDOT_VIDEO-5 );
+	
+	TextOut( C_COORHPOSI+32, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+122, C_VERTDOT_VIDEO- C_COORVPOSI, "红光标", 4 );
+	TextOut( C_COORHPOSI+C_COORHPOSI+154, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+245, C_VERTDOT_VIDEO- C_COORVPOSI, "蓝光标", 4 );
+	TextOut( C_COORHPOSI+C_COORHPOSI+262, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, "校准", 4 );
+	TextOut( C_COORHPOSI+C_COORHPOSI+390, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, "返回", 4 );
+
+	while( true )
+	{
+		keycode = MGetKeyCode( 0 );
+
+		if( keycode == C_KEYCOD_CONFIRM )
+		{
+			//确认键弹起，防止后续误判断
+			while( true )
+			{
+				keycode = MGetKeyCode( 0 );
+				if( keycode != C_KEYCOD_CONFIRM )
+					break;
+			}
+			break;
+		}
+		
+		if( keycode == C_KEYCOD_RETURN )
+		{
+			//取消键弹起，防止后续误判断
+			while( true )
+			{
+				keycode = MGetKeyCode( 0 );
+				if( keycode != C_KEYCOD_RETURN )
+					break;
+			}
+			break;
+		}
+	}
+}
 //B扫描
 void TOFDFunc(void)
 {
 	char  szkey[32];
-	int   keycode, iIndex = 0;
-	
+	int   keycode, iIndex = 1;
+	int   i = 0;
 	int iX0 = 0;
 	int iY0 = C_COORVPOSI + C_COORHEIGHT - C_COORHEIGHT/2 + 10;
 	int iX1 = ECHO_PACKAGE_SIZE;
@@ -8478,6 +8599,12 @@ void TOFDFunc(void)
 		{
 			//iIndex = 2;
 			//DrawFuncMenu( iIndex );
+			for( i = 0; i < 500; i++ ) 
+			{
+				memset( g_pEcho[i], 0, ECHO_PACKAGE_SIZE );
+			}	
+			g_iLine = 0;
+	
 			BScanEx();
 			EnableEchoDisplay( 0 ) ;
 			EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
@@ -8486,7 +8613,11 @@ void TOFDFunc(void)
 		}
 		else if( keycode == 19 )
 		{
-			iIndex = 3;
+			//iIndex = 3;
+			//DrawFuncMenu( iIndex );
+			DAFunc();
+			EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
+			iIndex = 1;
 			DrawFuncMenu( iIndex );
 		}
 		
@@ -8538,18 +8669,19 @@ void TOFDFunc(void)
 
 void BScanEx(void)
 {
-    int   xpos, ypos, x0, y0, j, keycode;
+    int   xpos, ypos, x0, y0, i, j, keycode;
 	short clrR, clrG, clrB, clr;
 	u_char* sampbuffer;
 	char  szkey[32];
 
 	int   iEncoder         =  0;
 	int   iLine            =  0;
-	int   iLineDraw        = -1;
+	int   iLineStart       =  0;
+	int   iLineDrawCount   =  0;
 	int   iLineLast        = -1;
 	int   iBscanHeight     = C_COORHEIGHT / 2;
 	u_int iRotaryValue     =  0;
-	int iOldcurr_cr 	   = curr_cr;			//记录当前绘制颜色		
+	int   iOldcurr_cr 	   = curr_cr;			//记录当前绘制颜色		
 
     ScreenRenovate();							//屏幕刷新
     MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
@@ -8557,19 +8689,21 @@ void BScanEx(void)
 
 	iBscan = 1;									//进入B扫模式
 
-	EraseWindow(C_COORHPOSI+2, C_COORVPOSI, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 );	//清除绘图区图像
+	EraseWindow(C_COORHPOSI+2, C_COORVPOSI+2, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 );	//清除绘图区图像
 	SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI, 1 );					//设置A扫显示区域
 	EnableEchoDisplay( 1 ) ;															//显示A扫
-
-	MSetDisplayColor( 0x3F << 5 );				//设置绘制为绿色 RBG(16bit, R:5bit, G:6bit, B:5bit)	
 	
 	//B扫区域
 	int iX0 = 0;
 	int iY0 = C_COORVPOSI + C_COORHEIGHT - iBscanHeight + 10;
 	int iX1 = ECHO_PACKAGE_SIZE;
 	int iY1 = C_COORVPOSI + C_COORHEIGHT;
+	
+	MSetDisplayColor( 0xFFE0 );
+	DrawLine( 1, C_COORVPOSI+2, 497, C_COORVPOSI+2 );
 	//绘制B扫边框
 	MDrawLine( iX0, iY0, iX1, iY0, C_CR_WAVEBACK );
+	MSetDisplayColor( 0x3F << 5 );				//设置绘制为绿色 RBG(16bit, R:5bit, G:6bit, B:5bit)	
 
 	if( iEncoder != -1 )
 	{
@@ -8616,47 +8750,104 @@ void BScanEx(void)
 		{
 			iRotaryValue = GetScanRotaryValue( iEncoder );
 
+			if( iRotaryValue > 60000 )
+			{
+				SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
+				SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
+				continue;
+			}
+			
 			if( g_iEncoderStep == 0 )
 				break;
 			
 			//扫描长度小于显示时直接按扫描点来显示
-			iLine = (int)( (float)(iRotaryValue) / (2*g_iEncoderStep)  + 0.5);//2mm绘制1次
+			iLine = (int)( (float)(iRotaryValue) / (g_iEncoderStep)  + 0.5);//1mm绘制1次
 
-			if( iLine >= 0 && iLine < iY1 - iY0 - 4 )
-			{
-				if( iLineLast != iLine )
-				{
-					MSetDisplayColor( 0x3F << 5 );	
-					if( iLineLast != -1 )
-					{
-						MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-14, iY0 - 3 + iLineLast, C_CR_WAVEBACK );
-						MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-9, iY0 + 2 + iLineLast, C_CR_WAVEBACK );
-						MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-14, iY0 + 7 + iLineLast, C_CR_WAVEBACK );
-					}
-					MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-14, iY0 - 3 + iLine, C_CR_WAVEBACK );
-					MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-9, iY0 + 2 + iLine, C_CR_WAVEBACK );
-					MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-14, iY0 + 7 + iLine, C_CR_WAVEBACK );
-					
-					iLineLast = iLine;
-				}
-
-				//获取A扫数据
-				sampbuffer = GetSampleBuffer();
+			sprintf( szkey, "%d, %d,%d,%d,%d", iLine, g_iLine, iY1 - iY0 - 4, iLineStart,iLineDrawCount );
+			TextOut( 0, 0, 1, 100, 20, szkey, 4 );
 			
-				for( j = 0; j < ECHO_PACKAGE_SIZE-20; j++ )
+			if( iLine >= 500 )
+				break;
+			//获取A扫数据
+			sampbuffer = GetSampleBuffer();
+			memcpy( g_pEcho[iLine], sampbuffer, ECHO_PACKAGE_SIZE );
+			if( g_iLine < iLine )
+				g_iLine = iLine;
+
+			if( g_iLine >= iY1 - iY0 - 4 )
+			{
+				if( g_iLine - iLine < iY1 - iY0 - 4 )
 				{
-					//R,G,B比值相同时为灰，波形数值越大，颜色越白
-					clrR = sampbuffer[j] * 0x1F / 0xFF;
-					clrG = sampbuffer[j] * 0x3F / 0xFF;
-					clrB = sampbuffer[j] * 0x1F / 0xFF;
-					clr  = ((0x1F & clrR) << 11) | ((0x3F & clrG) << 5) | (0x1F & clrB);
-					//设置绘制颜色
-					SetDisplayColor( clr );
-					xpos = j + 1;
-					ypos = iY0 + 4 + iLine;
-					DrawPixel( xpos, ypos );
+					iLineStart = g_iLine - (iY1 - iY0 - 4);
+				}
+				else
+				{
+					iLineStart = iLine;
+				}
+				
+				iLineDrawCount = iY1 - iY0 - 4;
+			}
+			else
+			{
+				iLineStart = 0;
+				iLineDrawCount = g_iLine;
+			}
+			
+			for( i = iLineStart; i <= iLineStart + iLineDrawCount; i++ )
+			{
+				if( i == iLine )
+				{
+					MSetDisplayColor( 0xFFE0 );
+					DrawLine( 1, iY0 + 4 + i - iLineStart, 497, iY0 + 4 + i - iLineStart );
+				}
+				else
+				{
+					for( j = 0; j < ECHO_PACKAGE_SIZE-5; j++ )
+					{
+						//R,G,B比值相同时为灰，波形数值越大，颜色越白
+						clrR = g_pEcho[i][j] * 0x1F / 0xFF;
+						clrG = g_pEcho[i][j] * 0x3F / 0xFF;
+						clrB = g_pEcho[i][j] * 0x1F / 0xFF;
+						clr  = ((0x1F & clrR) << 11) | ((0x3F & clrG) << 5) | (0x1F & clrB);
+						//设置绘制颜色
+						SetDisplayColor( clr );
+						xpos = j + 1;
+						ypos = iY0 + 4 + i - iLineStart;
+						DrawPixel( xpos, ypos );
+					}
 				}
 			}
+/*			
+			if( iLineLast != iLine )
+			{
+				MSetDisplayColor( 0x3F << 5 );	
+				if( iLineLast != -1 )
+				{
+					MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-14, iY0 - 3 + iLineLast, C_CR_WAVEBACK );
+					MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-9, iY0 + 2 + iLineLast, C_CR_WAVEBACK );
+					MDrawLine( iX1-19, iY0 + 2 + iLineLast, iX1-14, iY0 + 7 + iLineLast, C_CR_WAVEBACK );
+				}
+				MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-14, iY0 - 3 + iLine, C_CR_WAVEBACK );
+				MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-9, iY0 + 2 + iLine, C_CR_WAVEBACK );
+				MDrawLine( iX1-19, iY0 + 2 + iLine, iX1-14, iY0 + 7 + iLine, C_CR_WAVEBACK );
+				
+				iLineLast = iLine;
+			}
+
+			for( j = 0; j < ECHO_PACKAGE_SIZE-20; j++ )
+			{
+				//R,G,B比值相同时为灰，波形数值越大，颜色越白
+				clrR = g_bsData[iLine].pEcho[j] * 0x1F / 0xFF;
+				clrG = g_bsData[iLine].pEcho[j] * 0x3F / 0xFF;
+				clrB = g_bsData[iLine].pEcho[j] * 0x1F / 0xFF;
+				clr  = ((0x1F & clrR) << 11) | ((0x3F & clrG) << 5) | (0x1F & clrB);
+				//设置绘制颜色
+				SetDisplayColor( clr );
+				xpos = j + 1;
+				ypos = iY0 + 4 + iLine;
+				DrawPixel( xpos, ypos );
+			}
+*/
 			//确认或取消退出
 			int keycode = MGetKeyCode( 0 );
 			if( keycode == C_KEYCOD_RETURN || keycode == C_KEYCOD_CONFIRM )
