@@ -8512,81 +8512,95 @@ void SetFunc( int iIndex )
 	}
 }
 
-void DADraw( int iLineStart, short iLineR[2], short iLineB[2] )
+void DADraw( short iLineStart, short iLineR[2], short iLineB[2], short iIndexB )
 {
-	short xpos, ypos, i, j, iMaxLine;
+	short xpos, ypos, xposOld, yposOld, i, j, iMaxLine;
 	short clrR, clrG, clrB, clr;
 	int   L = 0;
 	char  szkey[64];
 	
-	if( g_iLine > 345 )
-		iMaxLine = 345;
+	if( g_iLine > 324 )
+		iMaxLine = 324;
 	else
 		iMaxLine = g_iLine;
 	
+	EraseWindow( 2, 4, 499, 426 );
+	
+	MSetDisplayColor( 0x3F << 5 );
+	//A扫分割线
+	DrawLine( 1, 104, 502, 104 );
+	//顶部直线
+	DrawLine( 502, 3, C_HORIDOT_SCREEN, 3 );
 	MSetDisplayColor( 0xFFE0 );
-	TextOut( 500, C_COORVPOSI+3, 1, C_HORIDOT_SCREEN, C_COORVPOSI+23, "距离(mm)", 4 );
-	
-	DrawLine( 498, C_COORVPOSI + 30, C_HORIDOT_SCREEN, C_COORVPOSI + 30 );
-	
+	TextOut( 504, 3, 1, C_HORIDOT_SCREEN, 26, "距离(mm)", 4 );
+	MSetDisplayColor( 0x3F << 5 );
+	DrawLine( 502, 30, C_HORIDOT_SCREEN, 30 );
+	//参数
 	MSetDisplayColor( 0x3F << 5 );
 	L = MGetRange(3) * (iLineR[0]) / ECHO_PACKAGE_SIZE;
 	sprintf( szkey, "R0:%d.%d ", L/10, L%10 );
-	TextOut( 500, C_COORVPOSI+36, 1, C_HORIDOT_SCREEN, C_COORVPOSI+56, szkey, 4 );
+	TextOut( 504, C_COORVPOSI+36, 1, C_HORIDOT_SCREEN, C_COORVPOSI+56, szkey, 4 );
 	L = MGetRange(3) * (iLineR[1]) / ECHO_PACKAGE_SIZE;
 	sprintf( szkey, "R1:%d.%d ", L/10, L%10 );
-	TextOut( 500, C_COORVPOSI+60, 1, C_HORIDOT_SCREEN, C_COORVPOSI+80, szkey, 4 );
-	L = MGetRange(3) * (iLineR[1] - iLineR[0]) / ECHO_PACKAGE_SIZE;
+	TextOut( 504, C_COORVPOSI+60, 1, C_HORIDOT_SCREEN, C_COORVPOSI+80, szkey, 4 );
+	L = (int)MGetRange(3) * (iLineR[1] - iLineR[0]) / ECHO_PACKAGE_SIZE;
 	sprintf( szkey, "L :%d.%d ", L/10, L%10 );
-	TextOut( 500, C_COORVPOSI+84, 1, C_HORIDOT_SCREEN, C_COORVPOSI+104, szkey, 4 );
+	TextOut( 504, C_COORVPOSI+84, 1, C_HORIDOT_SCREEN, C_COORVPOSI+104, szkey, 4 );
 	
 	sprintf( szkey, "B0:%d.0 ", iLineB[0] );
-	TextOut( 500, C_COORVPOSI+118, 1, C_HORIDOT_SCREEN, C_COORVPOSI+138, szkey, 4 );
+	TextOut( 504, C_COORVPOSI+118, 1, C_HORIDOT_SCREEN, C_COORVPOSI+138, szkey, 4 );
 	sprintf( szkey, "B1:%d.0 ", iLineB[1] );
-	TextOut( 500, C_COORVPOSI+144, 1, C_HORIDOT_SCREEN, C_COORVPOSI+164, szkey, 4 );
+	TextOut( 504, C_COORVPOSI+144, 1, C_HORIDOT_SCREEN, C_COORVPOSI+164, szkey, 4 );
 	sprintf( szkey, "H :%d.0 ", iLineB[1] - iLineB[0] );
-	TextOut( 500, C_COORVPOSI+168, 1, C_HORIDOT_SCREEN, C_COORVPOSI+188, szkey, 4 );
-	
-	MSetDisplayColor( 0x1F << 11 );
-	
-	if( iLineR[0] < ECHO_PACKAGE_SIZE-10 ) 
-		DrawLine( 4 + iLineR[0], C_COORVPOSI + 5, 4 + iLineR[0], C_COORVPOSI + 350  );
-	else
-		DrawLine( ECHO_PACKAGE_SIZE-6, C_COORVPOSI + 5, ECHO_PACKAGE_SIZE-6, C_COORVPOSI + 350  );
-	
-	if( iLineR[1] < ECHO_PACKAGE_SIZE-10 ) 
-		DrawLine( 4 + iLineR[1], C_COORVPOSI + 5, 4 + iLineR[1], C_COORVPOSI + 350  );
-	else
-		DrawLine( ECHO_PACKAGE_SIZE-6, C_COORVPOSI + 5, ECHO_PACKAGE_SIZE-6, C_COORVPOSI + 350  );
+	TextOut( 504, C_COORVPOSI+168, 1, C_HORIDOT_SCREEN, C_COORVPOSI+188, szkey, 4 );
 
-	MSetDisplayColor( 0x1F );
-	if( iLineB[0] >= iLineStart && iLineB[0] <= (iLineStart+iMaxLine) ) 
-		DrawLine( 4, C_COORVPOSI + 5 + iLineB[0] - iLineStart, ECHO_PACKAGE_SIZE-6, C_COORVPOSI + 5 + iLineB[0] - iLineStart  );
-	if( iLineB[1] >= iLineStart && iLineB[1] <= (iLineStart+iMaxLine) ) 
-		DrawLine( 4, C_COORVPOSI + 5 + iLineB[1] - iLineStart, ECHO_PACKAGE_SIZE-6, C_COORVPOSI + 5 + iLineB[1] - iLineStart );
+	xposOld = 2;
+	yposOld = 103 - (g_pEcho[iLineB[iIndexB]][0] * 100 / 255);	
+	
+	MSetDisplayColor( 0xFFE0 );
+	for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
+	{
+		xpos = 2 + j;
+		ypos = 103 - (g_pEcho[iLineB[iIndexB]][j] * 100 / 255);		
+		DrawLine( xposOld, yposOld, xpos, ypos );
+		xposOld = xpos;
+		yposOld = ypos;	
+	}
 	
 	for( i = 0; i <= iMaxLine; i++ )
 	{
-		if( i != (iLineB[0] - iLineStart) && i != (iLineB[1] - iLineStart) )
+		for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
 		{
-			for( j = 0; j < ECHO_PACKAGE_SIZE-10; j++ )
-			{
-				if( j != iLineR[0] && j != iLineR[1] )
-				{
-					//R,G,B比值相同时为灰，波形数值越大，颜色越白
-					clrR = g_pEcho[iLineStart+i][j] * 0x1F / 0xFF;
-					clrG = g_pEcho[iLineStart+i][j] * 0x3F / 0xFF;
-					clrB = g_pEcho[iLineStart+i][j] * 0x1F / 0xFF;
-					clr  = ((0x1F & clrR) << 11) | ((0x3F & clrG) << 5) | (0x1F & clrB);
-					//设置绘制颜色
-					SetDisplayColor( clr );
-					xpos = j + 4;
-					ypos = C_COORVPOSI + 5 + i;
-					DrawPixel( xpos, ypos );
-				}
-			}
+				//R,G,B比值相同时为灰，波形数值越大，颜色越白
+				clrR = g_pEcho[iLineStart+i][j] * 0x1F / 0xFF;
+				clrG = g_pEcho[iLineStart+i][j] * 0x3F / 0xFF;
+				clrB = g_pEcho[iLineStart+i][j] * 0x1F / 0xFF;
+				clr  = ((0x1F & clrR) << 11) | ((0x3F & clrG) << 5) | (0x1F & clrB);
+				//设置绘制颜色
+				SetDisplayColor( clr );
+				xpos = j + 2;
+				ypos = 105 + i;
+				DrawPixel( xpos, ypos );
 		}
 	}
+	
+	//红线
+	MSetDisplayColor( 0x1F << 11 );
+	if( iLineR[0] < ECHO_PACKAGE_SIZE ) 
+		DrawLine( 2 + iLineR[0], 4, 2 + iLineR[0], 429  );
+	else
+		DrawLine( 501, 4, 501, 429  );
+	
+	if( iLineR[1] < ECHO_PACKAGE_SIZE ) 
+		DrawLine( 2 + iLineR[1], 4, 2 + iLineR[1], 429  );
+	else
+		DrawLine( 501, 4, 501, 429  );
+	
+	MSetDisplayColor( 0x1F );
+	if( iLineB[0] >= iLineStart && iLineB[0] <= (iLineStart+iMaxLine) ) 
+		DrawLine( 2, 105 + iLineB[0] - iLineStart, 501, 105 + iLineB[0] - iLineStart  );
+	if( iLineB[1] >= iLineStart && iLineB[1] <= (iLineStart+iMaxLine) ) 
+		DrawLine( 2, 105 + iLineB[1] - iLineStart, 501, 105 + iLineB[1] - iLineStart  );
 }
 
 void DAFunc()
@@ -8597,41 +8611,38 @@ void DAFunc()
 	short xpos, ypos, i, j, iMaxLine, iLineStart = 0;
 	short iLineR[2] = {0, 20}, iLineB[2] = {0 , 20};
 	short clrR, clrG, clrB, clr;
-	int   iIndex = 2, iIndexR = 0, iIndexB = 0;
-			
-	EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像		
-	EraseWindow(500, C_COORVPOSI+5, C_COORWIDTH, 323 );	//清除绘图区图像
-	EraseDrawRectangle( C_COORHPOSI+2, C_COORVPOSI, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 ) ;
+	short iIndex = 2, iIndexR = 0, iIndexB = 0;
 	
+	//清除所有窗口内容	
+	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
+	//左侧图像区
 	MSetDisplayColor( 0x3F << 5 );
-	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+2, C_VERTDOT_VIDEO-5 );
-	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+494, C_VERTDOT_VIDEO - C_COORVPOSI - 18 );
-	DrawLine( C_COORHPOSI+494, C_VERTDOT_VIDEO - C_COORVPOSI - 18, C_COORHPOSI+494, C_VERTDOT_VIDEO-5 );
-	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO-5, C_COORHPOSI+494, C_VERTDOT_VIDEO-5 );
+	EraseDrawRectangle( 1, 1, 502, 477 );
 	
-	DrawLine( C_COORHPOSI+123, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+123, C_VERTDOT_VIDEO-5 );
-	DrawLine( C_COORHPOSI+246, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+246, C_VERTDOT_VIDEO-5 );
-	DrawLine( C_COORHPOSI+369, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+369, C_VERTDOT_VIDEO-5 );
-	
+	//功能按键区
+	DrawLine( 1, 430, 502, 430 );
+	DrawLine( 126, 430, 126, 477 );
+	DrawLine( 251, 430, 251, 477 );
+	DrawLine( 376, 430, 376, 477 );
+
 	MSetDisplayColor( 0xFFFF );
 	sprintf( szkey, "移动" );
-	TextOut( C_COORHPOSI+C_COORHPOSI+252, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+	TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 	MSetDisplayColor( 0x3F << 5 );
 	sprintf( szkey, "红线(%02d)", iIndexR );
-	TextOut( C_COORHPOSI+5, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+92, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+	TextOut( 6, 440, 1, 125, 470, szkey, 4 );
 	sprintf( szkey, "蓝线(%02d)", iIndexB );
-	TextOut( C_COORHPOSI+C_COORHPOSI+126, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+210, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+	TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 	sprintf( szkey, "步进(%02d)", iStep );
-	TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
-
-	if( g_iLine > 345 )
-		iMaxLine = 345;
+	TextOut( 382, 440, 1, 501, 470, szkey, 4 );
+	
+	if( g_iLine > 324 )
+		iMaxLine = 324;
 	else
 		iMaxLine = g_iLine;
 	
-	DADraw( iLineStart, iLineR, iLineB );
-	
-	DisplayPrompt( 15 );
+	DADraw( iLineStart, iLineR, iLineB, iIndexB );
+
 	while( true )
 	{
 		keycode = MGetKeyCode( 0 );
@@ -8679,7 +8690,7 @@ void DAFunc()
 			}
 			else if( iIndex == 2 )
 			{
-				if( g_iLine > 345 )
+				if( g_iLine > 324 )
 				{
 					if( iLineStart - iStep < 0 )
 						iLineStart = 0;
@@ -8687,17 +8698,8 @@ void DAFunc()
 						iLineStart -= iStep;
 				}
 			}
-			else if( iIndex == 3 )
-			{
-				if( iStep > 1 )
-					iStep--;
-				MSetDisplayColor( 0xFFFF );
-				sprintf( szkey, "步进(%02d)", iStep );
-				TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
-				MSetDisplayColor( 0x3F << 5 );
-			}
 			
-			DADraw( iLineStart, iLineR, iLineB );
+			DADraw( iLineStart, iLineR, iLineB, iIndexB );
 		}
 		else if( keycode == 14 )
 		{
@@ -8715,8 +8717,8 @@ void DAFunc()
 				else 
 					iLineB[iIndexB] += iStep;
 				
-				if( iLineB[iIndexB] > iLineStart + 345 )
-					iLineStart += iLineB[iIndexB] - (iLineStart + 345);
+				if( iLineB[iIndexB] > iLineStart + 324 )
+					iLineStart += iLineB[iIndexB] - (iLineStart + 324);
 				else if( iLineB[iIndexB] < iLineStart )
 					iLineStart = iLineB[iIndexB];
 			}
@@ -8724,7 +8726,7 @@ void DAFunc()
 			{
 				//sprintf( szkey, "%d, %d, %d, %d", iLineStart, iStep, iMaxLine, g_iLine );
 				//TextOut( 0, 0, 1, 100, 20, szkey, 4 );
-				if( g_iLine > 345 )
+				if( g_iLine > 324 )
 				{
 					if( iLineStart + iStep + iMaxLine > g_iLine )
 						iLineStart += g_iLine - (iLineStart + iMaxLine);
@@ -8732,15 +8734,8 @@ void DAFunc()
 						iLineStart += iStep;
 				}
 			}
-			else if( iIndex == 3 )
-			{
-				iStep++;
-				MSetDisplayColor( 0xFFFF );
-				sprintf( szkey, "步进(%02d)", iStep );
-				TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
-				MSetDisplayColor( 0x3F << 5 );
-			}
-			DADraw( iLineStart, iLineR, iLineB );
+			
+			DADraw( iLineStart, iLineR, iLineB, iIndexB );
 		}
 		else if( keycode == 16 )
 		{
@@ -8755,14 +8750,14 @@ void DAFunc()
 			
 			MSetDisplayColor( 0xFFFF );
 			sprintf( szkey, "红线(%02d)", iIndexR );
-			TextOut( C_COORHPOSI+5, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+92, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
 			MSetDisplayColor( 0x3F << 5 );
 			sprintf( szkey, "蓝线(%02d)", iIndexB );
-			TextOut( C_COORHPOSI+C_COORHPOSI+126, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+210, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			sprintf( szkey, "移动" );
-			TextOut( C_COORHPOSI+C_COORHPOSI+252, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
-			TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
 		}
 		else if( keycode == 17 )
 		{
@@ -8773,18 +8768,19 @@ void DAFunc()
 			else
 			{
 				iIndexB = ++iIndexB % 2;
+				DADraw( iLineStart, iLineR, iLineB, iIndexB );
 			}
 			
 			MSetDisplayColor( 0xFFFF );
 			sprintf( szkey, "蓝线(%02d)", iIndexB );
-			TextOut( C_COORHPOSI+C_COORHPOSI+126, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+210, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			MSetDisplayColor( 0x3F << 5 );
 			sprintf( szkey, "红线(%02d)", iIndexR );
-			TextOut( C_COORHPOSI+5, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+92, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
 			sprintf( szkey, "移动" );
-			TextOut( C_COORHPOSI+C_COORHPOSI+252, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
-			TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
 		}
 		else if( keycode == 18 )
 		{
@@ -8795,45 +8791,30 @@ void DAFunc()
 			
 			MSetDisplayColor( 0xFFFF );
 			sprintf( szkey, "移动" );
-			TextOut( C_COORHPOSI+C_COORHPOSI+252, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
-			MSetDisplayColor( 0x3F << 5 );
+			TextOut( 265, 440, 1, 375, 470, szkey, 4 );MSetDisplayColor( 0x3F << 5 );
 			sprintf( szkey, "红线(%02d)", iIndexR );
-			TextOut( C_COORHPOSI+5, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+92, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
 			sprintf( szkey, "蓝线(%02d)", iIndexB );
-			TextOut( C_COORHPOSI+C_COORHPOSI+126, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+210, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
-			TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
 		}
 		else if( keycode == 19 )
 		{
-			if( iIndex != 3 )
-			{
-				iIndex = 3;
-			}
+			if( iStep == 1 )
+				iStep = 5;
+			else if( iStep == 5 )
+				iStep = 10;
+			else if( iStep == 10 )
+				iStep = 20;
+			else if( iStep == 20 )
+				iStep = 50;
 			else
-			{
-				if( iStep == 1 )
-					iStep = 5;
-				else if( iStep == 5 )
-					iStep = 10;
-				else if( iStep == 10 )
-					iStep = 20;
-				else if( iStep == 20 )
-					iStep = 50;
-				else
-					iStep = 1;
-			}
+				iStep = 1;
 			
-			MSetDisplayColor( 0xFFFF );
-			sprintf( szkey, "步进(%02d)", iStep );
-			TextOut( C_COORHPOSI+C_COORHPOSI+372, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
 			MSetDisplayColor( 0x3F << 5 );
-			sprintf( szkey, "红线(%02d)", iIndexR );
-			TextOut( C_COORHPOSI+5, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+92, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
-			sprintf( szkey, "蓝线(%02d)", iIndexB );
-			TextOut( C_COORHPOSI+C_COORHPOSI+126, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+210, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
-			sprintf( szkey, "移动" );
-			TextOut( C_COORHPOSI+C_COORHPOSI+252, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, szkey, 4 );
+			sprintf( szkey, "步进(%02d)", iStep );
+			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
 		}
 	}
 }
@@ -8889,7 +8870,8 @@ void TOFDFunc(void)
 			//iIndex = 3;
 			//DrawFuncMenu( iIndex );
 			DAFunc();
-			EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
+			//清除所有窗口内容	
+			EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 			iIndex = 1;
 			DrawFuncMenu( iIndex );
 		}
