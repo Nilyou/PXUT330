@@ -8551,7 +8551,6 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	
 	EraseWindow( 2, 4, 499, 426 );
 	MSetDisplayColor( 0xFFE0 );
-	
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+29, "A扫波形", 4 );
 	iPt += 40;
 	sprintf( szkey, "蓝线(%02d)", iIndexB + 1 );
@@ -8578,6 +8577,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	iPt += (is+2);
 	if( iIndex != 1 )
 	{
+		MSetDisplayColor( 0x1F<<11 );
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线1", 4 );
 		iPt += is;
@@ -8596,6 +8596,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	}
 	else
 	{
+		MSetDisplayColor( 0x1F );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "蓝线1", 4 );
 		iPt += is;
@@ -8612,18 +8613,22 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	}
+	MSetDisplayColor( 0xFFE0 );
 	iPt += (is+2);
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量宽度", 4 );
 	iPt += is;
 	L = (int)(MGetRange(3) * (abs(iLineR[1] - iLineR[0]) + 1) / ECHO_PACKAGE_SIZE * 10 + 5);
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
+	MSetDisplayColor( 0xFFFF );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += is;
+	MSetDisplayColor( 0xFFE0 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量高度", 4 );
 	iPt += is;
 	L = (abs(iLineB[1] - iLineB[0]) + 1) * 100 / g_iPerMM;
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
+	MSetDisplayColor( 0xFFFF );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	
@@ -8802,6 +8807,8 @@ void DAFunc()
 					iLineR[iIndexR] = 0;
 				else 
 					iLineR[iIndexR] -= iStep;
+				
+				DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			}
 			else if( iIndex == 1 )
 			{
@@ -8812,6 +8819,8 @@ void DAFunc()
 				
 				if( iLineB[iIndexB] < iLineStart )
 					iLineStart = iLineB[iIndexB];
+				
+				DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			}
 			else if( iIndex == 2 )
 			{
@@ -8821,19 +8830,21 @@ void DAFunc()
 						iLineStart = 0;
 					else 
 						iLineStart -= iStep;
+					
+					DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 				}
 			}
-			
-			DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 		}
 		else if( keycode == 14 )
 		{
 			if( iIndex == 0 )
 			{
 				if( iLineR[iIndexR] + iStep > ECHO_PACKAGE_SIZE )
-						iLineR[iIndexR] = ECHO_PACKAGE_SIZE;
-					else 
-						iLineR[iIndexR] += iStep;
+					iLineR[iIndexR] = ECHO_PACKAGE_SIZE;
+				else 
+					iLineR[iIndexR] += iStep;
+					
+				DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			}
 			else if( iIndex == 1 )
 			{
@@ -8846,21 +8857,21 @@ void DAFunc()
 					iLineStart += iLineB[iIndexB] - (iLineStart + 324);
 				else if( iLineB[iIndexB] < iLineStart )
 					iLineStart = iLineB[iIndexB];
+				
+				DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			}
 			else if( iIndex == 2 )
 			{
-				//sprintf( szkey, "%d, %d, %d, %d", iLineStart, iStep, iMaxLine, g_iLine );
-				//TextOut( 0, 0, 1, 100, 20, szkey, 4 );
 				if( g_iLine > 324 )
 				{
 					if( iLineStart + iStep + iMaxLine > g_iLine )
 						iLineStart += g_iLine - (iLineStart + iMaxLine);
 					else 
 						iLineStart += iStep;
+					
+					DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 				}
 			}
-			
-			DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 		}
 		else if( keycode == 16 )
 		{
