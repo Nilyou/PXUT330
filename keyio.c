@@ -7,6 +7,7 @@
 char MEMORY_STORAGE[(C_OFF_FILEMAX+4095)/4096*4096];
 int nRotaryIndex;
 extern int HoriOffsetScreen ;		//所有写在屏幕上的内容，水平方向开始点
+extern int iTofdMode;
 
 int MGetRotary(int rotary/*0第一个旋钮1第二个，－1全部，－2判断是否有旋钮*/)
 {
@@ -281,8 +282,8 @@ int MGetKeyCode(u_int time)
     u_char powerlevel=0;
     u_char powerstatus=0;
     int ontime = elapsedtime / (1000*60);		//开机时长，单位分钟
-
-        if( MGetAcquisitionEnable() == 1 && SecondTime<=elapsedtime)
+if( iTofdMode != 1 )
+{       if( MGetAcquisitionEnable() == 1 && SecondTime<=elapsedtime)
         {
             SecondTime= elapsedtime +1000;
             GetSystemTime(&TimeClock);
@@ -353,7 +354,7 @@ int MGetKeyCode(u_int time)
             DrawPower(powerlevel,0);	//一旦停止充电需立即更新电池图标
         }
     }
-
+}
   //  if( elapsedtime1 + 10 < GetElapsedTime()  )
 /*    if(keycode==C_KEYCODMAX)
     {

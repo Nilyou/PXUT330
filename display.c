@@ -25,7 +25,7 @@ extern const unsigned char _Data[];   	  //数据处理
 extern const unsigned char _Freeze[]; 	  //冻结
 */
 
-extern int iBscan;
+extern int iTofdMode;
 
 extern const char 	_us[C_LANGUAGE][1][4];
 const char 	_ProbeFace[] =
@@ -4903,7 +4903,7 @@ void MGateDraw(void)   /*画门*/
 void MDrawGate( int/*-1两门都画0A门1B门*/ gatetype, int/*-1向下1向上*/ mode,
                 int paratype/*-1全门0门位1门宽2门高*/ ,int clear/*0新画1清除*/)
 {
-	if( iBscan == 1 )
+	if( iTofdMode == 1 )
 	{
 		return;
 	}
