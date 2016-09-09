@@ -8554,9 +8554,9 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+29, "A扫波形", 4 );
 	iPt += 40;
-	sprintf( szkey, "蓝线(%02d)", iIndexB );
+	sprintf( szkey, "蓝线(%02d)", iIndexB + 1 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+29, szkey, 4 );
-	iPt = 104;
+	iPt = 106;
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "扫描长度", 4 );
 	iPt += is;
 	if( g_iLine != 0 )
@@ -8575,7 +8575,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
-	iPt += (is+1);
+	iPt += (is+2);
 	if( iIndex != 1 )
 	{
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
@@ -8612,7 +8612,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	}
-	iPt += (is+1);
+	iPt += (is+2);
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量宽度", 4 );
 	iPt += is;
 	L = (int)(MGetRange(3) * (abs(iLineR[1] - iLineR[0]) + 1) / ECHO_PACKAGE_SIZE * 10 + 5);
@@ -8635,7 +8635,9 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt = 104;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
-	iPt += is;
+	iPt = 105;
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	iPt = 106;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt += is;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
@@ -8644,6 +8646,10 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	iPt += is;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt += is;
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	iPt += is;
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	iPt += 1;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt += 1;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
@@ -8657,7 +8663,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt += 1;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
-	iPt += is;
+	iPt += 1;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt += is;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
@@ -8665,7 +8671,11 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	iPt += is;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	//iPt += is;
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	//底线
+	DrawLine( 502, 477, C_HORIDOT_SCREEN, 477 );
+	DrawLine( 502, 478, C_HORIDOT_SCREEN, 478 );
 	DrawLine( 502, 479, C_HORIDOT_SCREEN, 479 );
 	
 	xposOld = 2;
@@ -8744,9 +8754,9 @@ void DAFunc()
 	sprintf( szkey, "图像" );
 	TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 	MSetDisplayColor( 0x3F << 5 );
-	sprintf( szkey, "红线(%02d)", iIndexR );
+	sprintf( szkey, "红线(%02d)", iIndexR + 1 );
 	TextOut( 6, 440, 1, 125, 470, szkey, 4 );
-	sprintf( szkey, "蓝线(%02d)", iIndexB );
+	sprintf( szkey, "蓝线(%02d)", iIndexB + 1 );
 	TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 	sprintf( szkey, "步进(%02d)", iStep );
 	TextOut( 382, 440, 1, 501, 470, szkey, 4 );
@@ -8865,10 +8875,10 @@ void DAFunc()
 			}
 			
 			MSetDisplayColor( 0xFFFF );
-			sprintf( szkey, "红线(%02d)", iIndexR );
+			sprintf( szkey, "红线(%02d)", iIndexR+1 );
 			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
 			MSetDisplayColor( 0x3F << 5 );
-			sprintf( szkey, "蓝线(%02d)", iIndexB );
+			sprintf( szkey, "蓝线(%02d)", iIndexB+1 );
 			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			sprintf( szkey, "图像" );
 			TextOut( 265, 440, 1, 375, 470, szkey, 4 );
@@ -8889,10 +8899,10 @@ void DAFunc()
 			DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			
 			MSetDisplayColor( 0xFFFF );
-			sprintf( szkey, "蓝线(%02d)", iIndexB );
+			sprintf( szkey, "蓝线(%02d)", iIndexB+1 );
 			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			MSetDisplayColor( 0x3F << 5 );
-			sprintf( szkey, "红线(%02d)", iIndexR );
+			sprintf( szkey, "红线(%02d)", iIndexR+1 );
 			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
 			sprintf( szkey, "图像" );
 			TextOut( 265, 440, 1, 375, 470, szkey, 4 );
@@ -8909,9 +8919,9 @@ void DAFunc()
 			MSetDisplayColor( 0xFFFF );
 			sprintf( szkey, "图像" );
 			TextOut( 265, 440, 1, 375, 470, szkey, 4 );MSetDisplayColor( 0x3F << 5 );
-			sprintf( szkey, "红线(%02d)", iIndexR );
+			sprintf( szkey, "红线(%02d)", iIndexR+1 );
 			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
-			sprintf( szkey, "蓝线(%02d)", iIndexB );
+			sprintf( szkey, "蓝线(%02d)", iIndexB+1 );
 			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
 			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
