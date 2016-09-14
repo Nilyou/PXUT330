@@ -8170,7 +8170,7 @@ void DrawFuncMenu( int iIndex )
 		TextOut( C_COORHPOSI+42, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+122, C_VERTDOT_VIDEO- C_COORVPOSI, "调校", 4 );
 		MSetDisplayColor( 0x3F << 5 );
 		
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+100, C_COORVPOSI+30, "0. 零点 & 声速", 4 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+100, C_COORVPOSI+30, "0. 探头前沿", 4 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+40, 1, C_COORHPOSI+100, C_COORVPOSI+60, "1. 编码器", 4 );
 	}
 	else
@@ -8198,8 +8198,8 @@ void DrawFuncMenu( int iIndex )
 		WriteOffset( C_COORHPOSI+152, C_COORVPOSI+160 );
 		sprintf( szkey, "6.PCS   :%d.%d", g_iPCS/100, g_iPCS%100 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+190, 1, C_COORHPOSI+100, C_COORVPOSI+210, szkey, 4 );
-		sprintf( szkey, "7.扫查频率: %d 次/mm  ", g_iPerMM );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+220, 1, C_COORHPOSI+100, C_COORVPOSI+240, szkey, 4 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+220, 1, C_COORHPOSI+100, C_COORVPOSI+240, "7.探头前沿:        ", 4 );
+		WriteLongness(C_COORHPOSI+152, C_COORVPOSI+220,MGetForward(),5,1);
 		iNumber = MGetPulseMode();
 		sprintf( szkey, "8.发射电压:%s         ", iNumber == 0?"低压":iNumber == 1?"中压":iNumber == 2?"标准":"高压" );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+250, 1, C_COORHPOSI+100, C_COORVPOSI+270, szkey, 4 );
@@ -8260,11 +8260,98 @@ void CalibrationFunc( int iIndex )
 	int   keycode      = 0;
 	int   iEncoder     = 0;
 	u_int iRotaryValue = 0;
+	int   number = 0, deci_len = 1;
 	char  szkey[64];
-
+	u_char* sampbuff;
+	int i = 0, j = 0;
+	u_char uMax = 0;
+	
 	if( iIndex == 0 )
 	{
-		iIndex = 0;
+		MSetRange(100,C_SETMODE_SETSAVE) ;
+		
+		ScreenRenovate();							//屏幕刷新
+		MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
+		MSetEchoMode(0,C_SETMODE_SETSAVE);			//射频模式
+		SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI + VertOffsetScreen, 0 );
+		EnableEchoDisplay( 1 ) ;
+		
+		DisplayPrompt( 15 );
+		TextOut( 0, 0, 1, 32, 16, "探头前沿校准", 4 );
+		EraseDrawRectangle( 200, 60, 480, 150 ) ;
+		TextOut( 202, 60, 1, 480, 89, "0. 探头前沿: ", 4 );
+		TextOut( 202, 90, 1, 480, 119, "1. 清除零点 ", 4 );
+		TextOut( 202, 120, 1, 480, 149, "2. 校准零点:  ", 4 );
+		while( true )
+		{
+			WriteLongness(350, 62,MGetForward(),5,1);
+			WriteOffset( 350, 121 );
+			
+			keycode = MGetKeyCode( 0 );
+			
+			if( keycode == 0 )
+			{
+				number = 0, deci_len = 1;
+
+				if( Input_Number(350, 62,&number,2, &deci_len,0) == 1)
+				{
+					if(( number <= 3000 && MGetUnitType()==0)||( number <= 11000 && MGetUnitType()==1))
+					{
+						MSetForward(number,C_SETMODE_SAVE);
+					}
+				}	
+				
+				MSetSystem();
+			}
+			else if( keycode == 2 )
+			{
+				sampbuff = GetSampleBuffer();
+				
+				for( i = 0; i < ECHO_PACKAGE_SIZE-2; i++ )
+				{
+					if( uMax < (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3 )
+					{
+						uMax = (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3;
+						j = i+1;
+					}
+				}
+
+				number = 10 * 1000 * j * 16 * 10 / 3230 / ECHO_PACKAGE_SIZE ;
+				MSetOffset( number, C_SETMODE_SETSAVE);
+				
+				MSetSystem();
+			}
+			else if( keycode == 1 )
+			{
+				MSetOffset(0,C_SETMODE_SETSAVE);
+				
+				MSetSystem();
+			}
+			else if( keycode == C_KEYCOD_CONFIRM )
+			{
+				//确认键弹起，防止后续误判断
+				while( true )
+				{
+					keycode = MGetKeyCode( 0 );
+					if( keycode != C_KEYCOD_CONFIRM )
+						break;
+				}
+				break;
+			}
+			else if( keycode == C_KEYCOD_RETURN )
+			{
+				//取消键弹起，防止后续误判断
+				while( true )
+				{
+					keycode = MGetKeyCode( 0 );
+					if( keycode != C_KEYCOD_RETURN )
+						break;
+				}
+				break;
+			}
+		}
+
+		EnableEchoDisplay( 0 ) ;
 	}
 	else if( iIndex == 1 )
 	{
@@ -8477,16 +8564,19 @@ void SetFunc( int iIndex )
 			g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 ) * 100);
 		}	
 	}
-	//7. 扫查频率
+	//7. 探头前沿
 	else if( iIndex == 7 )
 	{
-		sprintf( szkey, "扫查频率(1～%d):", g_iEncoderStep );
-		number = 1, deci_len = 0;
+		sprintf( szkey, "探头前沿:", g_iEncoderStep );
+		number = 0, deci_len = 1;
 		TextOut( 0, 0, 1, 100, 20, szkey, 4 );
-		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
+		
+		if( Input_Number(0,21,&number,2, &deci_len,0) == 1)
 		{
-			if( number >= 1 && number <= g_iEncoderStep )
-				g_iPerMM = number;
+			if(( number <= 3000 && MGetUnitType()==0)||( number <= 11000 && MGetUnitType()==1))
+			{
+				MSetForward(number,C_SETMODE_SAVE);
+			}
 		}	
 	}
 	//8. 发射电压
