@@ -8277,15 +8277,14 @@ void CalibrationFunc( int iIndex )
 		EnableEchoDisplay( 1 ) ;
 		
 		DisplayPrompt( 15 );
-		TextOut( 0, 0, 1, 32, 16, "探头前沿校准", 4 );
+		TextOut( 0, 0, 1, 32, 16, "探头前沿校准(按+/-键手动校准零点)", 4 );
 		EraseDrawRectangle( 200, 60, 480, 150 ) ;
 		TextOut( 202, 60, 1, 480, 89, "0. 探头前沿: ", 4 );
-		TextOut( 202, 90, 1, 480, 119, "1. 清除零点 ", 4 );
-		TextOut( 202, 120, 1, 480, 149, "2. 校准零点:  ", 4 );
+		TextOut( 202, 90, 1, 480, 119, "1. 校准零点 ", 4 );
 		while( true )
 		{
 			WriteLongness(350, 62,MGetForward(),5,1);
-			WriteOffset( 350, 121 );
+			WriteOffset( 350, 91 );
 			
 			keycode = MGetKeyCode( 0 );
 			
@@ -8303,29 +8302,49 @@ void CalibrationFunc( int iIndex )
 				
 				MSetSystem();
 			}
-			else if( keycode == 2 )
-			{
-				sampbuff = GetSampleBuffer();
-				
-				for( i = 0; i < ECHO_PACKAGE_SIZE-2; i++ )
-				{
-					if( uMax < (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3 )
-					{
-						uMax = (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3;
-						j = i+1;
-					}
-				}
-
-				number = 10 * 1000 * j * 16 * 10 / 3230 / ECHO_PACKAGE_SIZE ;
-				MSetOffset( number, C_SETMODE_SETSAVE);
-				
-				MSetSystem();
-			}
 			else if( keycode == 1 )
 			{
-				MSetOffset(0,C_SETMODE_SETSAVE);
+				if( MGetOffset() == 0 )
+				{
+					MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
 				
+					int iPos = MGetAmpPos(0);
+					/*
+					sampbuff = GetSampleBuffer();
+					
+					for( i = 0; i < ECHO_PACKAGE_SIZE-2; i++ )
+					{
+						if( uMax < (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3 )
+						{
+							uMax = (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3;
+							j = i+1;
+						}
+					}
+					*/
+					number = 10 * 1000 * iPos * 16 * 10 / 3230 / ECHO_PACKAGE_SIZE ;
+					
+					MSetOffset( number, C_SETMODE_SETSAVE);
+				}
+				else
+				{
+					MSetOffset(0,C_SETMODE_SETSAVE);
+				}
 				MSetSystem();
+			}
+			else if( keycode == 14 )
+			{
+				number = MGetOffset();
+				number++;
+				MSetOffset( number, C_SETMODE_SETSAVE);
+			}
+			else if( keycode == 13 )
+			{
+				number = MGetOffset();
+				number--;
+				if( number >= 0 )
+					MSetOffset( number, C_SETMODE_SETSAVE);
+				else
+					MSetOffset( 0, C_SETMODE_SETSAVE);
 			}
 			else if( keycode == C_KEYCOD_CONFIRM )
 			{
@@ -8498,7 +8517,7 @@ void SetFunc( int iIndex )
 		{
 			if( number >= 0 )
 			{
-				g_iThickness = number;
+				g_iThickness = number;	
 			}
 		}
 	}
@@ -8631,7 +8650,10 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 {
 	short xpos, ypos, xposOld, yposOld, i, j, iMaxLine;
 	short clrR, clrG, clrB, clr;
-	int   L = 0, iPt = 13, is = 28;
+	int   L = 0, iPt = 13, is = 28, L0 = 0, L1 = 0;
+	double t0 = g_iPCS /100.0 /1000.0 / MGetSpeed();
+	double t = 0;
+	
 	char  szkey[64];
 	
 	if( g_iLine > 324 )
@@ -8671,16 +8693,34 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线1", 4 );
 		iPt += is;
-		L = MGetRange(3) * (iLineR[0]) / ECHO_PACKAGE_SIZE*10+5;
-		sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
+
+		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*iLineR[0]*1000000
+		   //+MGetDelay(0)/200.0
+		   +g_iPCS/100.0/MGetSpeed()*1000
+		   -MGetOffset()*10/16;
+#if 0		
+		sprintf( szkey, "%d，%d, %d", MGetRange(3), MGetDelay(0), MGetOffset()*10/16 );
+		TextOut( 4, 300, 1, 500, 334, szkey, 4 );
+		
+		sprintf( szkey, "%d   ", (long)(t * 100));
+		TextOut( 4, 340, 1, 500, 374, szkey, 4 );
+#endif		   
+		   
+		L0 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+		sprintf( szkey, "%d.%dmm", L0/100, (L0%100)/10 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 		iPt += is;
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线2", 4 );
 		iPt += is;
-		L = MGetRange(3) * (iLineR[1]) / ECHO_PACKAGE_SIZE*10+5;
-		sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
+		
+		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*iLineR[1]*1000000
+		   //+MGetDelay(0)/200.0
+		   +g_iPCS/100.0/MGetSpeed()*1000
+		   -MGetOffset()*10/16;
+		L1 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+		sprintf( szkey, "%d.%dmm", L1/100, (L1%100)/10 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	}
@@ -8705,16 +8745,16 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	}
 	MSetDisplayColor( 0xFFE0 );
 	iPt += (is+2);
-	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量宽度", 4 );
+	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量高度", 4 );
 	iPt += is;
-	L = (int)(MGetRange(3) * (abs(iLineR[1] - iLineR[0]) + 1) / ECHO_PACKAGE_SIZE * 10 + 5);
+	L = abs(L1 - L0);
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	MSetDisplayColor( 0xFFFF );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += is;
 	MSetDisplayColor( 0xFFE0 );
-	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量高度", 4 );
+	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量宽度", 4 );
 	iPt += is;
 	L = (abs(iLineB[1] - iLineB[0]) + 1) * 100 / g_iPerMM;
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
@@ -9164,6 +9204,9 @@ void BScanEx(void)
 	u_int iRotaryValue     =  0;
 	int   iOldcurr_cr 	   = curr_cr;			//记录当前绘制颜色		
 
+	MSetScaleDelay( (g_iPCS+5)/10, C_SETMODE_SETSAVE );
+	MSetRange( 2*sqrt(pow(g_iThickness * 10, 2) + pow(g_iPCS/2.0, 2)) / 10 - g_iPCS/10,C_SETMODE_SETSAVE) ;
+	
     ScreenRenovate();							//屏幕刷新
     MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
 	MSetEchoMode(3,C_SETMODE_SETSAVE);			//射频模式
