@@ -8194,7 +8194,7 @@ void DrawFuncMenu( int iIndex )
 		Write_Number(C_COORHPOSI+152, C_COORVPOSI+100, g_iThickness,5,1,0);
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+130, 1, C_COORHPOSI+100, C_COORVPOSI+150, "4.声速   :", 4 );
 		WriteSpeed( C_COORHPOSI+152, C_COORVPOSI+130 );
-		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点   :", 4 );
+		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点   :     μs ", 4 );
 		WriteOffset( C_COORHPOSI+152, C_COORVPOSI+160 );
 		sprintf( szkey, "6.PCS   :%d.%d", g_iPCS/100, g_iPCS%100 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+190, 1, C_COORHPOSI+100, C_COORVPOSI+210, szkey, 4 );
@@ -8203,8 +8203,7 @@ void DrawFuncMenu( int iIndex )
 		iNumber = MGetPulseMode();
 		sprintf( szkey, "8.发射电压:%s         ", iNumber == 0?"低压":iNumber == 1?"中压":iNumber == 2?"标准":"高压" );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+250, 1, C_COORHPOSI+100, C_COORVPOSI+270, szkey, 4 );
-		iNumber = MGetRepeatRate();
-		sprintf( szkey, "9.重复频率:%d         ", iNumber );
+		sprintf( szkey, "9.扫查频率:%d  次/mm       ", g_iPerMM );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+280, 1, C_COORHPOSI+100, C_COORVPOSI+300, szkey, 4 );
 	}
 	else
@@ -8280,7 +8279,7 @@ void CalibrationFunc( int iIndex )
 		TextOut( 0, 0, 1, 32, 16, "探头前沿校准(按+/-键手动校准零点)", 4 );
 		EraseDrawRectangle( 200, 60, 480, 150 ) ;
 		TextOut( 202, 60, 1, 480, 89, "0. 探头前沿: ", 4 );
-		TextOut( 202, 90, 1, 480, 119, "1. 校准零点 ", 4 );
+		TextOut( 202, 90, 1, 480, 119, "1. 校准零点：      μs", 4 );
 		while( true )
 		{
 			WriteLongness(350, 62,MGetForward(),5,1);
@@ -8309,19 +8308,7 @@ void CalibrationFunc( int iIndex )
 					MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
 				
 					int iPos = MGetAmpPos(0);
-					/*
-					sampbuff = GetSampleBuffer();
-					
-					for( i = 0; i < ECHO_PACKAGE_SIZE-2; i++ )
-					{
-						if( uMax < (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3 )
-						{
-							uMax = (sampbuff[i] + sampbuff[i+1] + sampbuff[i+2])/3;
-							j = i+1;
-						}
-					}
-					*/
-					number = 10 * 1000 * iPos * 16 * 10 / 3230 / ECHO_PACKAGE_SIZE ;
+					number = 10 * 1000 * iPos * 16 * 10 / 2337 / ECHO_PACKAGE_SIZE ;
 					
 					MSetOffset( number, C_SETMODE_SETSAVE);
 				}
@@ -8630,17 +8617,16 @@ void SetFunc( int iIndex )
 			}
 		}
 	}
-	//9. 重复频率
+	//9. 扫查频率
 	else if( iIndex == 9 )
 	{
 		number = 100, deci_len = 0;
-		TextOut( 0, 0, 1, 100, 20, "重复频率(10 ～ 1000):", 4 );
+		TextOut( 0, 0, 1, 100, 20, "扫查频率:", 4 );
 		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
 		{
-			if(number >= 10 && number <= 1000)
+			if(number >= 0 )
 			{
-				MSetRepeatRate(number,C_SETMODE_SAVE);
-				MSetRepeatRate(MGetRepeatRate(),C_SETMODE_SET);
+				g_iPerMM = number;
 			}
 		}
 	}
@@ -8652,7 +8638,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	short clrR, clrG, clrB, clr;
 	int   L = 0, iPt = 13, is = 28, L0 = 0, L1 = 0;
 	double t0 = g_iPCS /100.0 /1000.0 / MGetSpeed();
-	double t = 0;
+	double t = 0, t1 = 0, t2 = 0;
 	
 	char  szkey[64];
 	
@@ -8694,35 +8680,65 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线1", 4 );
 		iPt += is;
 
-		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*iLineR[0]*1000000
-		   //+MGetDelay(0)/200.0
-		   +g_iPCS/100.0/MGetSpeed()*1000
+		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*(iLineR[0])*1000000
+		   +MGetDelay(0)/200.0
 		   -MGetOffset()*10/16;
-#if 0		
-		sprintf( szkey, "%d，%d, %d", MGetRange(3), MGetDelay(0), MGetOffset()*10/16 );
-		TextOut( 4, 300, 1, 500, 334, szkey, 4 );
-		
-		sprintf( szkey, "%d   ", (long)(t * 100));
-		TextOut( 4, 340, 1, 500, 374, szkey, 4 );
-#endif		   
+
+		//	t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*iLineR[0]*1000000
+		//	   +MGetDelay(0)/200.0
+		//	   -MGetOffset()*10/16;
+#if 0	
+		t2 = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*(iLineR[1]-iLineR[0])*1000000
+		   +MGetDelay(0)/200.0
+		   -MGetOffset()*10/16;
 		   
-		L0 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
-		sprintf( szkey, "%d.%dmm", L0/100, (L0%100)/10 );
-		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
-		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+		if( t2 >= g_iPCS/100.0/MGetSpeed()*1000 ) 
+		{
+			L0 = sqrt( pow((MGetSpeed() * (t2)/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+			sprintf( szkey, "%d, %d", (int)(t2 * 10000), L0 );
+			TextOut( 4, 300, 1, 500, 334, szkey, 4 );
+		}
+		else
+		{
+			TextOut( 4, 300, 1, 500, 334, "Error", 4 );
+		}
+#endif		   
+		
+		if( t >= g_iPCS/100.0/MGetSpeed()*1000 ) 
+		{
+			L0 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+			sprintf( szkey, "%d.%dmm", L0/100, (L0%100)/10 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+		}
+		else
+		{
+			L0 = -1;
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "--", 4 );
+		}
 		iPt += is;
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线2", 4 );
 		iPt += is;
 		
-		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*iLineR[1]*1000000
-		   //+MGetDelay(0)/200.0
-		   +g_iPCS/100.0/MGetSpeed()*1000
+		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*(iLineR[1])*1000000
+		   +MGetDelay(0)/200.0
 		   -MGetOffset()*10/16;
-		L1 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
-		sprintf( szkey, "%d.%dmm", L1/100, (L1%100)/10 );
-		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
-		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+		
+		if( t >= g_iPCS/100.0/MGetSpeed()*1000 ) 		
+		{
+			L1 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+			sprintf( szkey, "%d.%dmm", L1/100, (L1%100)/10 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+		}
+		else
+		{
+			L1 = -1;
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "--", 4 );
+		}
 	}
 	else
 	{
@@ -8747,11 +8763,20 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	iPt += (is+2);
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量高度", 4 );
 	iPt += is;
-	L = abs(L1 - L0);
+	
+	if( L1 != -1 && L0 != -1 )
+		L = abs(L1 - L0);
+	else if( L1 != -1 && L0 == -1 )
+		L = L1;
+	
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	MSetDisplayColor( 0xFFFF );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
-	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+	if( L1 == -1 && L0 == -1 )
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "--", 4 );
+	else
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+	
 	iPt += is;
 	MSetDisplayColor( 0xFFE0 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量宽度", 4 );
@@ -9204,8 +9229,8 @@ void BScanEx(void)
 	u_int iRotaryValue     =  0;
 	int   iOldcurr_cr 	   = curr_cr;			//记录当前绘制颜色		
 
-	MSetScaleDelay( (g_iPCS+5)/10, C_SETMODE_SETSAVE );
-	MSetRange( 2*sqrt(pow(g_iThickness * 10, 2) + pow(g_iPCS/2.0, 2)) / 10 - g_iPCS/10,C_SETMODE_SETSAVE) ;
+	//MSetScaleDelay( (g_iPCS+5)/10, C_SETMODE_SETSAVE );
+	//MSetRange( 2*sqrt(pow(g_iThickness * 10, 2) + pow(g_iPCS/2.0, 2)) / 10 - g_iPCS/10,C_SETMODE_SETSAVE) ;
 	
     ScreenRenovate();							//屏幕刷新
     MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
