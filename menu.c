@@ -7083,7 +7083,6 @@ int DataCall(int file_no,int SaveMode)	//调用已存储的数据并覆盖到当前通道
 }
 int TestFlawHigh(void)		//测高
 {
-
     u_short xpos,ypos,menu_xpos,menu_ypos;
     short keycode;
     int high = 0, high1=0,high2=0,i;
@@ -8133,7 +8132,7 @@ void BScan(void)//B扫描
 }
 
 //每mm编码器的值
-int g_iEncoderStep = 50;
+int g_iEncoderStep = 5;
 //每mm扫查次数
 int g_iPerMM = 1;
 //角度
@@ -8141,7 +8140,7 @@ int g_iAngle = 60;
 //工件厚度
 int g_iThickness = 200;
 //PCS, 2位小数
-int g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0*60) * 200 / 10 ) * 100);
+int g_iPCS = (int)((2.0 * 2.0 / 3.0 * tan(3.1415926/180.0*60) * 200 / 10 + 0.05) * 10);
 
 //1mm一次，工件长度小于1000mm
 u_char g_pEcho[1000][ECHO_PACKAGE_SIZE];
@@ -8195,8 +8194,8 @@ void DrawFuncMenu( int iIndex )
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+130, 1, C_COORHPOSI+100, C_COORVPOSI+150, "4.声速   :", 4 );
 		WriteSpeed( C_COORHPOSI+152, C_COORVPOSI+130 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点   :     μs ", 4 );
-		WriteOffset( C_COORHPOSI+152, C_COORVPOSI+160 );
-		sprintf( szkey, "6.PCS   :%d.%d", g_iPCS/100, g_iPCS%100 );
+		Write_Number( C_COORHPOSI+152, C_COORVPOSI+160, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+		sprintf( szkey, "6.PCS   :%d.%d", g_iPCS/10, g_iPCS%10 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+190, 1, C_COORHPOSI+100, C_COORVPOSI+210, szkey, 4 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+220, 1, C_COORHPOSI+100, C_COORVPOSI+240, "7.探头前沿:        ", 4 );
 		WriteLongness(C_COORHPOSI+152, C_COORVPOSI+220,MGetForward(),5,1);
@@ -8279,7 +8278,7 @@ void CalibrationFunc( int iIndex )
 		TextOut( 0, 0, 1, 32, 16, "探头前沿校准(按+/-键手动校准零点)", 4 );
 		EraseDrawRectangle( 200, 60, 480, 150 ) ;
 		TextOut( 202, 60, 1, 480, 89, "0. 探头前沿: ", 4 );
-		TextOut( 202, 90, 1, 480, 119, "1. 校准零点：      μs", 4 );
+		TextOut( 202, 90, 1, 480, 119, "1. 校准零点：    μs", 4 );
 		while( true )
 		{
 			WriteLongness(350, 62,MGetForward(),5,1);
@@ -8308,7 +8307,7 @@ void CalibrationFunc( int iIndex )
 					MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
 				
 					int iPos = MGetAmpPos(0);
-					number = 10 * 1000 * iPos * 16 * 10 / 2337 / ECHO_PACKAGE_SIZE ;
+					number = 10 * 1000 * iPos * 16 * 10 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
 					
 					MSetOffset( number, C_SETMODE_SETSAVE);
 				}
@@ -8354,6 +8353,10 @@ void CalibrationFunc( int iIndex )
 						break;
 				}
 				break;
+			}
+			else if( keycode == 11 )
+			{
+				KeyManage(keycode,1);
 			}
 		}
 
@@ -8492,6 +8495,7 @@ void SetFunc( int iIndex )
 			if( number >= 0 && number < 90)
 			{
 				g_iAngle = number;
+				g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 + 0.05) * 10);
 			}
 		}
 	}
@@ -8505,6 +8509,7 @@ void SetFunc( int iIndex )
 			if( number >= 0 )
 			{
 				g_iThickness = number;	
+				g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 + 0.05) * 10);
 			}
 		}
 	}
@@ -8552,23 +8557,20 @@ void SetFunc( int iIndex )
 		{
 			if( number >= 0 )
 			{
-				MSetOffset( number * 16, C_SETMODE_SETSAVE );
+				int iTemp = number * 2337.0 / 5920.0 * 2.0 + 0.5;
+				MSetOffset( iTemp * 16, C_SETMODE_SETSAVE );
 			}
 		}
 	}
 	//6. PCS
 	else if( iIndex == 6 )
 	{
-		number = 0, deci_len = 2;
+		number = 0, deci_len = 1;
 		TextOut( 0, 0, 1, 100, 20, "PCS(未填写时自动计算):", 4 );
 		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
 		{
 			g_iPCS = number;
-		}	
-		else
-		{
-			g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 ) * 100);
-		}	
+		}		
 	}
 	//7. 探头前沿
 	else if( iIndex == 7 )
@@ -8621,10 +8623,11 @@ void SetFunc( int iIndex )
 	else if( iIndex == 9 )
 	{
 		number = 100, deci_len = 0;
-		TextOut( 0, 0, 1, 100, 20, "扫查频率:", 4 );
+		sprintf( szkey, "扫查频率(1 ～ %d):  ", g_iEncoderStep );
+		TextOut( 0, 0, 1, 100, 20, szkey, 4 );
 		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
 		{
-			if(number >= 0 )
+			if(number >= 0 && number <= g_iEncoderStep )
 			{
 				g_iPerMM = number;
 			}
@@ -8637,8 +8640,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	short xpos, ypos, xposOld, yposOld, i, j, iMaxLine;
 	short clrR, clrG, clrB, clr;
 	int   L = 0, iPt = 13, is = 28, L0 = 0, L1 = 0;
-	double t0 = g_iPCS /100.0 /1000.0 / MGetSpeed();
-	double t = 0, t1 = 0, t2 = 0;
+	double S0 = 0, S1 = 0;
 	
 	char  szkey[64];
 	
@@ -8673,6 +8675,10 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += (is+2);
+	
+	S0 = MGetRange(3)*iLineR[0]/ECHO_PACKAGE_SIZE + MGetDelay(3);
+	S1 = MGetRange(3)*iLineR[1]/ECHO_PACKAGE_SIZE + MGetDelay(3);
+	
 	if( iIndex != 1 )
 	{
 		MSetDisplayColor( 0x1F<<11 );
@@ -8680,33 +8686,9 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线1", 4 );
 		iPt += is;
 
-		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*(iLineR[0])*1000000
-		   +MGetDelay(0)/200.0
-		   -MGetOffset()*10/16;
-
-		//	t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*iLineR[0]*1000000
-		//	   +MGetDelay(0)/200.0
-		//	   -MGetOffset()*10/16;
-#if 0	
-		t2 = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*(iLineR[1]-iLineR[0])*1000000
-		   +MGetDelay(0)/200.0
-		   -MGetOffset()*10/16;
-		   
-		if( t2 >= g_iPCS/100.0/MGetSpeed()*1000 ) 
+		if( S0 >= g_iPCS/2 ) 
 		{
-			L0 = sqrt( pow((MGetSpeed() * (t2)/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
-			sprintf( szkey, "%d, %d", (int)(t2 * 10000), L0 );
-			TextOut( 4, 300, 1, 500, 334, szkey, 4 );
-		}
-		else
-		{
-			TextOut( 4, 300, 1, 500, 334, "Error", 4 );
-		}
-#endif		   
-		
-		if( t >= g_iPCS/100.0/MGetSpeed()*1000 ) 
-		{
-			L0 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+			L0 = sqrt( pow(S0/10.0,2) - pow(g_iPCS/10.0/2, 2) ) * 100;
 			sprintf( szkey, "%d.%dmm", L0/100, (L0%100)/10 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
@@ -8721,14 +8703,10 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线2", 4 );
 		iPt += is;
-		
-		t = MGetRange(3)/10.0/1000.0/MGetSpeed()/ECHO_PACKAGE_SIZE*(iLineR[1])*1000000
-		   +MGetDelay(0)/200.0
-		   -MGetOffset()*10/16;
-		
-		if( t >= g_iPCS/100.0/MGetSpeed()*1000 ) 		
+
+		if( S1 >= g_iPCS/2 ) 		
 		{
-			L1 = sqrt( pow((t*MGetSpeed()/1000.0)/2,2) - pow(g_iPCS/100.0/2, 2) ) * 100;
+			L1 = sqrt( pow(S1/10.0,2) - pow(S0/10, 2) ) * 100;
 			sprintf( szkey, "%d.%dmm", L1/100, (L1%100)/10 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
@@ -8765,7 +8743,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	iPt += is;
 	
 	if( L1 != -1 && L0 != -1 )
-		L = abs(L1 - L0);
+		L = abs(sqrt( pow(S1/10.0,2) - pow(S0/10, 2) ) * 100 - sqrt( pow(S0/10.0,2) - pow(S0/10, 2) ) * 100);
 	else if( L1 != -1 && L0 == -1 )
 		L = L1;
 	
@@ -8779,7 +8757,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	
 	iPt += is;
 	MSetDisplayColor( 0xFFE0 );
-	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量宽度", 4 );
+	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量长度", 4 );
 	iPt += is;
 	L = (abs(iLineB[1] - iLineB[0]) + 1) * 100 / g_iPerMM;
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
@@ -8897,6 +8875,10 @@ void DAFunc()
 	short clrR, clrG, clrB, clr;
 	short iIndex = 2, iIndexR = 0, iIndexB = 0;
 	
+	iLineR[0] = (g_iPCS/2 - MGetDelay(3)) * ECHO_PACKAGE_SIZE / MGetRange(3)/10;
+	
+	if( iLineR[0] < 0 )
+		iLineR[0] = 0;
 	//清除所有窗口内容	
 	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 
@@ -9133,7 +9115,7 @@ void TOFDFunc(void)
 
 	while( true )
 	{
-		keycode = MGetKeyCode( 0 );
+		keycode = MGetKeyCode( 20 );
 
 		if( keycode == 16 )
 		{
@@ -9184,25 +9166,10 @@ void TOFDFunc(void)
 		
 		if( keycode == C_KEYCOD_CONFIRM )
 		{
-			//确认键弹起，防止后续误判断
-			while( true )
-			{
-				keycode = MGetKeyCode( 0 );
-				if( keycode != C_KEYCOD_CONFIRM )
-					break;
-			}
 			break;
 		}
-		
 		if( keycode == C_KEYCOD_RETURN )
 		{
-			//取消键弹起，防止后续误判断
-			while( true )
-			{
-				keycode = MGetKeyCode( 0 );
-				if( keycode != C_KEYCOD_RETURN )
-					break;
-			}
 			break;
 		}
 	}
@@ -9345,8 +9312,12 @@ void BScanEx(void)
 				else
 				{
 					DisplayPrompt( 15 );
+#if 0					
 					sprintf( szkey, "位置: %d.%dmm", (iLine * 100 / g_iPerMM)/100, ((iLine * 100 / g_iPerMM)%100)/10 );
-					TextOut( 0, 0, 1, 100, 20, szkey, 4 );
+#else
+					sprintf( szkey, "位置: %d.%dmm", (iLine * 100 / g_iPerMM)/100, ((iLine * 100 / g_iPerMM)%100)/10 );
+#endif
+					//TextOut( 0, 0, 1, 100, 20, szkey, 4 );
 				}
 				//获取A扫数据
 				sampbuffer = GetSampleBuffer();
@@ -9444,6 +9415,7 @@ void BScanEx(void)
 */
 			//确认或取消退出
 			int keycode = MGetKeyCode( 0 );
+			
 			if( keycode == C_KEYCOD_RETURN || keycode == C_KEYCOD_CONFIRM )
 			{
 				break;
