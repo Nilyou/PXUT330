@@ -8706,7 +8706,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 
 		if( S1 >= g_iPCS/2 ) 		
 		{
-			L1 = sqrt( pow(S1/10.0,2) - pow(S0/10, 2) ) * 100;
+			L1 = sqrt( pow(S1/10.0,2) - pow(g_iPCS/10.0/2, 2) ) * 100;
 			sprintf( szkey, "%d.%dmm", L1/100, (L1%100)/10 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
