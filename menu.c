@@ -8906,7 +8906,7 @@ bool LoadTofdFile()
 			MEraseWindow(0,0,320,C_CCHAR_VDOT);
 			
 			memset(szkey, 0, 32);
-			if(MInputChar(0, 0, 1, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
+			if(MInputChar(0, 0, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
 			{
 				for( i = 0; i < Notes.name[0]; i++ )
 					szkey[i] = Notes.name[i+1];
