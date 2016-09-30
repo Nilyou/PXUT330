@@ -7382,7 +7382,8 @@ int TestFlawHigh(void)		//测高
 #define C_WAVENUM	2
 #define C_REJ	10
 
-void BScan(void)//B扫描
+//B扫描
+void BScan(void)
 {
     int gain ,range;//, angle, speed;
     u_int amp,nextamp;
@@ -8795,51 +8796,51 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	DrawLine( 1, 104, 502, 104 );
 	//分割直线
 	iPt = 3;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt = 104;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt = 105;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt = 106;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	//iPt += is;
 	//DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	//底线
-	DrawLine( 502, 477, C_HORIDOT_SCREEN, 477 );
-	DrawLine( 502, 478, C_HORIDOT_SCREEN, 478 );
-	DrawLine( 502, 479, C_HORIDOT_SCREEN, 479 );
+	DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
+	DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
+	DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
 	
 	xposOld = 2;
 	yposOld = 103 - (g_pEcho[iLineB[iIndexB]][0] * 100 / 255);	
@@ -8848,7 +8849,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
 	{
 		xpos = 2 + j;
-		ypos = 103 - (g_pEcho[iLineB[iIndexB]][j] * 100 / 255);		
+		ypos = 103 - (g_pEcho[iLineB[iIndexB]][j] * 99 / 255);		
 		DrawLine( xposOld, yposOld, xpos, ypos );
 		xposOld = xpos;
 		yposOld = ypos;	
@@ -9288,7 +9289,152 @@ void TOFDFunc(void)
 	EnableEchoDisplay( 1 ) ;
 }
 
-#if 1
+void DrawAxisDot()
+{
+	//坐标虚线
+	int i = 0;
+	u_int iRange = 0, iDelay = 0;
+	char  szkey[32];
+	
+	MSetDisplayColor( 0xFFE0 );
+	
+	for( i = 0; i < 10; i++ )
+	{
+		DrawPixel(102, 5 + i * 10);
+		DrawPixel(202, 5 + i * 10);
+		DrawPixel(302, 5 + i * 10);
+		DrawPixel(402, 5 + i * 10);
+		//DrawLine( 102, 5 + i * 10, 102, 5 + i * 10 + 1 );
+		//DrawLine( 202, 5 + i * 10, 202, 5 + i * 10 + 1 );
+		//DrawLine( 302, 5 + i * 10, 302, 5 + i * 10 + 1 );
+		//DrawLine( 402, 5 + i * 10, 402, 5 + i * 10 + 1 );
+	}
+	
+	for( i = 0; i < 50; i++ )
+	{
+		DrawPixel(3 + i * 10, 23);
+		DrawPixel(3 + i * 10, 43);
+		DrawPixel(3 + i * 10, 63);
+		DrawPixel(3 + i * 10, 83);
+		//DrawLine( 3 + i * 10, 23, 3 + i * 10 + 1, 23 );
+		//DrawLine( 3 + i * 10, 43, 3 + i * 10 + 1, 43 );
+		//DrawLine( 3 + i * 10, 63, 3 + i * 10 + 1, 63 );
+		//DrawLine( 3 + i * 10, 83, 3 + i * 10 + 1, 83 );
+	}
+	
+	iDelay = MGetDelay(3);
+	iRange = MGetRange(3);
+	sprintf( szkey, "%d.%d ", iDelay/10, iDelay%10 );
+	TextOut( 2, 105, 1, 101, 135, szkey, 4 );
+	sprintf( szkey, "%d.%d ", (iDelay+iRange/5)/10, (iDelay+iRange/5)%10 );
+	TextOut( 103, 105, 1, 201, 135, szkey, 4 );
+	sprintf( szkey, "%d.%d ", (iDelay+iRange*2/5)/10, (iDelay+iRange*2/5)%10 );
+	TextOut( 203, 105, 1, 301, 135, szkey, 4 );
+	sprintf( szkey, "%d.%d ", (iDelay+iRange*3/5)/10, (iDelay+iRange*3/5)%10 );
+	TextOut( 303, 105, 1, 401, 135, szkey, 4 );
+	sprintf( szkey, "%d.%d ", (iDelay+iRange*4/5)/10, (iDelay+iRange*4/5)%10 );
+	TextOut( 403, 105, 1, 501, 135, szkey, 4 );
+}
+
+void DrawTofdBtn( int iBtn[4], int iIndexFunc )
+{
+	char  szkey[32];
+	int iPt = 105, is = 30;
+	
+	MSetDisplayColor( 0x3F << 5 );
+	if( iBtn[0] == 0 )
+	{	
+		TextOut( 6, 440, 1, 125, 470, "    ", 4 );	
+		TextOut( 6, 440, 1, 125, 470, "开始", 4 );	
+	}
+	else
+	{
+		TextOut( 6, 440, 1, 125, 470, "    ", 4 );	
+		TextOut( 6, 440, 1, 125, 470, "停止", 4 );
+	}	
+	
+	TextOut( 132, 440, 1, 250, 470, "功能", 4 );
+	TextOut( 265, 440, 1, 375, 470, "保存数据", 4 );
+	TextOut( 382, 440, 1, 501, 470, "退出", 4 );
+	
+	if( iIndexFunc == -1 )
+	{
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+	}
+	else if( iIndexFunc == 0 )
+	{
+		MSetDisplayColor( 0xFFFF );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+	}
+	else if( iIndexFunc == 1 )
+	{
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0xFFFF );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+	}
+	else if( iIndexFunc == 2 )
+	{
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0xFFFF );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+	}
+}
+#if 0
 void BScanEx(void)
 {
     int   xpos, ypos, x0, y0, i, j, keycode;
@@ -9607,11 +9753,23 @@ _BSCAN_END:
 #else
 void BScanEx(void)
 {
+	int iBtn[4] = {0,0,0,0};
 	short xpos, ypos, xposOld, yposOld, i, j, keycode;
-	int iPt = 3, is = 28;
+	int iPt = 3, is = 30;
 	bool bFirst = true;
+	int iIndexFunc = -1;
 	u_char* buffer;
 	u_char sampbuffer[ECHO_PACKAGE_SIZE], sampbufferOld[ECHO_PACKAGE_SIZE];
+	char  szkey[32];
+	
+	short clrR, clrG, clrB, clr;
+	u_int iRotaryValue   =  0;
+	int   iEncoder       =  0;
+	int   iLine          =  0;
+	int   iLineStart     =  0;
+	int   iLineDrawCount =  0;
+	int   iLineLast      = -1;
+	
 	//清除所有窗口内容	
 	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 
@@ -9624,56 +9782,67 @@ void BScanEx(void)
 	DrawLine( 126, 430, 126, 477 );
 	DrawLine( 251, 430, 251, 477 );
 	DrawLine( 376, 430, 376, 477 );
-	
+
 	//A扫分割线
 	DrawLine( 1, 104, 502, 104 );
+
+	//A扫坐标刻度分割线
+	DrawLine( 1, 134, 502, 134 );
+	
 	//分割直线
 	iPt = 3;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt = 104;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt = 105;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt = 106;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	iPt += is;
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
-	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
-	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
+	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	//iPt += is;
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	//iPt += is;
 	//DrawLine( 502, iPt, C_HORIDOT_SCREEN, iPt );
 	//底线
-	DrawLine( 502, 477, C_HORIDOT_SCREEN, 477 );
-	DrawLine( 502, 478, C_HORIDOT_SCREEN, 478 );
-	DrawLine( 502, 479, C_HORIDOT_SCREEN, 479 );
+	DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
+	DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
+	DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
+	
+	MSetDisplayColor( 0xFFE0 );
+	TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "位置 mm", 4 );
+	TextOut( 534, 53, 1, C_HORIDOT_SCREEN, 83, "0.0   ", 4 );
+	
+	DrawAxisDot();
+	DrawTofdBtn( iBtn, iIndexFunc );
 	
 	MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
 	MSetEchoMode(3,C_SETMODE_SETSAVE);			//射频模式
@@ -9684,16 +9853,19 @@ void BScanEx(void)
 		buffer = GetSampleBuffer();
 		memcpy( sampbuffer, buffer, ECHO_PACKAGE_SIZE );
 		
+		//绘制A扫波形，初始时直接绘制，后面只绘制不相同的部分
 		if( bFirst )
 		{
 			EraseWindow( 2, 4, 500, 100 );
+			DrawAxisDot();
 			MSetDisplayColor( 0xFFE0 );
 			xposOld = 2; 
-			yposOld = 103 - (sampbuffer[0] * 100 / 255);
+			yposOld = 103 - (sampbuffer[0] * 99 / 255);
 			for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
 			{
 				xpos = 2 + j;
-				ypos = 103 - (sampbuffer[j] * 100 / 255);		
+				ypos = 103 - (sampbuffer[j] * 99 / 255);	
+				if( ypos )
 				DrawLine( xposOld, yposOld, xpos, ypos );
 				xposOld = xpos; 
 				yposOld = ypos;
@@ -9707,44 +9879,238 @@ void BScanEx(void)
 			{
 				if( (sampbuffer[j] != sampbufferOld[j]) || (sampbuffer[j-1] != sampbufferOld[j-1]) )
 				{
+					//清除原图像显示
 					MSetDisplayColor( 0 );
 					xposOld = 1 + j;
-					yposOld = 103 - (sampbufferOld[j-1] * 100 / 255);	
+					yposOld = 103 - (sampbufferOld[j-1] * 99 / 255);	
 					xpos = 2 + j;
-					ypos = 103 - (sampbufferOld[j] * 100 / 255);		
+					ypos = 103 - (sampbufferOld[j] * 99 / 255);		
 					DrawLine( xposOld, yposOld, xpos, ypos );
-					
+					//绘制新的图像
 					MSetDisplayColor( 0xFFE0 );
 					xposOld = 1 + j;
-					yposOld = 103 - (sampbuffer[j-1] * 100 / 255);	
+					yposOld = 103 - (sampbuffer[j-1] * 99 / 255);	
 					xpos = 2 + j;
-					ypos = 103 - (sampbuffer[j] * 100 / 255);		
+					ypos = 103 - (sampbuffer[j] * 99 / 255);		
 					DrawLine( xposOld, yposOld, xpos, ypos );
 				}
 			}
 			memcpy( sampbufferOld, sampbuffer, ECHO_PACKAGE_SIZE );
 		}
 		
+		//开始TOFD扫查
+		if( iBtn[0] == 1 )
+		{
+			iRotaryValue = GetScanRotaryValue( iEncoder );
+			
+			if( iRotaryValue > 60000 )
+			{
+				SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
+				SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
+				continue;
+			}
+			
+			iLine = (int)( (float)(iRotaryValue) / (g_iEncoderStep/g_iPerMM)  + 0.5);//1mm绘制1次
+				
+			if( iLineLast != iLine )
+			{
+				MSetDisplayColor( 0xFFE0 );
+				if( iLine >= MAX_LINE )
+				{
+					TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "位置 mm", 4 );
+					TextOut( 534, 53, 1, C_HORIDOT_SCREEN, 83, "MAX  ", 4 );
+					iLineLast = iLine;
+					continue;
+				}	
+				else
+				{
+					TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "位置 mm", 4 );
+					sprintf( szkey, "%d.%d ", (iLine * 100 / g_iPerMM)/100, ((iLine * 100 / g_iPerMM)%100)/10 );
+					if( iLine == 0 )
+						TextOut( 534, 53, 1, C_HORIDOT_SCREEN, 83, "0.0   ", 4 );
+					else
+						TextOut( 534, 53, 1, C_HORIDOT_SCREEN, 83, szkey, 4 );
+				}
+				//获取A扫数据
+				buffer = GetSampleBuffer();
+				memcpy( g_pEcho[iLine], buffer, ECHO_PACKAGE_SIZE );
+				if( g_iLine < iLine )
+					g_iLine = iLine;
+
+				if( g_iLine >= 294 )
+				{
+					if( g_iLine - iLine < 294 )
+					{
+						iLineStart = g_iLine - 294;
+					}
+					else
+					{
+						iLineStart = iLine;
+					}
+					
+					iLineDrawCount = 294;
+				}
+				else
+				{
+					iLineStart = 0;
+					iLineDrawCount = g_iLine;
+				}
+					
+				for( i = iLineStart; i <= iLineStart + iLineDrawCount; i++ )
+				{
+					if( i == iLine )
+					{
+						MSetDisplayColor( 0xFFE0 );
+						DrawLine( 2, 135 + i - iLineStart, 501, 135 + i - iLineStart );
+					}
+					else
+					{
+						iRotaryValue = GetScanRotaryValue( iEncoder );
+						//扫描长度小于显示时直接按扫描点来显示
+						iLine = (int)( (float)(iRotaryValue) / (g_iEncoderStep/g_iPerMM)  + 0.5);//1mm绘制1次					
+						if( iLine < MAX_LINE )
+						{
+							buffer = GetSampleBuffer();
+							memcpy( g_pEcho[iLine], buffer, ECHO_PACKAGE_SIZE );
+							if( g_iLine < iLine )
+								g_iLine = iLine;
+						}
+						
+						for( j = 0; j < ECHO_PACKAGE_SIZE; j++ )
+						{
+							//R,G,B比值相同时为灰，波形数值越大，颜色越白
+							clrR = g_pEcho[i][j] * 0x1F / 0xFF;
+							clrG = g_pEcho[i][j] * 0x3F / 0xFF;
+							clrB = g_pEcho[i][j] * 0x1F / 0xFF;
+							clr  = ((0x1F & clrR) << 11) | ((0x3F & clrG) << 5) | (0x1F & clrB);
+							//设置绘制颜色
+							SetDisplayColor( clr );
+							xpos = j + 2;
+							ypos = 135 + i - iLineStart;
+							DrawPixel( xpos, ypos );
+						}
+					}
+				}
+				
+				iLineLast = iLine;
+			}
+		}
+		
+		//检测按键
 		keycode = MGetKeyCode( 0 );
 		
+		//-按下
 		if( keycode == 13 )
 		{
-			int iRang = MGetRange(1) - 10;
-			if( iRang < 90 )
-				iRang = 90;
-			MSetRange( iRang, C_SETMODE_SETSAVE );
+			if( iIndexFunc == 0 )
+			{
+				int basegain = MGetBaseGain() - 10;
+				MSetBaseGain( basegain, C_SETMODE_SAVE );
+				MSetSystem();
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", MGetBaseGain()/10, MGetBaseGain()%10 );
+				TextOut( 534, 136, 1, C_HORIDOT_SCREEN-1, 165, szkey, 4 );
+			}
+			else if( iIndexFunc == 1 )
+			{
+				int iRang = MGetRange(3) - 10;
+				if( iRang < 90 )
+					iRang = 90;
+				MSetRange( iRang, C_SETMODE_SETSAVE );
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", iRang/10, iRang%10 );
+				TextOut( 534, 196, 1, C_HORIDOT_SCREEN-1, 225, szkey, 4 );
+			}
+			else if( iIndexFunc == 2 )
+			{
+				MSetScaleDelay( MGetDelay(3) - 10, C_SETMODE_SETSAVE );
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+				TextOut( 534, 256, 1, C_HORIDOT_SCREEN-1, 285, szkey, 4 );
+			}
 			bFirst = true;
 		}
+		//+按下
 		else if( keycode == 14 )
 		{
-			MSetRange( MGetRange(1) +10, C_SETMODE_SETSAVE );
+			if( iIndexFunc == 0 )
+			{
+				MSetBaseGain( MGetBaseGain()+10, C_SETMODE_SAVE );
+				MSetSystem();
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", MGetBaseGain()/10, MGetBaseGain()%10 );
+				TextOut( 534, 136, 1, C_HORIDOT_SCREEN-1, 165, szkey, 4 );
+			}
+			else if( iIndexFunc == 1 )
+			{
+				MSetRange( MGetRange(3) +10, C_SETMODE_SETSAVE );
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+				TextOut( 534, 196, 1, C_HORIDOT_SCREEN-1, 225, szkey, 4 );
+			}
+			else if( iIndexFunc == 2 )
+			{
+				MSetScaleDelay( MGetDelay(3) + 10, C_SETMODE_SETSAVE );
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+				TextOut( 534, 256, 1, C_HORIDOT_SCREEN-1, 285, szkey, 4 );
+			}
 			bFirst = true;	
 		}
-		else if( keycode == C_KEYCOD_CONFIRM || keycode == C_KEYCOD_RETURN )
+		else if( keycode == 0 )
+		{
+			iIndexFunc = 0;
+			DrawTofdBtn( iBtn, iIndexFunc );
+		}
+		else if( keycode == 4 )
+		{
+			iIndexFunc = 1;
+			DrawTofdBtn( iBtn, iIndexFunc );
+		}
+		else if( keycode == 5 )
+		{
+			iIndexFunc = 2;
+			DrawTofdBtn( iBtn, iIndexFunc );
+		}
+		//功能键1或确认按键
+		else if( keycode == 16 || keycode == C_KEYCOD_CONFIRM )
+		{
+			if( iBtn[0] == 0 )
+			{
+				//初始化数据区
+				for( i = 0; i < 500; i++ ) 
+				{
+					memset( g_pEcho[i], 0, ECHO_PACKAGE_SIZE );
+				}	
+				g_iLine = 0;
+				
+				EraseWindow( 2, 135, 500, 295 );
+				
+				//初始化编码器
+				SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
+				SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
+				iRotaryValue =  0;
+				
+				//开始扫查FLAG
+				iBtn[0] = 1;
+			}
+			else
+			{
+				iBtn[0] = 0;
+			}
+			//更新按键显示
+			DrawTofdBtn( iBtn, iIndexFunc );
+		}
+		else if( keycode == 17 )
+		{
+			iIndexFunc = ++iIndexFunc % 3;
+			DrawTofdBtn( iBtn, iIndexFunc );
+		}
+		//取消按键
+		else if( keycode == C_KEYCOD_RETURN || keycode == 19 )
 		{
 			break;
 		}	
 	}
-	MAnyKeyReturn();
 }
 #endif
