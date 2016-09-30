@@ -8145,7 +8145,7 @@ int g_iThickness = 200;
 int g_iPCS = (int)((2.0 * 2.0 / 3.0 * tan(3.1415926/180.0*60) * 200 / 10 + 0.05) * 10);
 
 //1mm一次，工件长度小于1000mm
-#define MAX_LINE 500
+#define MAX_LINE 1000
 u_char g_pEcho[MAX_LINE][ECHO_PACKAGE_SIZE];
 int    g_iLine = 0;
 
@@ -8903,19 +8903,13 @@ bool LoadTofdFile()
 		{
 			DisplayPrompt(20);	//U盘连接成功
 			g_UDiskInfo.DataHeaderMark = 1;
-			
-			MEraseWindow(0,0,320,C_CCHAR_VDOT);
-			
+	
 			memset(szkey, 0, 32);
-			if(MInputChar(0, 0, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
+			if(MInputChar(10, 140, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
 			{
 				for( i = 0; i < Notes.name[0]; i++ )
 					szkey[i] = Notes.name[i+1];
-				//TextOut( 0, 0, 1, 100, 20, szkey, 4 );
-				//MAnyKeyReturn();
-				//DisplayPrompt( 15 );
 				strcat(szkey, ".tof" );
-					
 				FRESULT res = f_open(&g_FileObject, szkey, FA_OPEN_EXISTING|FA_WRITE|FA_READ);	
 				if( res == FR_OK )
 				{
@@ -8923,17 +8917,21 @@ bool LoadTofdFile()
 					f_read( &g_FileObject, &g_iLine, sizeof(int), NULL );
 					f_read( &g_FileObject, &g_iRang, sizeof(u_int), NULL );
 					f_read( &g_FileObject, &g_iDelay, sizeof(u_int), NULL );
-					for( i = 0; i < g_iLine; i++ )
+					f_read(&g_FileObject, &g_iPCS, sizeof(int), NULL);
+					f_read(&g_FileObject, &g_iPerMM, sizeof(int), NULL);
+					for( i = 0; i <= g_iLine; i++ )
 					{
 						f_read(&g_FileObject, g_pEcho[i], ECHO_PACKAGE_SIZE, NULL);
 					}
 					f_close(&g_FileObject);
 				}	
 				else 
+				{
+					strcat( szkey, " 读取失败! 按任意键继续!" );
+					TextOut( 10, 140, 1, 170, 20, szkey, 4 );
+					MAnyKeyReturn();
 					return false;
-				sprintf( szkey, "%d, %d, %d", g_iLine, g_iRang, g_iDelay );
-				TextOut( 0, 0, 1, 100, 20, szkey, 4 );
-				MAnyKeyReturn();
+				}
 			}
 			else 
 				return false;
@@ -8953,15 +8951,15 @@ void DAFunc()
 	int   iStep = 1;
 	int   iNumber = 0, keycode;
 	short xpos, ypos, i, j, iMaxLine, iLineStart = 0;
-	short iLineR[2] = {0, 20}, iLineB[2] = {2 , g_iLine > 20?20:g_iLine};
+	short iLineR[2] = {0, 20}, iLineB[2] = {2 , 20};
 	short clrR, clrG, clrB, clr;
 	short iIndex = 2, iIndexR = 0, iIndexB = 0;
 	
 	//清除所有窗口内容	
 	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 	EraseDrawRectangle( 1, 1, 502, 477 );
-	TextOut( 10, 10, 1, 375, 50, "1.分析当前扫查文件", 4 );
-	TextOut( 10, 60, 1, 375, 100, "2.载入已有扫查文件", 4 );
+	TextOut( 10, 50, 1, 375, 80, "1.分析当前扫查文件", 4 );
+	TextOut( 10, 90, 1, 375, 120, "2.载入已有扫查文件", 4 );
 	
 	while(true)
 	{
@@ -9241,8 +9239,7 @@ void TOFDFunc(void)
 			//iIndex = 2;
 			//DrawFuncMenu( iIndex );
 			BScanEx();
-			EnableEchoDisplay( 0 ) ;
-			EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
+			EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 			iIndex = 1;
 			DrawFuncMenu( iIndex );
 		}
@@ -9336,7 +9333,7 @@ void DrawAxisDot()
 	TextOut( 403, 105, 1, 501, 135, szkey, 4 );
 }
 
-void DrawTofdBtn( int iBtn[4], int iIndexFunc )
+void DrawTofdBtn( int iBtn[4], int iStep[3], int iIndexFunc )
 {
 	char  szkey[32];
 	int iPt = 105, is = 30;
@@ -9344,20 +9341,21 @@ void DrawTofdBtn( int iBtn[4], int iIndexFunc )
 	MSetDisplayColor( 0x3F << 5 );
 	if( iBtn[0] == 0 )
 	{	
-		TextOut( 6, 440, 1, 125, 470, "    ", 4 );	
-		TextOut( 6, 440, 1, 125, 470, "开始", 4 );	
+		TextOut( 6, 440, 1, 125, 470, "       ", 4 );	
+		TextOut( 6, 440, 1, 125, 470, "开始扫查", 4 );	
 	}
 	else
 	{
-		TextOut( 6, 440, 1, 125, 470, "    ", 4 );	
-		TextOut( 6, 440, 1, 125, 470, "停止", 4 );
+		TextOut( 6, 440, 1, 125, 470, "       ", 4 );	
+		TextOut( 6, 440, 1, 125, 470, "停止扫查", 4 );
 	}	
 	
-	TextOut( 132, 440, 1, 250, 470, "功能", 4 );
+	TextOut( 132, 440, 1, 250, 470, "功能切换", 4 );
 	TextOut( 265, 440, 1, 375, 470, "保存数据", 4 );
-	TextOut( 382, 440, 1, 501, 470, "退出", 4 );
+	MSetDisplayColor( 0x1F<<11 );
+	TextOut( 400, 440, 1, 501, 470, "退出", 4 );
 	
-	if( iIndexFunc == -1 )
+	if( iIndexFunc == 0 )
 	{
 		MSetDisplayColor( 0x3F << 5 );
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
@@ -9365,53 +9363,51 @@ void DrawTofdBtn( int iBtn[4], int iIndexFunc )
 		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[0]/10, iStep[0]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[1]/10, iStep[1]%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 		iPt += is;
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
-	}
-	else if( iIndexFunc == 0 )
-	{
-		MSetDisplayColor( 0xFFFF );
-		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
 		iPt += is;
-		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
-		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
-		iPt += is;
-		MSetDisplayColor( 0x3F << 5 );
-		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
-		iPt += is;
-		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
-		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
-		iPt += is;
-		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
-		iPt += is;
-		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		sprintf( szkey, "%d.%d ",iStep[2]/10, iStep[2]%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 	}
 	else if( iIndexFunc == 1 )
 	{
-		MSetDisplayColor( 0x3F << 5 );
+		MSetDisplayColor( 0xFFFF );
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 		iPt += is;
-		MSetDisplayColor( 0xFFFF );
+		sprintf( szkey, "%d.%d ",iStep[0]/10, iStep[0]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0x3F << 5 );
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 		iPt += is;
-		MSetDisplayColor( 0x3F << 5 );
+		sprintf( szkey, "%d.%d ",iStep[1]/10, iStep[1]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[2]/10, iStep[2]%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 	}
 	else if( iIndexFunc == 2 )
@@ -9422,15 +9418,53 @@ void DrawTofdBtn( int iBtn[4], int iIndexFunc )
 		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[0]/10, iStep[0]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0xFFFF );
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[1]/10, iStep[1]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[2]/10, iStep[2]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+	}
+	else if( iIndexFunc == 3 )
+	{
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "增益 dB", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[0]/10, iStep[0]%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "声程 mm", 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[1]/10, iStep[1]%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 		iPt += is;
 		MSetDisplayColor( 0xFFFF );
 		TextOut( 514, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, "延时 mm", 4 );
 		iPt += is;
 		sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
+		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
+		iPt += is;
+		sprintf( szkey, "%d.%d ",iStep[2]/10, iStep[2]%10 );
 		TextOut( 534, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is-1, szkey, 4 );
 	}
 }
@@ -9754,13 +9788,14 @@ _BSCAN_END:
 void BScanEx(void)
 {
 	int iBtn[4] = {0,0,0,0};
+	int iStep[3] = {10,10,10};
 	short xpos, ypos, xposOld, yposOld, i, j, keycode;
 	int iPt = 3, is = 30;
 	bool bFirst = true;
-	int iIndexFunc = -1;
+	int iIndexFunc = 0;
 	u_char* buffer;
 	u_char sampbuffer[ECHO_PACKAGE_SIZE], sampbufferOld[ECHO_PACKAGE_SIZE];
-	char  szkey[32];
+	char  szkey[64];
 	
 	short clrR, clrG, clrB, clr;
 	u_int iRotaryValue   =  0;
@@ -9783,9 +9818,11 @@ void BScanEx(void)
 	DrawLine( 251, 430, 251, 477 );
 	DrawLine( 376, 430, 376, 477 );
 
+	MSetDisplayColor( 0x20 << 5 );
 	//A扫分割线
 	DrawLine( 1, 104, 502, 104 );
-
+	
+	MSetDisplayColor( 0x3F << 5 );
 	//A扫坐标刻度分割线
 	DrawLine( 1, 134, 502, 134 );
 	
@@ -9801,7 +9838,11 @@ void BScanEx(void)
 	iPt += is;
 	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	iPt += is;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	iPt += is;
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
 	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
@@ -9809,25 +9850,17 @@ void BScanEx(void)
 	iPt += is;
 	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
-	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
-	iPt += 1;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
-	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
-	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += is;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	iPt += 1;
 	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
-	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
-	iPt += is;
-	DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	//iPt += is;
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
+	//iPt += is;
+	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	//iPt += is;
 	//DrawLine( 502, iPt, C_HORIDOT_SCREEN-1, iPt );
 	//iPt += is;
@@ -9842,7 +9875,7 @@ void BScanEx(void)
 	TextOut( 534, 53, 1, C_HORIDOT_SCREEN, 83, "0.0   ", 4 );
 	
 	DrawAxisDot();
-	DrawTofdBtn( iBtn, iIndexFunc );
+	DrawTofdBtn( iBtn, iStep, iIndexFunc );
 	
 	MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
 	MSetEchoMode(3,C_SETMODE_SETSAVE);			//射频模式
@@ -10002,75 +10035,113 @@ void BScanEx(void)
 		//-按下
 		if( keycode == 13 )
 		{
-			if( iIndexFunc == 0 )
+			if( iIndexFunc == 1 )
 			{
-				int basegain = MGetBaseGain() - 10;
+				int basegain = MGetBaseGain() - iStep[0];
 				MSetBaseGain( basegain, C_SETMODE_SAVE );
 				MSetSystem();
 				SetDisplayColor( 0xFFFF );
 				sprintf( szkey, "%d.%d ", MGetBaseGain()/10, MGetBaseGain()%10 );
 				TextOut( 534, 136, 1, C_HORIDOT_SCREEN-1, 165, szkey, 4 );
 			}
-			else if( iIndexFunc == 1 )
+			else if( iIndexFunc == 2 )
 			{
-				int iRang = MGetRange(3) - 10;
+				int iRang = MGetRange(3) - iStep[1];
 				if( iRang < 90 )
 					iRang = 90;
 				MSetRange( iRang, C_SETMODE_SETSAVE );
 				SetDisplayColor( 0xFFFF );
 				sprintf( szkey, "%d.%d ", iRang/10, iRang%10 );
-				TextOut( 534, 196, 1, C_HORIDOT_SCREEN-1, 225, szkey, 4 );
+				TextOut( 534, 226, 1, C_HORIDOT_SCREEN-1, 255, szkey, 4 );
 			}
-			else if( iIndexFunc == 2 )
+			else if( iIndexFunc == 3 )
 			{
-				MSetScaleDelay( MGetDelay(3) - 10, C_SETMODE_SETSAVE );
+				MSetScaleDelay( MGetDelay(3) - iStep[2], C_SETMODE_SETSAVE );
 				SetDisplayColor( 0xFFFF );
 				sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
-				TextOut( 534, 256, 1, C_HORIDOT_SCREEN-1, 285, szkey, 4 );
+				TextOut( 534, 316, 1, C_HORIDOT_SCREEN-1, 345, szkey, 4 );
 			}
+	
 			bFirst = true;
 		}
 		//+按下
 		else if( keycode == 14 )
 		{
-			if( iIndexFunc == 0 )
+			if( iIndexFunc == 1 )
 			{
-				MSetBaseGain( MGetBaseGain()+10, C_SETMODE_SAVE );
+				MSetBaseGain( MGetBaseGain()+iStep[0], C_SETMODE_SAVE );
 				MSetSystem();
 				SetDisplayColor( 0xFFFF );
 				sprintf( szkey, "%d.%d ", MGetBaseGain()/10, MGetBaseGain()%10 );
 				TextOut( 534, 136, 1, C_HORIDOT_SCREEN-1, 165, szkey, 4 );
 			}
-			else if( iIndexFunc == 1 )
-			{
-				MSetRange( MGetRange(3) +10, C_SETMODE_SETSAVE );
-				SetDisplayColor( 0xFFFF );
-				sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
-				TextOut( 534, 196, 1, C_HORIDOT_SCREEN-1, 225, szkey, 4 );
-			}
 			else if( iIndexFunc == 2 )
 			{
-				MSetScaleDelay( MGetDelay(3) + 10, C_SETMODE_SETSAVE );
+				MSetRange( MGetRange(3) +iStep[1], C_SETMODE_SETSAVE );
+				SetDisplayColor( 0xFFFF );
+				sprintf( szkey, "%d.%d ", MGetRange(3)/10, MGetRange(3)%10 );
+				TextOut( 534, 226, 1, C_HORIDOT_SCREEN-1, 255, szkey, 4 );
+			}
+			else if( iIndexFunc == 3 )
+			{
+				MSetScaleDelay( MGetDelay(3) + iStep[2], C_SETMODE_SETSAVE );
 				SetDisplayColor( 0xFFFF );
 				sprintf( szkey, "%d.%d ", MGetDelay(3)/10, MGetDelay(3)%10 );
-				TextOut( 534, 256, 1, C_HORIDOT_SCREEN-1, 285, szkey, 4 );
+				TextOut( 534, 316, 1, C_HORIDOT_SCREEN-1, 345, szkey, 4 );
 			}
+			
 			bFirst = true;	
 		}
 		else if( keycode == 0 )
 		{
-			iIndexFunc = 0;
-			DrawTofdBtn( iBtn, iIndexFunc );
+			if( iIndexFunc != 1 )
+			{
+				iIndexFunc = 1;
+			}
+			else
+			{
+				if( iStep[0] == 1 )
+					iStep[0] = 10;
+				else if( iStep[0] == 10 )
+					iStep[0] = 50;
+				else
+					iStep[0] = 1;
+			}
+			DrawTofdBtn( iBtn, iStep, iIndexFunc );
 		}
 		else if( keycode == 4 )
 		{
-			iIndexFunc = 1;
-			DrawTofdBtn( iBtn, iIndexFunc );
+			if( iIndexFunc != 2 )
+			{
+				iIndexFunc = 2;
+			}
+			else
+			{
+				if( iStep[1] == 1 )
+					iStep[1] = 10;
+				else if( iStep[1] == 10 )
+					iStep[1] = 50;
+				else
+					iStep[1] = 1;
+			}
+			DrawTofdBtn( iBtn, iStep, iIndexFunc );
 		}
 		else if( keycode == 5 )
 		{
-			iIndexFunc = 2;
-			DrawTofdBtn( iBtn, iIndexFunc );
+			if( iIndexFunc != 3 )
+			{
+				iIndexFunc = 3;
+			}
+			else
+			{
+				if( iStep[2] == 10 )
+					iStep[2] = 50;
+				else if( iStep[2] == 50 )
+					iStep[2] = 100;
+				else
+					iStep[2] = 10;
+			}
+			DrawTofdBtn( iBtn, iStep, iIndexFunc );
 		}
 		//功能键1或确认按键
 		else if( keycode == 16 || keycode == C_KEYCOD_CONFIRM )
@@ -10078,7 +10149,7 @@ void BScanEx(void)
 			if( iBtn[0] == 0 )
 			{
 				//初始化数据区
-				for( i = 0; i < 500; i++ ) 
+				for( i = 0; i < MAX_LINE; i++ ) 
 				{
 					memset( g_pEcho[i], 0, ECHO_PACKAGE_SIZE );
 				}	
@@ -10099,12 +10170,70 @@ void BScanEx(void)
 				iBtn[0] = 0;
 			}
 			//更新按键显示
-			DrawTofdBtn( iBtn, iIndexFunc );
+			DrawTofdBtn( iBtn, iStep, iIndexFunc );
 		}
 		else if( keycode == 17 )
 		{
-			iIndexFunc = ++iIndexFunc % 3;
-			DrawTofdBtn( iBtn, iIndexFunc );
+			iIndexFunc = ++iIndexFunc % 4;
+			DrawTofdBtn( iBtn, iStep, iIndexFunc );
+		}
+		else if( keycode == 18 )
+		{
+			if ( g_iLine != 0 && MGetSaveStatus() == 0)	//开始记录
+			{
+				if (DisplayQuery(14))	//已连接好U盘？
+				{
+					DisplayPrompt(19);	//正在连接U盘
+					
+					if(UDiskInitialize(0))
+					{
+						DisplayPrompt(20);	//U盘连接成功
+						g_UDiskInfo.DataHeaderMark = 1;
+						MSetSaveStatus( 1,C_SETMODE_SETSAVE);
+						EraseWindow( 2, 4, 500, 100 );
+						memset( szkey, 0, 64 );
+						if(MInputChar(10, 10, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
+						{
+							EraseWindow( 2, 4, 500, 100 );
+							
+							for( i = 0; i < Notes.name[0]; i++ )
+								szkey[i] = Notes.name[i+1];
+							strcat(szkey, ".tof" );
+							
+							FRESULT res = f_open(&g_FileObject, szkey, FA_CREATE_ALWAYS|FA_WRITE|FA_READ);
+							if( res == FR_OK )
+							{
+								f_lseek( &g_FileObject, 0 );
+								f_write(&g_FileObject, &g_iLine, sizeof(int), NULL);
+								u_int iRang  = MGetRange(3);
+								f_write(&g_FileObject, &iRang, sizeof(u_int), NULL);
+								u_int iDelay = MGetDelay(3);
+								f_write(&g_FileObject, &iDelay, sizeof(u_int), NULL);
+								f_write(&g_FileObject, &g_iPCS, sizeof(int), NULL);
+								f_write(&g_FileObject, &g_iPerMM, sizeof(int), NULL);
+								
+								for( i = 0; i <= g_iLine; i++ )
+									f_write(&g_FileObject, g_pEcho[i], ECHO_PACKAGE_SIZE, NULL);
+									
+								f_close(&g_FileObject);
+								
+								strcat(szkey, " 已保存! 按任意键继续!" );
+								TextOut( 10, 31, 1, 500, 61, szkey, 4 );
+							}
+							else
+							{
+								strcat(szkey, " 打开出错! 按任意键继续!" );
+								TextOut( 10, 31, 1, 500, 61, szkey, 4 );
+							}
+						}	
+						MSetSaveStatus( 0,C_SETMODE_SETSAVE);	
+						
+						MAnyKeyReturn();
+						bFirst = true;						
+					}	
+				}
+			}
+			
 		}
 		//取消按键
 		else if( keycode == C_KEYCOD_RETURN || keycode == 19 )
