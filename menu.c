@@ -8369,10 +8369,35 @@ void CalibrationFunc( int iIndex )
 	}
 	else if( iIndex == 1 )
 	{
-		EraseDrawRectangle( C_COORHPOSI+2, C_COORVPOSI, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 ) ;
+		int iPt = 3, is = 30;
+		int iLen = 100;
+		//清除所有窗口内容	
+		EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
+
+		//左侧图像区
+		MSetDisplayColor( 0x3F << 5 );
+		EraseDrawRectangle( 1, 1, 502, 477 );
+		
+		//功能按键区
+		DrawLine( 1, 430, 502, 430 );
+		DrawLine( 126, 430, 126, 477 );
+		DrawLine( 251, 430, 251, 477 );
+		DrawLine( 376, 430, 376, 477 );
+
+		MSetDisplayColor( 0x20 << 5 );
+		//A扫分割线
+		DrawLine( 1, 104, 502, 104 );
+		
+		MSetDisplayColor( 0x3F << 5 );
+		//A扫坐标刻度分割线
+		DrawLine( 1, 134, 502, 134 );
+		
+		//分割直线
+		DrawLine( 502, 3, C_HORIDOT_SCREEN-1, 3 );
+		DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
+		DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
+		DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
 		//重置编码器
-		DisplayPrompt( 15 );
-		TextOut( 0, 0, 1, 32, 16, "重置编码器", 4 );
 		do
 		{
 			SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
@@ -8391,15 +8416,42 @@ void CalibrationFunc( int iIndex )
 		}
 		while( GetScanRotaryValue(iEncoder) != 0 );
 
-		DisplayPrompt( 15 );
-		TextOut( 0, 0, 1, 32, 16, "编码器校准", 4 );
+		MSetDisplayColor( 0xFFE0 );
+		TextOut( 11, 9, 1, 41, 15, "编码器校准", 4 );
+		TextOut( 10, 10, 1, 40, 16, "编码器校准", 4 );
+		sprintf( szkey, "编码比值:%d (参考范围:4 ～ 6)", g_iEncoderStep );
+		TextOut( 10, 60, 1, 500, 90, szkey, 4 );	
+		TextOut( 10, 105, 1, 500, 133, "请将扫查架移动100mm   ", 4 );
+
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 6, 440, 1, 125, 470, "开始校准", 4 );
+		TextOut( 132, 440, 1, 250, 470, "移动距离", 4 );
+		TextOut( 285, 440, 1, 375, 470, "完成", 4 );
+		MSetDisplayColor( 0x1F<<11 );
+		TextOut( 400, 440, 1, 501, 470, "退出", 4 );
 		
-		TextOut( C_COORHPOSI+C_COORHPOSI+164, C_VERTDOT_VIDEO- C_COORVPOSI - 3, 1, C_COORHPOSI+245, C_VERTDOT_VIDEO- C_COORVPOSI, "      ", 4 );
-		TextOut( C_COORHPOSI+C_COORHPOSI+164, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+245, C_VERTDOT_VIDEO- C_COORVPOSI, "重置", 4 );
-		TextOut( C_COORHPOSI+C_COORHPOSI+250, C_VERTDOT_VIDEO- C_COORVPOSI, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, "       ", 4 );
-		TextOut( C_COORHPOSI+C_COORHPOSI+380, C_VERTDOT_VIDEO- C_COORVPOSI, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, "       ", 4 );
+		MSetDisplayColor( 0x3F << 5 );
+		iPt = 60, is = 30;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "1.指定扫查", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "架移动距离.", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "2.将扫查架", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "移动指定距", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "离.", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "3.对比参考", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "标准,比较编", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "码比值.", 4 );
 		
-		int i = 0;
+		TextOut( 10, 140, 1, 500, 170, "编码器移动距离:", 4 );
+		TextOut( 10, 180, 1, 500, 210, "编码比值:", 4 );
+			
+		i = 0;
 		while( true )
 		{
 			iRotaryValue = GetScanRotaryValue( iEncoder );
@@ -8410,52 +8462,43 @@ void CalibrationFunc( int iIndex )
 				SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
 				iRotaryValue = 0;
 			}
-			MSetDisplayColor( 0xFFE0 );
-			TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+100, C_COORVPOSI+30, "请将探头移动100mm", 4 );
-			MSetDisplayColor( 0x3F << 5 );
 			
-			sprintf( szkey, "编码器移动距离: %d         ", iRotaryValue );
-			TextOut( C_COORHPOSI+10, C_COORVPOSI+50, 1, C_COORHPOSI+100, C_COORVPOSI+70, szkey, 4 );
-			sprintf( szkey, "每mm对应编码器的值: %d       ", iRotaryValue/100 );
-			TextOut( C_COORHPOSI+10, C_COORVPOSI+80, 1, C_COORHPOSI+100, C_COORVPOSI+110, szkey, 4 );
+			MSetDisplayColor( 0xFFE0 );
+			sprintf( szkey, "%d         ", iRotaryValue );
+			TextOut( 200, 140, 1, 500, 170, szkey, 4 );
+			sprintf( szkey, "%d       ", iRotaryValue/iLen );
+			TextOut( 126, 180, 1, 500, 210, szkey, 4 );
 			
 			keycode = MGetKeyCode( 0 );
 			
-			if( keycode == 17 )
+			if( keycode == 16 )
 			{
 				SetScanRotaryEncoder( iEncoder, 1, 1, 1 );
 				SetScanRotaryEncoder( iEncoder, 1, 0, 1 );
 				iRotaryValue = 0;
 			}
-			
-			if( (iRotaryValue != 0) && (keycode == C_KEYCOD_CONFIRM) )
+			else if( keycode == 17 )
 			{
-				g_iEncoderStep = iRotaryValue/100;
-				//确认键弹起，防止后续误判断
-				while( true )
+				int number = 100, deci_len = 0;
+				if( Input_Number(300,105,&number,4, &deci_len,0) == 1 )
 				{
-					keycode = MGetKeyCode( 0 );
-					if( keycode != C_KEYCOD_CONFIRM )
-						break;
+					iLen = number;
+					MSetDisplayColor( 0xFFE0 );
+					sprintf( szkey, "请将扫查架移动%dmm    ", iLen );
+					TextOut( 10, 105, 1, 500, 133, szkey, 4 );
 				}
+			}
+			else if( (iRotaryValue != 0) && (keycode == 18) )
+			{
+				g_iEncoderStep = iRotaryValue/iLen;
 				break;
 			}
-			
-			if( keycode == C_KEYCOD_RETURN )
+			else if( keycode == 19 )
 			{
-				//取消键弹起，防止后续误判断
-				while( true )
-				{
-					keycode = MGetKeyCode( 0 );
-					if( keycode != C_KEYCOD_RETURN )
-						break;
-				}
 				break;
 			}
 		}
-		
 	}
-	
 }
 
 void SetFunc( int iIndex )
@@ -9266,7 +9309,8 @@ void TOFDFunc(void)
 			}
 			
 			MSetSystem();
-			EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
+			EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
+			//EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
 			DrawFuncMenu( iIndex );
 		}
 		
@@ -9828,7 +9872,7 @@ void BScanEx(void)
 			DrawTofdBtn( iBtn, iStep, iIndexFunc );
 		}
 		//功能键1或确认按键
-		else if( keycode == 16 || keycode == C_KEYCOD_CONFIRM )
+		else if( keycode == 16 )
 		{
 			if( iBtn[0] == 0 )
 			{
@@ -9920,7 +9964,7 @@ void BScanEx(void)
 			
 		}
 		//取消按键
-		else if( keycode == C_KEYCOD_RETURN || keycode == 19 )
+		else if( keycode == 19 )
 		{
 			break;
 		}	
