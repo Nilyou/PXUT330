@@ -8265,112 +8265,293 @@ void CalibrationFunc( int iIndex )
 	u_int iRotaryValue = 0;
 	int   number = 0, deci_len = 1;
 	char  szkey[64];
-	u_char* sampbuff;
-	int i = 0, j = 0;
 	u_char uMax = 0;
+	short xpos, ypos, xposOld, yposOld, i, j;
+	int iPt = 3, is = 30;
+	bool bFirst = true;
+	bool bAutoSet = true;
+	
+	u_char* buffer;
+	u_char sampbuffer[ECHO_PACKAGE_SIZE], sampbufferOld[ECHO_PACKAGE_SIZE];
+	
+	
+	//清除所有窗口内容	
+	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
+
+	//左侧图像区
+	MSetDisplayColor( 0x3F << 5 );
+	EraseDrawRectangle( 1, 1, 502, 477 );
+	
+	//功能按键区
+	DrawLine( 1, 430, 502, 430 );
+	DrawLine( 126, 430, 126, 477 );
+	DrawLine( 251, 430, 251, 477 );
+	DrawLine( 376, 430, 376, 477 );
+
+	MSetDisplayColor( 0x20 << 5 );
+	//A扫分割线
+	DrawLine( 1, 104, 502, 104 );
+	
+	
+	MSetDisplayColor( 0x3F << 5 );
+	//A扫坐标刻度分割线
+	DrawLine( 1, 134, 502, 134 );
+	
+	//分割直线
+	DrawLine( 502, 3, C_HORIDOT_SCREEN-1, 3 );
+	DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
+	DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
+	DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
 	
 	if( iIndex == 0 )
 	{
+		MSetDisplayColor( 0x3F << 5 );
+		DrawLine( 1, 400, 502, 400 );
+		DrawLine( 502, 104, C_HORIDOT_SCREEN-1, 104 );
+		DrawLine( 502, 194, C_HORIDOT_SCREEN-1, 194 );
+		
 		MSetRange(100,C_SETMODE_SETSAVE) ;
-		
-		ScreenRenovate();							//屏幕刷新
+		MSetScaleDelay( 0, C_SETMODE_SETSAVE );
 		MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
-		MSetEchoMode(0,C_SETMODE_SETSAVE);			//射频模式
-		SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI + VertOffsetScreen, 0 );
-		EnableEchoDisplay( 1 ) ;
+		MSetEchoMode(0,C_SETMODE_SETSAVE);			//全波模式
 		
-		DisplayPrompt( 15 );
-		TextOut( 0, 0, 1, 32, 16, "探头前沿校准(按+/-键手动校准零点)", 4 );
-		EraseDrawRectangle( 200, 60, 480, 150 ) ;
-		TextOut( 202, 60, 1, 480, 89, "0. 探头前沿: ", 4 );
-		TextOut( 202, 90, 1, 480, 119, "1. 校准零点：    μs", 4 );
+		MSetDisplayColor( 0xFFE0 );
+		TextOut( 11, 9, 1, 41, 15, "前沿零点校准", 4 );
+		TextOut( 10, 10, 1, 40, 16, "前沿零点校准", 4 );
+		
+		sprintf( szkey, "探头前沿:%d.%d mm    ", MGetForward()/10, MGetForward()%10 );
+		TextOut( 10, 105, 1, 500, 133, szkey, 4 );
+
+		MSetDisplayColor( 0x3F << 5 );
+		if( MGetOffset() == 0 )
+			TextOut( 6, 440, 1, 125, 470, "校准零点", 4 );
+		else
+			TextOut( 6, 440, 1, 125, 470, "清除零点", 4 );
+		TextOut( 132, 440, 1, 250, 470, "输入前沿", 4 );
+		TextOut( 265, 440, 1, 375, 470, "手动校准", 4 );
+		MSetDisplayColor( 0x1F<<11 );
+		TextOut( 400, 440, 1, 501, 470, "退出", 4 );
+		
+		sprintf( szkey, "0.0mm" );
+		TextOut( 2, 400, 1, 101, 429, szkey, 4 );
+		MSetDisplayColor( 0xFFE0 );
+		sprintf( szkey, "2.0" );
+		TextOut( 103, 400, 1, 201, 429, szkey, 4 );
+		sprintf( szkey, "4.0" );
+		TextOut( 203, 400, 1, 301, 429, szkey, 4 );
+		sprintf( szkey, "6.0" );
+		TextOut( 303, 400, 1, 401, 429, szkey, 4 );
+		sprintf( szkey, "8.0" );
+		TextOut( 403, 400, 1, 501, 429, szkey, 4 );
+
+		SetDisplayColor( 0xFFFF );
+		TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "增益 dB", 4 );
+		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+		TextOut( 534, 53, 1, C_HORIDOT_SCREEN-1, 83, szkey, 4 );
+		MSetDisplayColor( 0xFFE0 );
+		TextOut( 514, 105, 1, C_HORIDOT_SCREEN-1, 135, "零点 μs", 4 );
+		Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+		
+		iPt = 196, is = 30;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "1.清除零点", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "2.校准零点", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "3.测量前沿", 4 );
+		iPt += is;
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "4.输入前沿", 4 );
+		
 		while( true )
 		{
-			WriteLongness(350, 62,MGetForward(),5,1);
-			WriteOffset( 350, 91 );
+			buffer = GetSampleBuffer();
+			memcpy( sampbuffer, buffer, ECHO_PACKAGE_SIZE );
+			
+			//绘制A扫波形，初始时直接绘制，后面只绘制不相同的部分
+			if( bFirst )
+			{
+				EraseWindow( 2, 135, 500, 264 );
+				MSetDisplayColor( 0xFFE0 );
+				xposOld = 2; 
+				yposOld = 399 - (sampbuffer[0] * 264 / 255);
+				for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
+				{
+					xpos = 2 + j;
+					ypos = 399 - (sampbuffer[j] * 264 / 255);	
+					if( ypos )
+					DrawLine( xposOld, yposOld, xpos, ypos );
+					xposOld = xpos; 
+					yposOld = ypos;
+				}
+				memcpy( sampbufferOld, sampbuffer, ECHO_PACKAGE_SIZE );
+				bFirst = false;
+			}
+			else
+			{
+				for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
+				{
+					if( (sampbuffer[j] != sampbufferOld[j]) || (sampbuffer[j-1] != sampbufferOld[j-1]) )
+					{
+						//清除原图像显示
+						MSetDisplayColor( 0 );
+						xposOld = 1 + j;
+						yposOld = 399 - (sampbufferOld[j-1] * 264 / 255);	
+						xpos = 2 + j;
+						ypos = 399 - (sampbufferOld[j] * 264 / 255);		
+						DrawLine( xposOld, yposOld, xpos, ypos );
+						//绘制新的图像
+						MSetDisplayColor( 0xFFE0 );
+						xposOld = 1 + j;
+						yposOld = 399 - (sampbuffer[j-1] * 264 / 255);	
+						xpos = 2 + j;
+						ypos = 399 - (sampbuffer[j] * 264 / 255);		
+						DrawLine( xposOld, yposOld, xpos, ypos );
+					}
+				}
+				memcpy( sampbufferOld, sampbuffer, ECHO_PACKAGE_SIZE );
+			}
 			
 			keycode = MGetKeyCode( 0 );
 			
-			if( keycode == 0 )
+			if( keycode == 13 )
 			{
-				number = 0, deci_len = 1;
-
-				if( Input_Number(350, 62,&number,2, &deci_len,0) == 1)
+				if( bAutoSet )
 				{
-					if(( number <= 3000 && MGetUnitType()==0)||( number <= 11000 && MGetUnitType()==1))
+					int basegain = MGetBaseGain() - 10;
+					MSetBaseGain( basegain, C_SETMODE_SAVE );
+					MSetSystem();
+					SetDisplayColor( 0xFFFF );
+					sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+					TextOut( 534, 53, 1, C_HORIDOT_SCREEN-1, 83, szkey, 4 );
+				}
+				else
+				{
+					number = MGetOffset();
+					number--;
+					if( number >= 0 )
 					{
-						MSetForward(number,C_SETMODE_SAVE);
+						MSetOffset( number, C_SETMODE_SETSAVE);
+						MSetSystem();
+						
+						MSetDisplayColor( 0xFFE0 );
+						Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+						
+						MSetDisplayColor( 0x3F << 5 );
+						EraseWindow( 2, 431, 123, 45 );
+						if( number != 0 )
+							TextOut( 6, 440, 1, 125, 470, "清除零点", 4 );
+						else
+							TextOut( 6, 440, 1, 125, 470, "校准零点", 4 );
 					}
-				}	
-				
-				MSetSystem();
+				}
+				bFirst = true;
 			}
-			else if( keycode == 1 )
+			//+按下
+			else if( keycode == 14 )
+			{
+				if( bAutoSet )
+				{
+					MSetBaseGain( MGetBaseGain()+10, C_SETMODE_SAVE );
+					MSetSystem();
+					SetDisplayColor( 0xFFFF );
+					sprintf( szkey, "%d.%d ", MGetBaseGain()/10, MGetBaseGain()%10 );
+					TextOut( 534, 53, 1, C_HORIDOT_SCREEN-1, 83, szkey, 4 );
+				}
+				else
+				{
+					number = MGetOffset();
+					number++;
+					MSetOffset( number, C_SETMODE_SETSAVE);
+					MSetSystem();
+					
+					MSetDisplayColor( 0xFFE0 );
+					Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+					MSetDisplayColor( 0x3F << 5 );
+					EraseWindow( 2, 431, 123, 45 );
+					TextOut( 6, 440, 1, 125, 470, "清除零点", 4 );
+				}
+				bFirst = true;	
+			}
+			else if( keycode == 16 )
 			{
 				if( MGetOffset() == 0 )
 				{
 					MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
-				
 					int iPos = MGetAmpPos(0);
 					number = 10 * 1000 * iPos * 16 * 10 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
-					
 					MSetOffset( number, C_SETMODE_SETSAVE);
+					MSetSystem();
+					
+					MSetDisplayColor( 0xFFE0 );
+					Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+					
+					if( number != 0 )
+					{
+						MSetDisplayColor( 0x3F << 5 );
+						EraseWindow( 2, 431, 123, 45 );
+						TextOut( 6, 440, 1, 125, 470, "清除零点", 4 );
+					}
 				}
 				else
 				{
 					MSetOffset(0,C_SETMODE_SETSAVE);
+					MSetSystem();
+					
+					MSetDisplayColor( 0xFFE0 );
+					Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+					
+					MSetDisplayColor( 0x3F << 5 );
+					EraseWindow( 2, 431, 123, 45 );
+					TextOut( 6, 440, 1, 125, 470, "校准零点", 4 );
 				}
-				MSetSystem();
 			}
-			else if( keycode == 14 )
+			else if( keycode == 17 )
 			{
-				number = MGetOffset();
-				number++;
-				MSetOffset( number, C_SETMODE_SETSAVE);
+				int number = 0, deci_len = 1;
+				if( Input_Number(300,105,&number,4, &deci_len,0) == 1 )
+				{
+					if( number >= 0 && ((number <= 3000 && MGetUnitType()==0)||( number <= 11000 && MGetUnitType()==1)) )
+					{
+						MSetDisplayColor( 0xFFE0 );
+						MSetForward(number,C_SETMODE_SAVE);
+						sprintf( szkey, "探头前沿:%d.%d mm    ", number/10, number%10 );
+						TextOut( 10, 105, 1, 500, 133, szkey, 4 );
+					}
+				}
 			}
-			else if( keycode == 13 )
+			else if( keycode == 18 )
 			{
-				number = MGetOffset();
-				number--;
-				if( number >= 0 )
-					MSetOffset( number, C_SETMODE_SETSAVE);
+				if( bAutoSet )
+				{
+					bAutoSet = false;
+					MSetDisplayColor( 0xFFFF );
+					TextOut( 265, 440, 1, 375, 470, "手动校准", 4 );
+					MSetDisplayColor( 0xFFE0 );
+					TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "增益 dB", 4 );
+					sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+					TextOut( 534, 53, 1, C_HORIDOT_SCREEN-1, 83, szkey, 4 );
+				}
 				else
-					MSetOffset( 0, C_SETMODE_SETSAVE);
-			}
-			else if( keycode == C_KEYCOD_CONFIRM )
-			{
-				//确认键弹起，防止后续误判断
-				while( true )
 				{
-					keycode = MGetKeyCode( 0 );
-					if( keycode != C_KEYCOD_CONFIRM )
-						break;
+					bAutoSet = true;
+					MSetDisplayColor( 0x3F << 5 );
+					TextOut( 265, 440, 1, 375, 470, "手动校准", 4 );
+					MSetDisplayColor( 0xFFFF );
+					TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "增益 dB", 4 );
+					sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
+					TextOut( 534, 53, 1, C_HORIDOT_SCREEN-1, 83, szkey, 4 );
 				}
+			}
+			else if( keycode == 19 )
+			{
 				break;
 			}
-			else if( keycode == C_KEYCOD_RETURN )
-			{
-				//取消键弹起，防止后续误判断
-				while( true )
-				{
-					keycode = MGetKeyCode( 0 );
-					if( keycode != C_KEYCOD_RETURN )
-						break;
-				}
-				break;
-			}
-			else if( keycode == 11 )
-			{
-				KeyManage(keycode,1);
-			}
+			
 		}
-
-		EnableEchoDisplay( 0 ) ;
 	}
 	else if( iIndex == 1 )
 	{
-		int iPt = 3, is = 30;
 		int iLen = 100;
+		/*
 		//清除所有窗口内容	
 		EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 
@@ -8397,6 +8578,7 @@ void CalibrationFunc( int iIndex )
 		DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
 		DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
 		DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
+		*/
 		//重置编码器
 		do
 		{
