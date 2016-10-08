@@ -8133,10 +8133,11 @@ void BScan(void)
 
 }
 
-//每mm编码器的值
-int g_iEncoderStep = 5;
-//每mm扫查次数
-int g_iPerMM = 1;
+//TOFD采样频率
+int g_iTofdFreq = 4;
+//编码器比值
+long g_iEncValue = 25;
+
 //角度
 int g_iAngle = 60;
 //工件厚度
@@ -8182,7 +8183,7 @@ void DrawFuncMenu( int iIndex )
 	if( iIndex == 0 )
 	{
 		MSetDisplayColor( 0xFFFF );
-		TextOut( 1, 425, 1, 159, 455, "调校", 4 );
+		TextOut( 1, 435, 1, 159, 465, "调校", 4 );
 		//TextOut( C_COORHPOSI+42, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+122, C_VERTDOT_VIDEO- C_COORVPOSI, "调校", 4 );
 		MSetDisplayColor( 0x3F << 5 );
 		
@@ -8191,13 +8192,13 @@ void DrawFuncMenu( int iIndex )
 	}
 	else
 	{
-		TextOut( 1, 425, 1, 159, 455, "调校", 4 );
+		TextOut( 1, 435, 1, 159, 465, "调校", 4 );
 	}
 	
 	if( iIndex == 1 )
 	{
 		MSetDisplayColor( 0xFFFF );
-		TextOut( 180, 425, 1, 319, 455, "设置", 4 );
+		TextOut( 200, 435, 1, 319, 465, "设置", 4 );
 		MSetDisplayColor( 0x3F << 5 );
 
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+200, C_COORVPOSI+30, "0.探头频率:     MHz", 4 );
@@ -8219,23 +8220,23 @@ void DrawFuncMenu( int iIndex )
 		iNumber = MGetPulseMode();
 		sprintf( szkey, "8.发射电压:%s         ", iNumber == 0?"低压":iNumber == 1?"中压":iNumber == 2?"标准":"高压" );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+250, 1, C_COORHPOSI+100, C_COORVPOSI+270, szkey, 4 );
-		sprintf( szkey, "9.扫查频率:%d  次/mm       ", g_iPerMM );
+		sprintf( szkey, "9.扫查频率:%d.%d%d mm/次       ", (g_iTofdFreq * g_iEncValue)/100, (g_iTofdFreq * g_iEncValue)%100/10, (g_iTofdFreq * g_iEncValue)%10 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+280, 1, C_COORHPOSI+100, C_COORVPOSI+300, szkey, 4 );
 	}
 	else
 	{
-		TextOut( 180, 425, 1, 319, 455, "设置", 4 );
+		TextOut( 200, 435, 1, 319, 465, "设置", 4 );
 	}
 	
-	TextOut( 321, 425, 1, 479, 455, "TOFD扫查", 4 );
-	TextOut( 481, 425, 1, C_HORIDOT_SCREEN - 1, 455, "数据分析", 4 );
+	TextOut( 321, 435, 1, 479, 465, "TOFD扫查", 4 );
+	TextOut( 481, 435, 1, C_HORIDOT_SCREEN - 1, 465, "数据分析", 4 );
 }
 
 void CalibrationFunc( int iIndex )
 {
 	int   keycode      = 0;
 	int   iEncoder     = 0;
-	u_int iRotaryValue = 0;
+	u_int iRotaryValue = 0, iRotaryValueOld = -1;
 	int   number = 0, deci_len = 1;
 	char  szkey[64];
 	u_char uMax = 0;
@@ -8521,34 +8522,6 @@ void CalibrationFunc( int iIndex )
 	else if( iIndex == 1 )
 	{
 		int iLen = 100;
-		/*
-		//清除所有窗口内容	
-		EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
-
-		//左侧图像区
-		MSetDisplayColor( 0x3F << 5 );
-		EraseDrawRectangle( 1, 1, 502, 477 );
-		
-		//功能按键区
-		DrawLine( 1, 430, 502, 430 );
-		DrawLine( 126, 430, 126, 477 );
-		DrawLine( 251, 430, 251, 477 );
-		DrawLine( 376, 430, 376, 477 );
-
-		MSetDisplayColor( 0x20 << 5 );
-		//A扫分割线
-		DrawLine( 1, 104, 502, 104 );
-		
-		MSetDisplayColor( 0x3F << 5 );
-		//A扫坐标刻度分割线
-		DrawLine( 1, 134, 502, 134 );
-		
-		//分割直线
-		DrawLine( 502, 3, C_HORIDOT_SCREEN-1, 3 );
-		DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
-		DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
-		DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
-		*/
 		//重置编码器
 		do
 		{
@@ -8571,9 +8544,10 @@ void CalibrationFunc( int iIndex )
 		MSetDisplayColor( 0xFFE0 );
 		TextOut( 11, 9, 1, 41, 15, "编码器校准", 4 );
 		TextOut( 10, 10, 1, 40, 16, "编码器校准", 4 );
-		sprintf( szkey, "编码比值:%d (参考范围:4 ～ 6)", g_iEncoderStep );
-		TextOut( 10, 60, 1, 500, 90, szkey, 4 );	
-		TextOut( 10, 105, 1, 500, 133, "请将扫查架移动100mm   ", 4 );
+		
+		sprintf( szkey, "当前编码比值:%d.%d%d  ", g_iEncValue/100, g_iEncValue%100/10, g_iEncValue%10 );
+		TextOut( 10, 60, 1, 500, 90, "编码比值参考范围:0.23～0.27", 4 );	
+		TextOut( 10, 105, 1, 500, 133, szkey, 4 );
 
 		MSetDisplayColor( 0x3F << 5 );
 		TextOut( 6, 440, 1, 125, 470, "开始校准", 4 );
@@ -8600,8 +8574,15 @@ void CalibrationFunc( int iIndex )
 		iPt += is;
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "码比值.", 4 );
 		
-		TextOut( 10, 140, 1, 500, 170, "编码器移动距离:", 4 );
-		TextOut( 10, 180, 1, 500, 210, "编码比值:", 4 );
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 10, 140, 1, 160, 170, "请将扫查架移动", 4 );
+		MSetDisplayColor( 0xFFE0 );
+		TextOut( 180, 140, 1, 245, 170, "100", 4 );
+		MSetDisplayColor( 0x3F << 5 );
+		TextOut( 245, 140, 1, 500, 170, "mm   ", 4 );
+		
+		TextOut( 10, 180, 1, 500, 210, "编码器移动距离:", 4 );
+		TextOut( 10, 220, 1, 500, 250, "编码比值:", 4 );
 			
 		i = 0;
 		while( true )
@@ -8615,12 +8596,24 @@ void CalibrationFunc( int iIndex )
 				iRotaryValue = 0;
 			}
 			
-			MSetDisplayColor( 0xFFE0 );
-			sprintf( szkey, "%d         ", iRotaryValue );
-			TextOut( 200, 140, 1, 500, 170, szkey, 4 );
-			sprintf( szkey, "%d       ", iRotaryValue/iLen );
-			TextOut( 126, 180, 1, 500, 210, szkey, 4 );
-			
+			if( iRotaryValue != iRotaryValueOld )
+			{
+				MSetDisplayColor( 0xFFE0 );
+				sprintf( szkey, "%d         ", iRotaryValue );
+				TextOut( 200, 180, 1, 500, 210, szkey, 4 );
+				
+				if( iRotaryValue != 0 )
+				{
+					sprintf( szkey, "%d.%d%d  ", (iLen*100/iRotaryValue)/100, (iLen*100/iRotaryValue)%100/10, (iLen*100/iRotaryValue)%10 );
+					TextOut( 126, 220, 1, 500, 240, szkey, 4 );
+				}
+				else
+				{
+					TextOut( 126, 220, 1, 500, 240, "0.00  ", 4 );
+				}
+				
+				iRotaryValueOld = iRotaryValue;
+			}
 			keycode = MGetKeyCode( 0 );
 			
 			if( keycode == 16 )
@@ -8632,17 +8625,18 @@ void CalibrationFunc( int iIndex )
 			else if( keycode == 17 )
 			{
 				int number = 100, deci_len = 0;
-				if( Input_Number(300,105,&number,4, &deci_len,0) == 1 )
+				if( Input_Number(300,140,&number,4, &deci_len,0) == 1 )
 				{
 					iLen = number;
 					MSetDisplayColor( 0xFFE0 );
-					sprintf( szkey, "请将扫查架移动%dmm    ", iLen );
-					TextOut( 10, 105, 1, 500, 133, szkey, 4 );
+					sprintf( szkey, "%d", iLen );
+					TextOut( 180, 140, 1, 245, 170, szkey, 4 );
+					iRotaryValueOld = -1;
 				}
 			}
 			else if( (iRotaryValue != 0) && (keycode == 18) )
 			{
-				g_iEncoderStep = iRotaryValue/iLen;
+				g_iEncValue = iLen * 100 / iRotaryValue;
 				break;
 			}
 			else if( keycode == 19 )
@@ -8835,14 +8829,14 @@ void SetFunc( int iIndex )
 	//9. 扫查频率
 	else if( iIndex == 9 )
 	{
-		number = 100, deci_len = 0;
-		sprintf( szkey, "扫查频率(1 ～ %d):  ", g_iEncoderStep );
+		number = 0, deci_len = 2;
+		sprintf( szkey, "扫查频率(%d.%d%d ～ 1000):  ", g_iEncValue/100, g_iEncValue%100/10, g_iEncValue%10 );
 		TextOut( 0, 0, 1, 100, 20, szkey, 4 );
 		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
 		{
-			if(number >= 0 && number <= g_iEncoderStep )
+			if(number >= g_iEncValue && number <= 1000 )
 			{
-				g_iPerMM = number;
+				g_iTofdFreq = number/g_iEncValue;
 			}
 		}
 	}
@@ -8872,18 +8866,19 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "扫描长度", 4 );
 	iPt += is;
 	if( g_iLine != 0 )
-		L = (g_iLine + 1) * 100 / g_iPerMM;
+		L = (g_iLine + 1) * g_iTofdFreq * g_iEncValue; 
+	
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += is;
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "图像位置", 4 );
 	iPt += is;
-	L = iLineStart * 100 / g_iPerMM;
+	L = iLineStart * g_iTofdFreq * g_iEncValue;
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += is;
-	L = (iLineStart + iMaxLine) * 100 / g_iPerMM;
+	L = (iLineStart + iMaxLine) * g_iTofdFreq * g_iEncValue;
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
@@ -8943,7 +8938,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "蓝线1", 4 );
 		iPt += is;
-		L = iLineB[0] * 100 / g_iPerMM + 5;
+		L = iLineB[0] * g_iTofdFreq * g_iEncValue;
 		sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
@@ -8951,7 +8946,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "蓝线2", 4 );
 		iPt += is;
-		L = iLineB[1] * 100 / g_iPerMM + 5;
+		L = iLineB[1] * g_iTofdFreq * g_iEncValue;
 		sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
@@ -8980,7 +8975,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	MSetDisplayColor( 0xFFE0 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量长度", 4 );
 	iPt += is;
-	L = (abs(iLineB[1] - iLineB[0]) + 1) * 100 / g_iPerMM;
+	L = (abs(iLineB[1] - iLineB[0]) + 1) * g_iTofdFreq * g_iEncValue;
 	sprintf( szkey, "%d.%dmm", L/100, (L%100)/10 );
 	MSetDisplayColor( 0xFFFF );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
@@ -9113,7 +9108,9 @@ bool LoadTofdFile()
 					f_read( &g_FileObject, &g_iRang, sizeof(u_int), NULL );
 					f_read( &g_FileObject, &g_iDelay, sizeof(u_int), NULL );
 					f_read(&g_FileObject, &g_iPCS, sizeof(int), NULL);
-					f_read(&g_FileObject, &g_iPerMM, sizeof(int), NULL);
+					f_read(&g_FileObject, &g_iTofdFreq, sizeof(int), NULL);
+					f_read(&g_FileObject, &g_iEncValue, sizeof(long), NULL);
+								
 					for( i = 0; i <= g_iLine; i++ )
 					{
 						f_read(&g_FileObject, g_pEcho[i], ECHO_PACKAGE_SIZE, NULL);
@@ -9375,6 +9372,8 @@ void DAFunc()
 			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
 			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
+			
+			LoadTofdFile();
 		}
 		else if( keycode == 19 )
 		{
@@ -9823,8 +9822,8 @@ void BScanEx(void)
 				continue;
 			}
 			
-			iLine = (int)( (float)(iRotaryValue) / (g_iEncoderStep/g_iPerMM)  + 0.5);//1mm绘制1次
-				
+			iLine = iRotaryValue /g_iTofdFreq;
+
 			if( iLineLast != iLine )
 			{
 				MSetDisplayColor( 0xFFE0 );
@@ -9838,7 +9837,7 @@ void BScanEx(void)
 				else
 				{
 					TextOut( 514, 13, 1, C_HORIDOT_SCREEN-1, 43, "位置 mm", 4 );
-					sprintf( szkey, "%d.%d ", (iLine * 100 / g_iPerMM)/100, ((iLine * 100 / g_iPerMM)%100)/10 );
+					sprintf( szkey, "%d.%d ", (iLine * g_iTofdFreq * g_iEncValue)/100, ((iLine * g_iTofdFreq * g_iEncValue)%100)/10 );
 					if( iLine == 0 )
 						TextOut( 534, 53, 1, C_HORIDOT_SCREEN, 83, "0.0   ", 4 );
 					else
@@ -9880,7 +9879,8 @@ void BScanEx(void)
 					{
 						iRotaryValue = GetScanRotaryValue( iEncoder );
 						//扫描长度小于显示时直接按扫描点来显示
-						iLine = (int)( (float)(iRotaryValue) / (g_iEncoderStep/g_iPerMM)  + 0.5);//1mm绘制1次					
+						iLine = iRotaryValue /g_iTofdFreq;
+			
 						if( iLine < MAX_LINE )
 						{
 							buffer = GetSampleBuffer();
@@ -10090,7 +10090,8 @@ void BScanEx(void)
 								u_int iDelay = MGetDelay(3);
 								f_write(&g_FileObject, &iDelay, sizeof(u_int), NULL);
 								f_write(&g_FileObject, &g_iPCS, sizeof(int), NULL);
-								f_write(&g_FileObject, &g_iPerMM, sizeof(int), NULL);
+								f_write(&g_FileObject, &g_iTofdFreq, sizeof(int), NULL);
+								f_write(&g_FileObject, &g_iEncValue, sizeof(long), NULL);
 								
 								for( i = 0; i <= g_iLine; i++ )
 									f_write(&g_FileObject, g_pEcho[i], ECHO_PACKAGE_SIZE, NULL);
