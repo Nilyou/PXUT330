@@ -8157,8 +8157,19 @@ void DrawFuncMenu( int iIndex )
 	int   iNumber = 0;
 			
 	MSetDisplayColor( 0x3F << 5 );
-	EraseDrawRectangle( C_COORHPOSI+2, C_COORVPOSI, 495, C_VERTDOT_VIDEO - C_COORVPOSI - 20 ) ;
+	//清除所有窗口内容	
+	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
 	
+	DrawLine( 1, 55, C_HORIDOT_SCREEN - 1, 55 );
+	DrawLine( C_HORIDOT_SCREEN - 1, 55, C_HORIDOT_SCREEN - 1, C_VERTDOT_SCREEN - 1 );
+	DrawLine( 1, 55, 1, C_VERTDOT_SCREEN - 1 );
+	DrawLine( 1, C_VERTDOT_SCREEN - 1, C_HORIDOT_SCREEN - 1, C_VERTDOT_SCREEN - 1 );
+	
+	DrawLine( 1, 420, C_HORIDOT_SCREEN - 1, 420 );
+	DrawLine( 160, 420, 160, 479 );
+	DrawLine( 320, 420, 320, 479 );
+	DrawLine( 480, 420, 480, 479 );
+	/*
 	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+2, C_VERTDOT_VIDEO-5 );
 	DrawLine( C_COORHPOSI+2, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+494, C_VERTDOT_VIDEO - C_COORVPOSI - 18 );
 	DrawLine( C_COORHPOSI+494, C_VERTDOT_VIDEO - C_COORVPOSI - 18, C_COORHPOSI+494, C_VERTDOT_VIDEO-5 );
@@ -8167,11 +8178,12 @@ void DrawFuncMenu( int iIndex )
 	DrawLine( C_COORHPOSI+123, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+123, C_VERTDOT_VIDEO-5 );
 	DrawLine( C_COORHPOSI+246, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+246, C_VERTDOT_VIDEO-5 );
 	DrawLine( C_COORHPOSI+369, C_VERTDOT_VIDEO- C_COORVPOSI - 18, C_COORHPOSI+369, C_VERTDOT_VIDEO-5 );
-	
+	*/
 	if( iIndex == 0 )
 	{
 		MSetDisplayColor( 0xFFFF );
-		TextOut( C_COORHPOSI+42, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+122, C_VERTDOT_VIDEO- C_COORVPOSI, "调校", 4 );
+		TextOut( 1, 425, 1, 159, 455, "调校", 4 );
+		//TextOut( C_COORHPOSI+42, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+122, C_VERTDOT_VIDEO- C_COORVPOSI, "调校", 4 );
 		MSetDisplayColor( 0x3F << 5 );
 		
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+100, C_COORVPOSI+30, "0. 探头前沿", 4 );
@@ -8179,13 +8191,13 @@ void DrawFuncMenu( int iIndex )
 	}
 	else
 	{
-		TextOut( C_COORHPOSI+42, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+122, C_VERTDOT_VIDEO- C_COORVPOSI, "调校", 4 );
+		TextOut( 1, 425, 1, 159, 455, "调校", 4 );
 	}
 	
 	if( iIndex == 1 )
 	{
 		MSetDisplayColor( 0xFFFF );
-		TextOut( C_COORHPOSI+C_COORHPOSI+164, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+245, C_VERTDOT_VIDEO- C_COORVPOSI, "设置", 4 );
+		TextOut( 180, 425, 1, 319, 455, "设置", 4 );
 		MSetDisplayColor( 0x3F << 5 );
 
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+10, 1, C_COORHPOSI+200, C_COORVPOSI+30, "0.探头频率:     MHz", 4 );
@@ -8212,50 +8224,11 @@ void DrawFuncMenu( int iIndex )
 	}
 	else
 	{
-		TextOut( C_COORHPOSI+C_COORHPOSI+164, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+245, C_VERTDOT_VIDEO- C_COORVPOSI, "设置", 4 );
-	}
-		
-	if( iIndex == 2 )
-	{
-		MSetDisplayColor( 0xFFFF );	
-		TextOut( C_COORHPOSI+C_COORHPOSI+250, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, "TOFD扫查", 4 );
-		MSetDisplayColor( 0x3F << 5 );
-	}
-	else
-	{
-		TextOut( C_COORHPOSI+C_COORHPOSI+250, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+368, C_VERTDOT_VIDEO- C_COORVPOSI, "TOFD扫查", 4 );
+		TextOut( 180, 425, 1, 319, 455, "设置", 4 );
 	}
 	
-	if( iIndex == 3 )
-	{
-		MSetDisplayColor( 0xFFFF );
-		TextOut( C_COORHPOSI+C_COORHPOSI+380, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, "数据分析", 4 );
-		MSetDisplayColor( 0x3F << 5 );
-		
-		while( true )
-		{
-			int keycode = MGetKeyCode( 0 );
-			
-			sprintf( szkey, "%d        ", keycode );
-			TextOut( C_COORHPOSI+10, C_COORVPOSI+40, 1, C_COORHPOSI+100, C_COORVPOSI+60, szkey, 4 );
-		
-			if( keycode == C_KEYCOD_RETURN )
-			{
-				//取消键弹起，防止后续误判断
-				while( true )
-				{
-					keycode = MGetKeyCode( 0 );
-					if( keycode != C_KEYCOD_RETURN )
-						break;
-				}
-				break;
-			}
-		}
-	}
-	else
-	{
-		TextOut( C_COORHPOSI+C_COORHPOSI+380, C_VERTDOT_VIDEO- C_COORVPOSI - 5, 1, C_COORHPOSI+494, C_VERTDOT_VIDEO- C_COORVPOSI, "数据分析", 4 );
-	}
+	TextOut( 321, 425, 1, 479, 455, "TOFD扫查", 4 );
+	TextOut( 481, 425, 1, C_HORIDOT_SCREEN - 1, 455, "数据分析", 4 );
 }
 
 void CalibrationFunc( int iIndex )
@@ -8287,8 +8260,7 @@ void CalibrationFunc( int iIndex )
 	DrawLine( 126, 430, 126, 477 );
 	DrawLine( 251, 430, 251, 477 );
 	DrawLine( 376, 430, 376, 477 );
-
-	MSetDisplayColor( 0x20 << 5 );
+	
 	//A扫分割线
 	DrawLine( 1, 104, 502, 104 );
 	
@@ -8299,8 +8271,6 @@ void CalibrationFunc( int iIndex )
 	
 	//分割直线
 	DrawLine( 502, 3, C_HORIDOT_SCREEN-1, 3 );
-	DrawLine( 502, 477, C_HORIDOT_SCREEN-1, 477 );
-	DrawLine( 502, 478, C_HORIDOT_SCREEN-1, 478 );
 	DrawLine( 502, 479, C_HORIDOT_SCREEN-1, 479 );
 	
 	if( iIndex == 0 )
