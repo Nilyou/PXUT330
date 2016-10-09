@@ -3,6 +3,10 @@
 #include <stdarg.h>
 #include "Media.h"
 #include "ff.h"
+
+#include<dirent.h>
+#include<stdio.h>
+#include<stdlib.h>
 	
 //#include "ding.c"
 //#include "Music_alice.c"
@@ -8134,9 +8138,9 @@ void BScan(void)
 }
 
 //TOFD采样频率
-int g_iTofdFreq = 4;
+int g_iTofdFreq = 10;
 //编码器比值
-long g_iEncValue = 25;
+long g_iEncValue = 6;
 
 //角度
 int g_iAngle = 60;
@@ -8212,7 +8216,7 @@ void DrawFuncMenu( int iIndex )
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+130, 1, C_COORHPOSI+100, C_COORVPOSI+150, "4.声速   :", 4 );
 		WriteSpeed( C_COORHPOSI+152, C_COORVPOSI+130 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点   :     μs ", 4 );
-		Write_Number( C_COORHPOSI+152, C_COORVPOSI+160, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+		Write_Number( C_COORHPOSI+152, C_COORVPOSI+160, MGetOffset()*10/16, 5, 2, 0 );
 		sprintf( szkey, "6.PCS   :%d.%d", g_iPCS/10, g_iPCS%10 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+190, 1, C_COORHPOSI+100, C_COORVPOSI+210, szkey, 4 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+220, 1, C_COORHPOSI+100, C_COORVPOSI+240, "7.探头前沿:        ", 4 );
@@ -8242,6 +8246,7 @@ void CalibrationFunc( int iIndex )
 	u_char uMax = 0;
 	short xpos, ypos, xposOld, yposOld, i, j;
 	int iPt = 3, is = 30;
+	int iStep = 0;
 	bool bFirst = true;
 	bool bAutoSet = true;
 	
@@ -8281,7 +8286,7 @@ void CalibrationFunc( int iIndex )
 		DrawLine( 502, 104, C_HORIDOT_SCREEN-1, 104 );
 		DrawLine( 502, 194, C_HORIDOT_SCREEN-1, 194 );
 		
-		MSetRange(100,C_SETMODE_SETSAVE) ;
+		MSetRange(300,C_SETMODE_SETSAVE) ;
 		MSetScaleDelay( 0, C_SETMODE_SETSAVE );
 		MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
 		MSetEchoMode(0,C_SETMODE_SETSAVE);			//全波模式
@@ -8303,16 +8308,17 @@ void CalibrationFunc( int iIndex )
 		MSetDisplayColor( 0x1F<<11 );
 		TextOut( 400, 440, 1, 501, 470, "退出", 4 );
 		
-		sprintf( szkey, "0.0mm" );
+		iStep = MGetRange(3)*1000.0*2*10/MGetSpeed()/5/16;
+		sprintf( szkey, "0.0us" );
 		TextOut( 2, 400, 1, 101, 429, szkey, 4 );
 		MSetDisplayColor( 0xFFE0 );
-		sprintf( szkey, "2.0" );
+		sprintf( szkey, "%d.%d", iStep/10, iStep%10 );
 		TextOut( 103, 400, 1, 201, 429, szkey, 4 );
-		sprintf( szkey, "4.0" );
+		sprintf( szkey, "%d.%d", iStep*2/10, (iStep*2)%10 );
 		TextOut( 203, 400, 1, 301, 429, szkey, 4 );
-		sprintf( szkey, "6.0" );
+		sprintf( szkey, "%d.%d", iStep*3/10, (iStep*3)%10 );
 		TextOut( 303, 400, 1, 401, 429, szkey, 4 );
-		sprintf( szkey, "8.0" );
+		sprintf( szkey, "%d.%d", iStep*4/10, (iStep*4)%10 );
 		TextOut( 403, 400, 1, 501, 429, szkey, 4 );
 
 		SetDisplayColor( 0xFFFF );
@@ -8320,8 +8326,8 @@ void CalibrationFunc( int iIndex )
 		sprintf( szkey, "%d.%d ",MGetBaseGain()/10, MGetBaseGain()%10 );
 		TextOut( 534, 53, 1, C_HORIDOT_SCREEN-1, 83, szkey, 4 );
 		MSetDisplayColor( 0xFFE0 );
-		TextOut( 514, 105, 1, C_HORIDOT_SCREEN-1, 135, "零点 μs", 4 );
-		Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+		TextOut( 514, 105, 1, C_HORIDOT_SCREEN-1, 135, "零点 us", 4 );
+		Write_Number( 534, 135, MGetOffset()*10/16, 5, 2, 0 );
 		
 		iPt = 196, is = 30;
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN-1, iPt+is, "1.清除零点", 4 );
@@ -8404,7 +8410,7 @@ void CalibrationFunc( int iIndex )
 						MSetSystem();
 						
 						MSetDisplayColor( 0xFFE0 );
-						Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+						Write_Number( 534, 135, MGetOffset()*10/16, 5, 2, 0 );
 						
 						MSetDisplayColor( 0x3F << 5 );
 						EraseWindow( 2, 431, 123, 45 );
@@ -8435,7 +8441,7 @@ void CalibrationFunc( int iIndex )
 					MSetSystem();
 					
 					MSetDisplayColor( 0xFFE0 );
-					Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+					Write_Number( 534, 135, MGetOffset()*10/16, 5, 2, 0 );
 					MSetDisplayColor( 0x3F << 5 );
 					EraseWindow( 2, 431, 123, 45 );
 					TextOut( 6, 440, 1, 125, 470, "清除零点", 4 );
@@ -8448,12 +8454,12 @@ void CalibrationFunc( int iIndex )
 				{
 					MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
 					int iPos = MGetAmpPos(0);
-					number = 10 * 1000 * iPos * 16 * 10 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
+					number = 30 * 1000 * iPos * 10 * 10 * 2 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
 					MSetOffset( number, C_SETMODE_SETSAVE);
 					MSetSystem();
 					
 					MSetDisplayColor( 0xFFE0 );
-					Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+					Write_Number( 534, 135, MGetOffset()*10/16, 5, 2, 0 );
 					
 					if( number != 0 )
 					{
@@ -8468,7 +8474,7 @@ void CalibrationFunc( int iIndex )
 					MSetSystem();
 					
 					MSetDisplayColor( 0xFFE0 );
-					Write_Number( 534, 135, MGetOffset()*10/16*MGetSpeed()/2/2337, 5, 2, 0 );
+					Write_Number( 534, 135, MGetOffset()*10/16, 5, 2, 0 );
 					
 					MSetDisplayColor( 0x3F << 5 );
 					EraseWindow( 2, 431, 123, 45 );
@@ -8764,8 +8770,7 @@ void SetFunc( int iIndex )
 		{
 			if( number >= 0 )
 			{
-				int iTemp = number * 2337.0 / 5920.0 * 2.0 + 0.5;
-				MSetOffset( iTemp * 16, C_SETMODE_SETSAVE );
+				MSetOffset( number * 16 / 10, C_SETMODE_SETSAVE );
 			}
 		}
 	}
@@ -9086,6 +9091,8 @@ bool LoadTofdFile()
 	int i = 0;
 	char  szkey[32];
 	
+	EraseWindow( 2, 4, 500, 100 );
+	
 	if (DisplayQuery(14))	//已连接好U盘？
 	{
 		DisplayPrompt(19);	//正在连接U盘
@@ -9093,9 +9100,9 @@ bool LoadTofdFile()
 		{
 			DisplayPrompt(20);	//U盘连接成功
 			g_UDiskInfo.DataHeaderMark = 1;
-	
+			
 			memset(szkey, 0, 32);
-			if(MInputChar(10, 140, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
+			if(MInputChar(10, 10, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
 			{
 				for( i = 0; i < Notes.name[0]; i++ )
 					szkey[i] = Notes.name[i+1];
@@ -9120,7 +9127,7 @@ bool LoadTofdFile()
 				else 
 				{
 					strcat( szkey, " 读取失败! 按任意键继续!" );
-					TextOut( 10, 140, 1, 170, 20, szkey, 4 );
+					TextOut( 10, 10, 1, 170, 40, szkey, 4 );
 					MAnyKeyReturn();
 					return false;
 				}
@@ -9145,35 +9152,10 @@ void DAFunc()
 	short xpos, ypos, i, j, iMaxLine, iLineStart = 0;
 	short iLineR[2] = {0, 20}, iLineB[2] = {2 , 20};
 	short clrR, clrG, clrB, clr;
-	short iIndex = 2, iIndexR = 0, iIndexB = 0;
+	short iIndex = 0, iIndexR = 0, iIndexB = 0;
 	
-	//清除所有窗口内容	
-	EraseWindow( 0, 0, C_HORIDOT_SCREEN, C_VERTDOT_SCREEN );
-	EraseDrawRectangle( 1, 1, 502, 477 );
-	TextOut( 10, 50, 1, 375, 80, "1.分析当前扫查文件", 4 );
-	TextOut( 10, 90, 1, 375, 120, "2.载入已有扫查文件", 4 );
-	
-	while(true)
-	{
-		keycode = MGetKeyCode( 0 );
-
-		if( keycode == 1 )
-		{
-			g_iRang  = MGetDelay(3);
-			g_iDelay = MGetRange(3);
-			break;
-		}	
-		else if( keycode == 2 )
-		{
-			if( !LoadTofdFile() )
-				return;
-			else
-				break;
-		}
-		else if( keycode == C_KEYCOD_RETURN )
-			return;
-	}
-	
+	g_iRang  = MGetDelay(3);
+	g_iDelay = MGetRange(3);
 	iLineR[0] = (g_iPCS/2 - g_iRang) * ECHO_PACKAGE_SIZE / g_iDelay/10;
 	
 	if( iLineR[0] < 0 )
@@ -9192,13 +9174,13 @@ void DAFunc()
 	DrawLine( 376, 430, 376, 477 );
 
 	MSetDisplayColor( 0xFFFF );
-	sprintf( szkey, "图像" );
-	TextOut( 265, 440, 1, 375, 470, szkey, 4 );
-	MSetDisplayColor( 0x3F << 5 );
 	sprintf( szkey, "红线(%02d)", iIndexR + 1 );
 	TextOut( 6, 440, 1, 125, 470, szkey, 4 );
+	MSetDisplayColor( 0x3F << 5 );
 	sprintf( szkey, "蓝线(%02d)", iIndexB + 1 );
 	TextOut( 132, 440, 1, 250, 470, szkey, 4 );
+	sprintf( szkey, "加载文件" );
+	TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 	sprintf( szkey, "步进(%02d)", iStep );
 	TextOut( 382, 440, 1, 501, 470, szkey, 4 );
 	
@@ -9258,18 +9240,6 @@ void DAFunc()
 				
 				DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			}
-			else if( iIndex == 2 )
-			{
-				if( g_iLine > 324 )
-				{
-					if( iLineStart - iStep < 0 )
-						iLineStart = 0;
-					else 
-						iLineStart -= iStep;
-					
-					DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
-				}
-			}
 		}
 		else if( keycode == 14 )
 		{
@@ -9296,18 +9266,6 @@ void DAFunc()
 				
 				DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 			}
-			else if( iIndex == 2 )
-			{
-				if( g_iLine > 324 )
-				{
-					if( iLineStart + iStep + iMaxLine > g_iLine )
-						iLineStart += g_iLine - (iLineStart + iMaxLine);
-					else 
-						iLineStart += iStep;
-					
-					DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
-				}
-			}
 		}
 		else if( keycode == 16 )
 		{
@@ -9327,7 +9285,7 @@ void DAFunc()
 			MSetDisplayColor( 0x3F << 5 );
 			sprintf( szkey, "蓝线(%02d)", iIndexB+1 );
 			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
-			sprintf( szkey, "图像" );
+			sprintf( szkey, "加载文件" );
 			TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
 			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
@@ -9351,29 +9309,15 @@ void DAFunc()
 			MSetDisplayColor( 0x3F << 5 );
 			sprintf( szkey, "红线(%02d)", iIndexR+1 );
 			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
-			sprintf( szkey, "图像" );
+			sprintf( szkey, "加载文件" );
 			TextOut( 265, 440, 1, 375, 470, szkey, 4 );
 			sprintf( szkey, "步进(%02d)", iStep );
 			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
 		}
 		else if( keycode == 18 )
 		{
-			if( iIndex != 2 )
-			{
-				iIndex = 2;
-			}
-			
-			MSetDisplayColor( 0xFFFF );
-			sprintf( szkey, "图像" );
-			TextOut( 265, 440, 1, 375, 470, szkey, 4 );MSetDisplayColor( 0x3F << 5 );
-			sprintf( szkey, "红线(%02d)", iIndexR+1 );
-			TextOut( 6, 440, 1, 125, 470, szkey, 4 );
-			sprintf( szkey, "蓝线(%02d)", iIndexB+1 );
-			TextOut( 132, 440, 1, 250, 470, szkey, 4 );
-			sprintf( szkey, "步进(%02d)", iStep );
-			TextOut( 382, 440, 1, 501, 470, szkey, 4 );
-			
 			LoadTofdFile();
+			DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 		}
 		else if( keycode == 19 )
 		{
