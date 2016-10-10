@@ -8134,7 +8134,7 @@ void BScan(void)
 }
 
 //TOFD采样频率
-int g_iTofdFreq = 10;
+int g_iTofdFreq = 15;
 //编码器比值
 long g_iEncValue = 6;
 
@@ -8285,6 +8285,8 @@ void CalibrationFunc( int iIndex )
 		
 		MSetRange(300,C_SETMODE_SETSAVE) ;
 		MSetScaleDelay( 0, C_SETMODE_SETSAVE );
+		MSetBaseGain( 160, C_SETMODE_SAVE );
+		MSetSystem();
 		MSetProbeMode(2,C_SETMODE_SAVE);			//设置成双晶探头
 		MSetEchoMode(0,C_SETMODE_SETSAVE);			//全波模式
 		
@@ -8566,7 +8568,7 @@ void CalibrationFunc( int iIndex )
 		TextOut( 10, 10, 1, 40, 16, "编码器校准", 4 );
 		
 		sprintf( szkey, "当前编码比值:%d.%d%d  ", g_iEncValue/100, g_iEncValue%100/10, g_iEncValue%10 );
-		TextOut( 10, 60, 1, 500, 90, "编码比值参考范围:0.23～0.27", 4 );	
+		TextOut( 10, 60, 1, 500, 90, "编码比值参考范围:0.04～0.08", 4 );	
 		TextOut( 10, 105, 1, 500, 133, szkey, 4 );
 
 		MSetDisplayColor( 0x3F << 5 );
