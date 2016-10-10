@@ -4,10 +4,6 @@
 #include "Media.h"
 #include "ff.h"
 
-#include<dirent.h>
-#include<stdio.h>
-#include<stdlib.h>
-	
 //#include "ding.c"
 //#include "Music_alice.c"
 //#include "Music_lee.c"
@@ -8244,6 +8240,7 @@ void CalibrationFunc( int iIndex )
 	int   number = 0, deci_len = 1;
 	char  szkey[64];
 	u_char uMax = 0;
+	int   iPosMax = 0;
 	short xpos, ypos, xposOld, yposOld, i, j;
 	int iPt = 3, is = 30;
 	int iStep = 0;
@@ -8350,6 +8347,8 @@ void CalibrationFunc( int iIndex )
 				MSetDisplayColor( 0xFFE0 );
 				xposOld = 2; 
 				yposOld = 399 - (sampbuffer[0] * 264 / 255);
+				uMax = sampbuffer[0];
+				iPosMax = 0;
 				for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
 				{
 					xpos = 2 + j;
@@ -8358,12 +8357,19 @@ void CalibrationFunc( int iIndex )
 					DrawLine( xposOld, yposOld, xpos, ypos );
 					xposOld = xpos; 
 					yposOld = ypos;
+					if( sampbuffer[j] > uMax )
+					{
+						uMax = sampbuffer[j];
+						iPosMax = j;
+					}
 				}
 				memcpy( sampbufferOld, sampbuffer, ECHO_PACKAGE_SIZE );
 				bFirst = false;
 			}
 			else
 			{
+				uMax = sampbuffer[0];
+				iPosMax = 0;
 				for( j = 1; j < ECHO_PACKAGE_SIZE; j++ )
 				{
 					if( (sampbuffer[j] != sampbufferOld[j]) || (sampbuffer[j-1] != sampbufferOld[j-1]) )
@@ -8382,6 +8388,11 @@ void CalibrationFunc( int iIndex )
 						xpos = 2 + j;
 						ypos = 399 - (sampbuffer[j] * 264 / 255);		
 						DrawLine( xposOld, yposOld, xpos, ypos );
+					}
+					if( sampbuffer[j] > uMax )
+					{
+						uMax = sampbuffer[j];
+						iPosMax = j;
 					}
 				}
 				memcpy( sampbufferOld, sampbuffer, ECHO_PACKAGE_SIZE );
@@ -8403,7 +8414,7 @@ void CalibrationFunc( int iIndex )
 				else
 				{
 					number = MGetOffset();
-					number--;
+					number-=10;
 					if( number >= 0 )
 					{
 						MSetOffset( number, C_SETMODE_SETSAVE);
@@ -8436,7 +8447,7 @@ void CalibrationFunc( int iIndex )
 				else
 				{
 					number = MGetOffset();
-					number++;
+					number+=10;
 					MSetOffset( number, C_SETMODE_SETSAVE);
 					MSetSystem();
 					
@@ -8452,9 +8463,12 @@ void CalibrationFunc( int iIndex )
 			{
 				if( MGetOffset() == 0 )
 				{
-					MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
-					int iPos = MGetAmpPos(0);
-					number = 30 * 1000 * iPos * 10 * 10 * 2 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
+					
+					//MSetGatePara( 5, C_COORWIDTH-10, MGetGatePara(0,2), 0, C_SETMODE_SETSAVE);
+					//int iPos = MGetAmpPos(0);
+					//number = 30 * 1000 * iPos * 10 * 10 * 2 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
+					number = MGetRange(3) * 1000 * iPosMax * 10 * 2 / MGetSpeed() / ECHO_PACKAGE_SIZE ;
+					
 					MSetOffset( number, C_SETMODE_SETSAVE);
 					MSetSystem();
 					
@@ -8770,7 +8784,7 @@ void SetFunc( int iIndex )
 		{
 			if( number >= 0 )
 			{
-				MSetOffset( number * 16 / 10, C_SETMODE_SETSAVE );
+				MSetOffset( number * 16, C_SETMODE_SETSAVE );
 			}
 		}
 	}
@@ -8853,6 +8867,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	short clrR, clrG, clrB, clr;
 	int   L = 0, iPt = 13, is = 28, L0 = 0, L1 = 0;
 	double S0 = 0, S1 = 0;
+	int iDelay = 0;
 	
 	char  szkey[64];
 	
@@ -8860,7 +8875,11 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		iMaxLine = 324;
 	else
 		iMaxLine = g_iLine;
-	
+#if 0
+	sprintf( szkey, "%d,%d,%d,%d,%d,%d", g_iLine,g_iRang,g_iDelay,g_iPCS,g_iTofdFreq,g_iEncValue );
+	TextOut( 10, 10, 1, 170, 40, szkey, 4 );
+	MAnyKeyReturn();
+#endif	
 	EraseWindow( 2, 4, 499, 426 );
 	MSetDisplayColor( 0xFFE0 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+29, "A扫波形", 4 );
@@ -8888,14 +8907,10 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += (is+2);
+
+	iDelay = g_iPCS/2 - g_iRang*iLineR[0]/ECHO_PACKAGE_SIZE; 
 	
-	S0 = g_iRang*iLineR[0]/ECHO_PACKAGE_SIZE + g_iDelay;
-	if( S0 >= g_iPCS/2 ) 
-		L0 = sqrt( pow(S0/10.0,2) - pow(g_iPCS/10.0/2, 2) ) * 100;
-	else
-		L0 = -1;
-	
-	S1 = g_iRang*iLineR[1]/ECHO_PACKAGE_SIZE + g_iDelay;
+	S1 = g_iRang*iLineR[1]/ECHO_PACKAGE_SIZE + iDelay;
 	if( S1 >= g_iPCS/2 ) 		
 		L1 = sqrt( pow(S1/10.0,2) - pow(g_iPCS/10.0/2, 2) ) * 100;
 	else
@@ -8907,19 +8922,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线1", 4 );
 		iPt += is;
-
-		if( L0 != -1 ) 
-		{
-			sprintf( szkey, "%d.%dmm", L0/100, (L0%100)/10 );
-			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
-			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
-		}
-		else
-		{
-			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
-			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "--", 4 );
-		}
-		
+		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "0.0mm", 4 );
 		iPt += is;
 		TextOut( 504, iPt-1, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线2", 4 );
@@ -8961,9 +8964,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量高度", 4 );
 	iPt += is;
 	
-	if( L1 != -1 && L0 != -1 )
-		L = abs(L1 - L0);
-	else if( L1 != -1 && L0 == -1 )
+	if( L1 != -1 )
 		L = L1;
 	else 
 		L = 0;
@@ -9069,10 +9070,18 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	
 	//红线
 	MSetDisplayColor( 0x1F << 11 );
-	if( iLineR[0] < ECHO_PACKAGE_SIZE ) 
+	if( iLineR[0] < ECHO_PACKAGE_SIZE-2 ) 
+	{
 		DrawLine( 2 + iLineR[0], 4, 2 + iLineR[0], 429  );
+		DrawLine( 3 + iLineR[0], 4, 3 + iLineR[0], 429  );
+		DrawLine( 4 + iLineR[0], 4, 4 + iLineR[0], 429  );
+	}
 	else
+	{
+		DrawLine( 499, 4, 499, 429  );
+		DrawLine( 500, 4, 500, 429  );
 		DrawLine( 501, 4, 501, 429  );
+	}	
 	
 	if( iLineR[1] < ECHO_PACKAGE_SIZE ) 
 		DrawLine( 2 + iLineR[1], 4, 2 + iLineR[1], 429  );
@@ -9154,8 +9163,8 @@ void DAFunc()
 	short clrR, clrG, clrB, clr;
 	short iIndex = 0, iIndexR = 0, iIndexB = 0;
 	
-	g_iRang  = MGetDelay(3);
-	g_iDelay = MGetRange(3);
+	g_iRang  = MGetRange(3);
+	g_iDelay = MGetDelay(3);
 	iLineR[0] = (g_iPCS/2 - g_iRang) * ECHO_PACKAGE_SIZE / g_iDelay/10;
 	
 	if( iLineR[0] < 0 )
