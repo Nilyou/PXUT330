@@ -248,7 +248,11 @@ int ChannelParaInit(int mode)	/*参数初始化，mode=0当前一个通道，mode=1所有通道,2
             MSetDiameter(0);
 
             MSetChannel(Channel,0);
-
+	
+			ChannelPara.iAngle = 60;
+	        ChannelPara.iThickness = 200;
+			ChannelPara.iPcs = 462;
+			
             ChannelParaStore();
 
             retvalue = C_TRUE;
