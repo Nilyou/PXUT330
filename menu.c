@@ -8873,8 +8873,7 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	short clrR, clrG, clrB, clr;
 	int   L = 0, iPt = 13, is = 28, L0 = 0, L1 = 0;
 	double S0 = 0, S1 = 0;
-	int iDelay = 0;
-	
+
 	char  szkey[64];
 	
 	if( g_iLine > 324 )
@@ -8914,9 +8913,13 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 	iPt += (is+2);
 
-	iDelay = g_iPCS/2 - g_iRang*iLineR[0]/ECHO_PACKAGE_SIZE; 
+	S0 = g_iRang*iLineR[0]/ECHO_PACKAGE_SIZE + g_iDelay;
+	if( S0 >= g_iPCS/2 ) 		
+		L0 = sqrt( pow(S0/10.0,2) - pow(g_iPCS/10.0/2, 2) ) * 100;
+	else
+		L0 = -1;
 	
-	S1 = g_iRang*iLineR[1]/ECHO_PACKAGE_SIZE + iDelay;
+	S1 = g_iRang*iLineR[1]/ECHO_PACKAGE_SIZE + g_iDelay;
 	if( S1 >= g_iPCS/2 ) 		
 		L1 = sqrt( pow(S1/10.0,2) - pow(g_iPCS/10.0/2, 2) ) * 100;
 	else
@@ -8934,9 +8937,18 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 		TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "红线2", 4 );
 		iPt += is;
 
-		if( L1 != -1 ) 		
+		if( L1 != -1 && L0 == -1 ) 		
 		{
 			sprintf( szkey, "%d.%dmm", L1/100, (L1%100)/10 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
+			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
+		}
+		else if( L1 != -1 && L0 != -1 ) 		
+		{
+			if( L1 - L0 >= 0 )
+				sprintf( szkey, "%d.%dmm", (L1 - L0)/100, ((L1 - L0)%100)/10 );
+			else
+				sprintf( szkey, "-%d.%dmm", (L0 - L1)/100, ((L0 - L1)%100)/10 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "        ", 4 );
 			TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, szkey, 4 );
 		}
@@ -8970,8 +8982,10 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 	TextOut( 504, iPt, 1, C_HORIDOT_SCREEN, iPt+is-1, "测量高度", 4 );
 	iPt += is;
 	
-	if( L1 != -1 )
+	if( L1 != -1 && L0 == -1 )
 		L = L1;
+	else if( L1 != -1 && L0 != -1 )
+		L = abs(L1-L0);
 	else 
 		L = 0;
 	
@@ -9104,59 +9118,152 @@ void DADraw( short iIndex, short iLineStart, short iLineR[2], short iLineB[2], s
 bool LoadTofdFile()
 {
 	int i = 0;
-	char  szkey[32];
+	char szkey[32];
+	int keycode;
+	
+	FILINFO fi;
+	DIR dirinfo;
+	int iFileCount = 0;
+	char fname[1000][13];
+	int iStartFile = 0;
+	int iPt = 105, is = 30;
+	bool bUpdate = true;
 	
 	EraseWindow( 2, 4, 500, 100 );
+	EraseWindow( 2, 105, 500, 324 );
+	MSetDisplayColor( 0xFFFF );
 	
 	if (DisplayQuery(14))	//已连接好U盘？
 	{
 		DisplayPrompt(19);	//正在连接U盘
-		if(UDiskInitialize(0))
+		if(UDiskInitialize(3))
 		{
 			DisplayPrompt(20);	//U盘连接成功
 			g_UDiskInfo.DataHeaderMark = 1;
-			
-			memset(szkey, 0, 32);
-			if(MInputChar(10, 10, 0, Notes.name, 30, 30) == C_TRUE)	//最多30个字符
+
+			f_opendir(&dirinfo,"/PXUTTOFD");
+			//f_opendir(&dirinfo,"/PXUTDATA");
+
+			while( f_readdir(&dirinfo, &fi) == 0 )
 			{
-				for( i = 0; i < Notes.name[0]; i++ )
-					szkey[i] = Notes.name[i+1];
-				strcat(szkey, ".tof" );
-				FRESULT res = f_open(&g_FileObject, szkey, FA_OPEN_EXISTING|FA_WRITE|FA_READ);	
-				if( res == FR_OK )
+				
+				if( strcmp(fi.fname,"") )
 				{
-					f_lseek( &g_FileObject, 0 );
-					f_read( &g_FileObject, &g_iLine, sizeof(int), NULL );
-					f_read( &g_FileObject, &g_iRang, sizeof(u_int), NULL );
-					f_read( &g_FileObject, &g_iDelay, sizeof(u_int), NULL );
-					f_read(&g_FileObject, &g_iPCS, sizeof(int), NULL);
-					f_read(&g_FileObject, &g_iTofdFreq, sizeof(int), NULL);
-					f_read(&g_FileObject, &g_iEncValue, sizeof(long), NULL);
-								
-					for( i = 0; i <= g_iLine; i++ )
+					for( i = 0; i < 10; i++ )
 					{
-						f_read(&g_FileObject, g_pEcho[i], ECHO_PACKAGE_SIZE, NULL);
+						if( fi.fname[i] == '.' && 
+							(fi.fname[i+1] == 't' || fi.fname[i+1] == 'T') && 
+							(fi.fname[i+2] == 'o' || fi.fname[i+2] == 'O') &&
+							(fi.fname[i+3] == 'f' || fi.fname[i+3] == 'F')
+						  )
+						{
+							strcpy( fname[iFileCount++], fi.fname );
+							break;
+						}
+						else if(fi.fname[i] == 0)
+							break;
 					}
-					f_close(&g_FileObject);
-				}	
-				else 
+				}
+				else
+					break;
+			}
+			
+			sprintf(szkey, "文件总数:%d", iFileCount);
+			TextOut( 10, 10, 1, 170, 40, szkey, 4 );
+			TextOut( 10, 40, 1, 170, 70, "按数字键选择文件，+/-键翻页", 4 );
+			
+			while(true)
+			{
+				if( bUpdate )
 				{
-					strcat( szkey, " 读取失败! 按任意键继续!" );
-					TextOut( 10, 10, 1, 170, 40, szkey, 4 );
-					MAnyKeyReturn();
+					EraseWindow( 2, 105, 500, 324 );
+					if( iStartFile + 10 < iFileCount )
+					{
+						iPt = 105;
+						for( i = 0; i < 10; i++ )
+						{
+							sprintf( szkey, "%d: %s", i, fname[iStartFile+i] );
+							TextOut( 10, iPt, 1, 500, iPt+is-1, szkey, 4 );
+							iPt += is;
+						}
+					}
+					else
+					{
+						iPt = 105;
+						for( i = 0; i < iFileCount - iStartFile; i++ )
+						{
+							sprintf( szkey, "%d: %s", i, fname[iStartFile+i] );
+							TextOut( 10, iPt, 1, 500, iPt+is-1, szkey, 4 );
+							iPt += is;
+						}
+					}
+					
+					bUpdate = false;
+				}
+
+				keycode = MGetKeyCode( 0 );
+				
+				if( keycode >=0 && keycode <= 9 )
+				{
+					if( iStartFile + keycode < iFileCount )
+					{
+						sprintf(szkey, "%s", fname[iStartFile+keycode]);
+						FRESULT res = f_open(&g_FileObject, szkey, FA_OPEN_EXISTING|FA_WRITE|FA_READ);	
+						if( res == FR_OK )
+						{
+							f_lseek( &g_FileObject, 0 );
+							f_read( &g_FileObject, &g_iLine, sizeof(int), NULL );
+							f_read( &g_FileObject, &g_iRang, sizeof(u_int), NULL );
+							f_read( &g_FileObject, &g_iDelay, sizeof(u_int), NULL );
+							f_read(&g_FileObject, &g_iPCS, sizeof(int), NULL);
+							f_read(&g_FileObject, &g_iTofdFreq, sizeof(int), NULL);
+							f_read(&g_FileObject, &g_iEncValue, sizeof(long), NULL);
+										
+							for( i = 0; i <= g_iLine; i++ )
+							{
+								f_read(&g_FileObject, g_pEcho[i], ECHO_PACKAGE_SIZE, NULL);
+							}
+							f_close(&g_FileObject);
+							return true;
+						}	
+						else 
+						{
+							strcat( szkey, " 读取失败! 按任意键继续!" );
+							TextOut( 10, 10, 1, 170, 40, szkey, 4 );
+							MAnyKeyReturn();
+							return false;
+						}
+					}
+				}
+				else if( keycode == 13 )
+				{
+					if( iStartFile != 0 )
+					{
+						iStartFile -= 10;
+						if( iStartFile < 0 )
+							iStartFile = 0;
+						bUpdate = true;
+					}
+				}
+				else if( keycode == 14 )
+				{
+					if( iStartFile + 10 < iFileCount )
+					{
+						iStartFile += 10;
+						bUpdate = true;
+					}
+				}
+				else if( keycode == C_KEYCOD_CONFIRM || keycode == C_KEYCOD_RETURN )
+				{
 					return false;
 				}
 			}
-			else 
-				return false;
 		}
 		else 
 			return false;
 	}
 	else 
 		return false;
-	
-	return true;
 }
 
 void DAFunc()
@@ -9169,8 +9276,6 @@ void DAFunc()
 	short clrR, clrG, clrB, clr;
 	short iIndex = 0, iIndexR = 0, iIndexB = 0;
 	
-	g_iRang  = MGetRange(3);
-	g_iDelay = MGetDelay(3);
 	iLineR[0] = (g_iPCS/2 - g_iRang) * ECHO_PACKAGE_SIZE / g_iDelay/10;
 	
 	if( iLineR[0] < 0 )
@@ -9212,7 +9317,8 @@ void DAFunc()
 
 		if( keycode == C_KEYCOD_CONFIRM )
 		{
-			break;
+			g_iDelay = g_iPCS/2 - g_iRang*iLineR[0]/ECHO_PACKAGE_SIZE; 
+			DADraw( iIndex, iLineStart, iLineR, iLineB, iIndexB );
 		}
 		else if( keycode == C_KEYCOD_RETURN )
 		{
@@ -10011,9 +10117,10 @@ void BScanEx(void)
 				{
 					DisplayPrompt(19);	//正在连接U盘
 					
-					if(UDiskInitialize(0))
+					if(UDiskInitialize(3))
 					{
 						DisplayPrompt(20);	//U盘连接成功
+						
 						g_UDiskInfo.DataHeaderMark = 1;
 						MSetSaveStatus( 1,C_SETMODE_SETSAVE);
 						EraseWindow( 2, 4, 500, 100 );
@@ -10065,6 +10172,8 @@ void BScanEx(void)
 		//取消按键
 		else if( keycode == 19 )
 		{
+			g_iRang  = MGetRange(3);
+			g_iDelay = MGetDelay(3);
 			break;
 		}	
 	}

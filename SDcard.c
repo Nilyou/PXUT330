@@ -399,6 +399,12 @@ int UDiskInitialize(int mode)
                 f_mkdir("PXUTTEST");
             f_chdir("/PXUTTEST");
         }
+		else if(mode==3)
+        {
+            if(f_opendir(&dirinfo,"/PXUTTOFD")!=FR_OK)
+                f_mkdir("PXUTTOFD");
+            f_chdir("/PXUTTOFD");
+        }
         else
         {
 
