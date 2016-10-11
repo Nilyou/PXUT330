@@ -651,7 +651,10 @@ typedef struct
     u_short		PoreDiameter;	//ºá¿×Ö±¾¶
     u_short		PoreDepth[2];	//2ºá¿×¿×Éî
     //3300+: end
-    u_int		prepare[4];		//Ô¤ÁôÖµ
+	u_int       iPcs;
+	u_int       iAngle;
+	u_int       iThickness;
+    u_int		prepare[1];		//Ô¤ÁôÖµ
 
 } CHANNEL_PARAMETER;		//100 BYTES
 

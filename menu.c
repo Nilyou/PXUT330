@@ -8139,9 +8139,7 @@ int g_iTofdFreq = 15;
 long g_iEncValue = 6;
 
 //角度
-int g_iAngle = 60;
 //工件厚度
-int g_iThickness = 200;
 //PCS, 2位小数
 int g_iPCS = (int)((2.0 * 2.0 / 3.0 * tan(3.1415926/180.0*60) * 200 / 10 + 0.05) * 10);
 
@@ -8205,10 +8203,10 @@ void DrawFuncMenu( int iIndex )
 		Write_Number(C_COORHPOSI+152, C_COORVPOSI+10, MGetFrequence(),5,2,0);
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+40, 1, C_COORHPOSI+100, C_COORVPOSI+60, "1.晶片尺寸:      ", 4 );
 		Write_Crystal( C_COORHPOSI+152, C_COORVPOSI+40, MGetCrystal_l(), MGetCrystal_w());
-		sprintf( szkey, "2.角度   :%d °           ", g_iAngle );
+		sprintf( szkey, "2.角度   :%d °           ", ChannelPara.iAngle );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+70, 1, C_COORHPOSI+200, C_COORVPOSI+90, szkey, 4 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+100, 1, C_COORHPOSI+100, C_COORVPOSI+120, "3.工件厚度:     mm ", 4 );
-		Write_Number(C_COORHPOSI+152, C_COORVPOSI+100, g_iThickness,5,1,0);
+		Write_Number(C_COORHPOSI+152, C_COORVPOSI+100, ChannelPara.iThickness,5,1,0);
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+130, 1, C_COORHPOSI+100, C_COORVPOSI+150, "4.声速   :", 4 );
 		WriteSpeed( C_COORHPOSI+152, C_COORVPOSI+130 );
 		TextOut( C_COORHPOSI+10, C_COORVPOSI+160, 1, C_COORHPOSI+100, C_COORVPOSI+180, "5.零点   :     μs ", 4 );
@@ -8572,7 +8570,7 @@ void CalibrationFunc( int iIndex )
 		TextOut( 10, 105, 1, 500, 133, szkey, 4 );
 
 		MSetDisplayColor( 0x3F << 5 );
-		TextOut( 6, 440, 1, 125, 470, "开始校准", 4 );
+		TextOut( 36, 440, 1, 125, 470, "重置", 4 );
 		TextOut( 132, 440, 1, 250, 470, "移动距离", 4 );
 		TextOut( 285, 440, 1, 375, 470, "完成", 4 );
 		MSetDisplayColor( 0x1F<<11 );
@@ -8723,8 +8721,10 @@ void SetFunc( int iIndex )
 		{
 			if( number >= 0 && number < 90)
 			{
-				g_iAngle = number;
-				g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 + 0.05) * 10);
+				ChannelPara.iAngle = number;
+				g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* ChannelPara.iAngle) * ChannelPara.iThickness / 10.0 + 0.05) * 10);
+				ChannelPara.iPcs = g_iPCS;
+				ChannelParaStore();
 			}
 		}
 	}
@@ -8737,8 +8737,10 @@ void SetFunc( int iIndex )
 		{
 			if( number >= 0 )
 			{
-				g_iThickness = number;	
-				g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* g_iAngle) * g_iThickness / 10.0 + 0.05) * 10);
+				ChannelPara.iThickness = number;	
+				g_iPCS = (int)(( 2.0 * 2.0 / 3.0 * tan(3.1415926/180.0* ChannelPara.iAngle) * ChannelPara.iThickness / 10.0 + 0.05) * 10);
+				ChannelPara.iPcs = g_iPCS;
+				ChannelParaStore();
 			}
 		}
 	}
@@ -8798,6 +8800,8 @@ void SetFunc( int iIndex )
 		if( Input_Number(0,21,&number,4, &deci_len,0) == 1)
 		{
 			g_iPCS = number;
+			ChannelPara.iPcs = g_iPCS;
+			ChannelParaStore();
 		}		
 	}
 	//7. 探头前沿
@@ -9208,24 +9212,10 @@ void DAFunc()
 
 		if( keycode == C_KEYCOD_CONFIRM )
 		{
-			//确认键弹起，防止后续误判断
-			while( true )
-			{
-				keycode = MGetKeyCode( 0 );
-				if( keycode != C_KEYCOD_CONFIRM )
-					break;
-			}
 			break;
 		}
 		else if( keycode == C_KEYCOD_RETURN )
 		{
-			//取消键弹起，防止后续误判断
-			while( true )
-			{
-				keycode = MGetKeyCode( 0 );
-				if( keycode != C_KEYCOD_RETURN )
-					break;
-			}
 			break;
 		}
 		else if( keycode == 13 )
@@ -9362,7 +9352,8 @@ void TOFDFunc(void)
 	int iY1 = C_COORVPOSI + C_COORHEIGHT;
 	
 	iTofdMode = 1;									//进入TOFD模式
-
+	g_iPCS = ChannelPara.iPcs;
+	
 	MSetAcquisition(1);		
 	EnableEchoDisplay( 0 ) ;
 	//EraseWindow(C_COORHPOSI, 0, 495, C_VERTDOT_VIDEO );	//清除绘图区图像
