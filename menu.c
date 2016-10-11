@@ -8481,6 +8481,7 @@ void CalibrationFunc( int iIndex )
 						EraseWindow( 2, 431, 123, 45 );
 						TextOut( 6, 440, 1, 125, 470, "清除零点", 4 );
 					}
+					MKeyRlx();
 				}
 				else
 				{
@@ -8493,6 +8494,7 @@ void CalibrationFunc( int iIndex )
 					MSetDisplayColor( 0x3F << 5 );
 					EraseWindow( 2, 431, 123, 45 );
 					TextOut( 6, 440, 1, 125, 470, "校准零点", 4 );
+					MKeyRlx();
 				}
 			}
 			else if( keycode == 17 )
