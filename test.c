@@ -91,7 +91,7 @@ void HotKeySet(void)
             Function.funcMenu[0]=1;
             Function.funcMenu[1]=2;
             Function.funcMenu[2]=7;
-            Function.funcMenu[3]=0;
+            Function.funcMenu[3]=9;
             continue;
         }
         else if (keycode == C_KEYCOD_RETURN)
@@ -129,21 +129,24 @@ void HotKeySet(void)
         ypos = para_ypos;
 
         len = 6;
-        row = 9;
+        row = 10;
         MPushWindow(xpos, ypos, xpos+ (len+5+10*MGetLanguage())*C_ECHAR_HDOT, ypos + (row+0) * crow_height) ;
-        EraseDrawRectangle(xpos, ypos, xpos+ (len+5+10*MGetLanguage())*C_ECHAR_HDOT, ypos + (row+0) * crow_height) ;
+        EraseDrawRectangle(xpos, ypos, xpos+ (len+5+10*MGetLanguage())*C_ECHAR_HDOT, ypos + (row+0) * crow_height - 10) ;
         for( i = 0; i < row ; i++)
         {
             TextOut(xpos + C_ECHAR_HDOT,ypos+4+i*crow_height,1,17,crow_height,(u_char*)_FuncHotKey_B[MGetLanguage()][i],4);
         }
         while(1)
         {
-            keycode = MenuKeyReturn(row,2);	/*出现菜单时，按不大于keymax的键返回，mode=0其它键无效，=1确认键有效，=2返回键有效，=3确认返回键有效*/
+            keycode = MGetKeyCode( 0 );//MenuKeyReturn(row,2);	/*出现菜单时，按不大于keymax的键返回，mode=0其它键无效，=1确认键有效，=2返回键有效，=3确认返回键有效*/
             if (keycode == C_KEYCOD_RETURN||keycode == C_KEYCOD_CONFIRM)
                 break;
-            else if(keycode > 0 && keycode <= row)
+            else if(keycode >= 0 && keycode < row)
             {
-                Function.funcMenu[item]=keycode-1;
+				if( keycode == 0 )
+					Function.funcMenu[item] = 9;
+				else
+					Function.funcMenu[item] = keycode-1;
                 break;
             }
         }

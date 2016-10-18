@@ -1017,8 +1017,8 @@ int KeyManage(int keycode,int mode)		//按键管理,mode=1renovate
             ScreenRenovate();	/*屏幕刷新*/
             DrawDac(0);
             break;
-        case C_FUNC_GATEEXPEND:        //门内展宽
-
+        /*
+		case C_FUNC_GATEEXPEND:        //门内展宽
             if( MGetGatePara(0,0) > 1)
             {
                 prestatus = MGetFunctionMode(C_WAVE_EXPEND);	//原状态
@@ -1067,6 +1067,7 @@ int KeyManage(int keycode,int mode)		//按键管理,mode=1renovate
                 MKeyRlx();
             }
             break;
+		*/
         case C_FUNC_GATEALARM:	      //门内报警
             prestatus = MGetFunctionMode(C_GATE_ALARM);	//原状态
             MSetFunctionMode( prestatus+1,C_GATE_ALARM);
@@ -1173,6 +1174,9 @@ int KeyManage(int keycode,int mode)		//按键管理,mode=1renovate
             MSetFill(MGetFill()+1,C_SETMODE_SETSAVE);
             SysParaDisp();
             break;
+		case C_FUNC_TOFD:
+			TOFDFunc();
+			break;
         default:
             break;
         }
@@ -5275,10 +5279,6 @@ int FuncMenu(void)
         else if(keycode == C_BSCAN + 1)//B扫描
         {
             TOFDFunc();
-            MSetAcquisitionEnable(1,C_SETMODE_SETSAVE);
-            MSetHardEchoShow(1,C_SETMODE_SETSAVE);
-            ScreenRenovate();	/*屏幕刷新*/
-            DrawDac(0);		//新画DAC
             return 1;
         }
 //		else if(keycode == C_FLAW_HEIGHT);//裂纹测高
@@ -9533,6 +9533,11 @@ void TOFDFunc(void)
 	//还原A扫显示区域
 	SetEchoLayout( C_COORHPOSI, C_COORHPOSI + 500, C_COORVPOSI + VertOffsetScreen, 0 );
 	EnableEchoDisplay( 1 ) ;
+	
+	MSetAcquisitionEnable(1,C_SETMODE_SETSAVE);
+    MSetHardEchoShow(1,C_SETMODE_SETSAVE);
+    ScreenRenovate();	/*屏幕刷新*/
+    DrawDac(0);		//新画DAC
 }
 
 void DrawAxisDot()

@@ -1492,15 +1492,16 @@ const u_char _FuncHotKey_A[C_LANGUAGE][5][22] =
 const u_char _FuncHotKey_B[C_LANGUAGE][11][22] =
 {
     {
-        "⒈初始化  ",
-        "⒉回波包络",
-        "⒊峰值记忆",
-        "⒋ＤＡＣ门",
-        "⒌深度补偿",
-        "⒍实心波形",
-        "⒎门内报警",
-        "⒏数据处理",
-        "⒐波形冻结",
+        "1.初始化  ",
+        "2.回波包络",
+        "3.峰值记忆",
+        "4.ＤＡＣ门",
+        "5.深度补偿",
+        "6.实心波形",
+        "7.门内报警",
+        "8.数据处理",
+        "9.波形冻结",
+		"0.TOFD",
     },//中文
     {
         "1.Initialization ",
@@ -1512,6 +1513,7 @@ const u_char _FuncHotKey_B[C_LANGUAGE][11][22] =
         "7.Alarm in Gate  ",
         "8.Data Storage   ",
         "9.Freeze         ",
+		"0.TOFD         ",
     },
 };
 const u_char _FuncMenu_A1[C_LANGUAGE][11][22] =

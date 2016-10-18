@@ -281,6 +281,7 @@ C_DEVLIB	23	//23tft .24 EL
 #define C_FUNC_DATA		    7      //数据处理
 #define C_FUNC_FREEZ	    8      //波形冻结
 #define C_FUNC_GATEEXPEND   9      //门内展宽
+#define C_FUNC_TOFD         9      //TOFD,与门内展宽共用图标
 
 
 #define C_SENSITIVITY_GAIN	30	/*两次灵敏度校验间的最大差值，单位0.1dB*/

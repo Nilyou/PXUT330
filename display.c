@@ -650,12 +650,12 @@ void SysParaDisp(void)		//显示通道号、探头类型、频带等
                     MInvertWindow( xpos-8+32*i,ypos, xpos-8+32*i+24,ypos+24) ;
                 }
                         break;
-            case C_FUNC_GATEEXPEND:           //门内展宽
+            //case C_FUNC_GATEEXPEND:           //门内展宽
               //  if (MGetFunctionMode(C_WAVE_EXPEND))
-                {
+              //  {
               //      InvertBytes(xpos-8+32*i,ypos, 1);
-                }
-                        break;
+                //}
+                  //      break;
             case C_FUNC_GATEALARM:            //门内报警
                 if (MGetFunctionMode(C_GATE_ALARM))
                 {
@@ -674,7 +674,7 @@ void SysParaDisp(void)		//显示通道号、探头类型、频带等
                     MInvertWindow( xpos-8+32*i,ypos, xpos-8+32*i+24,ypos+24) ;
                 }
                 break;
-            default:
+            default:	
             break;
         }
     }

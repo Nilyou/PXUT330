@@ -38,7 +38,7 @@ int ChannelParaInit(int mode)	/*参数初始化，mode=0当前一个通道，mode=1所有通道,2
         Function.funcMenu[0]=1;
         Function.funcMenu[1]=2;
         Function.funcMenu[2]=7;
-        Function.funcMenu[3]=0;
+        Function.funcMenu[3]=9;
 
         offset = C_OFF_KEYFUNC;
         MCopyProtectedMemory( (void*)offset, &Function, C_LEN_FUNCTION, PM_COPY_WRITE);
